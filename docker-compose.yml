@@ -1,0 +1,20 @@
+#    image: devoleksiy/php-dev:v1 # с webdevops/php-apache-dev:7.4-alpine
+version: '3'
+services:
+  php-dev:
+    build: .
+#    image: devoleksiy/php-dev:v1
+    image: centos:latest
+#    tty: true
+#    ports:
+#      - 80:80
+#    volumes:
+#      - ./:/app/
+      # - ./dev/etc/php/php.ini:/opt/docker/etc/php/php.ini
+      # - ./etc/apache2/sites-available:/etc/apache2/sites-available
+      # - ./etc/httpd/:/opt/docker/etc/httpd/
+      # - ./dev/log/:/var/log
+#    environment:
+##--------->  OPCACHE  <-------------------------
+#      - WEB_DOCUMENT_ROOT=/app
+#      - PHP_MEMORY_LIMIT=3G

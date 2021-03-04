@@ -6,7 +6,7 @@
 # Currently Supported Operating Systems:
 #
 #   RHEL 5, 6, 7
-#   CentOS 5, 6, 7
+#   CentOS 5, 6, 7, 8
 #   Debian 7, 8
 #   Ubuntu 12.04 - 18.04
 #   Amazon Linux 2017
@@ -48,7 +48,13 @@ esac
 
 # Check wget
 if [ -e '/usr/bin/wget' ]; then
-    wget http://vestacp.com/pub/vst-install-$type.sh -O vst-install-$type.sh
+
+ #   wget http://vestacp.com/pub/vst-install-$type.sh -O vst-install-$type.sh
+ wget -no-check-certificate --content-disposition https://raw.githubusercontent.com/Devoleksiy/vesta/install/vst-install-$type.sh -O vst-install-$type.sh
+ https://github.com/Devoleksiy/vesta/install/vst-install.sh
+ wget https://raw.githubusercontent.com/Devoleksiy/vesta/master/install/vst-install-$type.sh -O vst-install-$type.sh
+
+ wget https://raw.githubusercontent.com/Devoleksiy/vesta/master/install/vst-install-rhel.sh -O vst-install-rhel.sh
     if [ "$?" -eq '0' ]; then
         bash vst-install-$type.sh $*
         exit
@@ -57,10 +63,11 @@ if [ -e '/usr/bin/wget' ]; then
         exit 1
     fi
 fi
-
+/Devoleksiy/vesta
 # Check curl
 if [ -e '/usr/bin/curl' ]; then
-    curl -O http://vestacp.com/pub/vst-install-$type.sh
+#    curl -O http://vestacp.com/pub/vst-install-$type.sh
+    curl -O https://raw.githubusercontent.com/Devoleksiy/vesta/install/vst-install-$type.sh
     if [ "$?" -eq '0' ]; then
         bash vst-install-$type.sh $*
         exit
