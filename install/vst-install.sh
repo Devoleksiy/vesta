@@ -63,7 +63,7 @@ if [ -e '/usr/bin/wget' ]; then
         exit 1
     fi
 fi
-/Devoleksiy/vesta
+
 # Check curl
 if [ -e '/usr/bin/curl' ]; then
 #    curl -O http://vestacp.com/pub/vst-install-$type.sh

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Vesta RHEL/CentOS installer v.05
-
+# Add Centos 8 support
 #----------------------------------------------------------#
 #                  Variables&Functions                     #
 #----------------------------------------------------------#
