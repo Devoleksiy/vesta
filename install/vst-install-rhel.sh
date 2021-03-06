@@ -6,8 +6,8 @@
 #                  Variables&Functions                     #
 #----------------------------------------------------------#
 export PATH=$PATH:/sbin
-RHOST='r.webstudion.dev'
-CHOST='c.webstudion.dev'
+RHOST='r.vestacp.com'
+CHOST='c.vestacp.com'
 REPO='cmmnt'
 VERSION='rhel'
 VESTA='/usr/local/vesta'
@@ -18,11 +18,13 @@ release=$(grep -o "[0-9]" /etc/redhat-release |head -n1)
 codename="${os}_$release"
 vestacp="$VESTA/install/$VERSION/$release"
 
+ignorConflicts='1'
+
 # Defining software pack for all distros
 software="nginx awstats bc bind bind-libs bind-utils clamav-server clamav-update
     curl dovecot e2fsprogs exim expect fail2ban flex freetype ftp GeoIP httpd
     ImageMagick iptables-services jwhois lsof mailx mariadb mariadb-server mc
-    mod_fcgid mod_ruid2 mod_ssl net-tools ntp openssh-clients pcre php
+    mod_fcgid mod_ruid2 mod_ssl net-tools cronyd openssh-clients pcre php
     php-bcmath php-cli php-common php-fpm php-gd php-imap php-mbstring
     php-mcrypt phpMyAdmin php-mysql php-pdo phpPgAdmin php-pgsql php-soap
     php-tidy php-xml php-xmlrpc postgresql postgresql-contrib
@@ -260,7 +262,7 @@ check_result $? "No access to Vesta repository"
 tmpfile=$(mktemp -p /tmp)
 rpm -qa > $tmpfile
 for pkg in exim mysql-server httpd nginx vesta; do
-    if [ ! -z "$(grep $pkg $tmpfile)" ]; then
+    if [ ! -z "$(grep $pkg $tmpfile)" ] && [ $ignorConflicts = '0' ]; then
         conflicts="$pkg $conflicts"
     fi
 done
@@ -474,11 +476,19 @@ echo "enabled=1" >> $nrepo
 vrepo='/etc/yum.repos.d/vesta.repo'
 echo "[vesta]" > $vrepo
 echo "name=Vesta - $REPO" >> $vrepo
+if [ "$release" -eq '8' ]; then
+echo "baseurl=http://$RHOST/$REPO/7/\$basearch/" >> $vrepo
+else
 echo "baseurl=http://$RHOST/$REPO/$release/\$basearch/" >> $vrepo
+fi
 echo "enabled=1" >> $vrepo
 echo "gpgcheck=1" >> $vrepo
 echo "gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-VESTA" >> $vrepo
 wget c.vestacp.com/GPG.txt -O /etc/pki/rpm-gpg/RPM-GPG-KEY-VESTA
+
+# mkdir /usr/local/vesta
+# git clone https://github.com/Devoleksiy/vesta.git /root/vestaNew
+# yes | cp -rf /root/vestaNew/* /usr/local/vesta
 
 
 #----------------------------------------------------------#
@@ -632,6 +642,12 @@ fi
 #----------------------------------------------------------#
 
 # Installing rpm packages
+for var in $software
+do
+echo $var
+yum install $var -y
+done
+
 yum install -y $software
 if [ $? -ne 0 ]; then
     if [ "$remi" = 'yes' ]; then
@@ -675,11 +691,15 @@ service iptables stop
 service firewalld stop >/dev/null 2>&1
 
 
+# Configuring New chrony synchronization time
+systemctl enable --now chronyd
+ystemctl restart chronyd
+
 # Configuring NTP synchronization
-echo '#!/bin/sh' > /etc/cron.daily/ntpdate
-echo "$(which ntpdate) -s pool.ntp.org" >> /etc/cron.daily/ntpdate
-chmod 775 /etc/cron.daily/ntpdate
-ntpdate -s pool.ntp.org
+# echo '#!/bin/sh' > /etc/cron.daily/ntpdate
+# echo "$(which ntpdate) -s pool.ntp.org" >> /etc/cron.daily/ntpdate
+# chmod 775 /etc/cron.daily/ntpdate
+# ntpdate -s pool.ntp.org
 
 # Disabling webalizer routine
 rm -f /etc/cron.daily/00webalizer
