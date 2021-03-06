@@ -19,14 +19,21 @@ codename="${os}_$release"
 vestacp="$VESTA/install/$VERSION/$release"
 
 ignorConflicts='1'
+# Minimum php7.4 
+phpV='php74'
+# test="$phpV"'php'
+# echo $test
 
 # Defining software pack for all distros
+#fix for centos 8 = jwhois > whois, ntp > chrony, php-imap > phpXX-php-imap, php-mcrypt > phpXX-php-pecl-mcrypt,
+# php-mysql > php-mysqlnd, 
+# Test = cronyd, php-tidy > 
 software="nginx awstats bc bind bind-libs bind-utils clamav-server clamav-update
     curl dovecot e2fsprogs exim expect fail2ban flex freetype ftp GeoIP httpd
-    ImageMagick iptables-services jwhois lsof mailx mariadb mariadb-server mc
-    mod_fcgid mod_ruid2 mod_ssl net-tools cronyd openssh-clients pcre php
+    ImageMagick iptables-services whois lsof mailx mariadb mariadb-server mc
+    mod_fcgid mod_ruid2 mod_ssl net-tools chrony openssh-clients pcre php
     php-bcmath php-cli php-common php-fpm php-gd php-imap php-mbstring
-    php-mcrypt phpMyAdmin php-mysql php-pdo phpPgAdmin php-pgsql php-soap
+    php-pecl-mcrypt phpMyAdmin php-mysql php-pdo phpPgAdmin php-pgsql php-soap
     php-tidy php-xml php-xmlrpc postgresql postgresql-contrib
     postgresql-server proftpd roundcubemail rrdtool rsyslog screen
     spamassassin sqlite sudo tar telnet unzip vesta vesta-ioncube vesta-nginx
@@ -453,9 +460,19 @@ fi
 yum -y update
 check_result $? 'yum update failed'
 
+dnf module enable php:remi-7.4
+check_result $? 'Not enable > dnf module enable php:remi-7.4 <'
+
+
 # Installing EPEL repository
-yum install epel-release -y
-check_result $? "Can't install EPEL repository"
+if [ "$release" -eq '8' ]; then
+    dnf install epel-release -y
+    check_result $? "Can't install EPEL repository"
+else
+    yum install epel-release -y
+    check_result $? "Can't install EPEL repository"
+fi
+
 
 # Installing Remi repository
 if [ "$remi" = 'yes' ] && [ ! -e "/etc/yum.repos.d/remi.repo" ]; then
@@ -642,11 +659,18 @@ fi
 #----------------------------------------------------------#
 
 # Installing rpm packages
-for var in $software
-do
-echo $var
-yum install $var -y
-done
+
+# Rezerv install variant for phpmyadmin
+# wget https://files.phpmyadmin.net/phpMyAdmin/4.9.1/phpMyAdmin-4.9.1-all-languages.tar.gz
+# tar -zxvf phpMyAdmin-4.9.1-all-languages.tar.gz
+# mv phpMyAdmin-4.9.1-all-languages /usr/share/phpMyAdmin
+
+# Debug packets loop
+# for var in $software
+# do
+# echo $var
+# yum install $var -y
+# done
 
 yum install -y $software
 if [ $? -ne 0 ]; then
@@ -655,7 +679,7 @@ if [ $? -ne 0 ]; then
             --enablerepo="*base,*updates,nginx,epel,vesta,remi*" \
             install $software
     else
-        yum -y --disablerepo=* --enablerepo="*base,*updates,nginx,epel,vesta" \
+        yum -y --disablerepo=* --enablerepo="*baseos,*updates,nginx,epel,vesta" \
             install $software
     fi
 fi
@@ -687,13 +711,13 @@ if [ -e '/etc/sysconfig/selinux' ]; then
 fi
 
 # Disabling iptables
-service iptables stop
-service firewalld stop >/dev/null 2>&1
+systemctl stop iptables.service
+systemctl stop firewalld >/dev/null 2>&1
 
 
 # Configuring New chrony synchronization time
-systemctl enable --now chronyd
-ystemctl restart chronyd
+systemctl enable chronyd --now
+systemctl restart chronyd
 
 # Configuring NTP synchronization
 # echo '#!/bin/sh' > /etc/cron.daily/ntpdate
