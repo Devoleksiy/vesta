@@ -6,8 +6,8 @@
 #                  Variables&Functions                     #
 #----------------------------------------------------------#
 export PATH=$PATH:/sbin
-RHOST='r.webstudion.dev'
-CHOST='c.webstudion.dev'
+RHOST='r.vestacp.com'
+CHOST='c.vestacp.com'
 REPO='cmmnt'
 VERSION='rhel'
 VESTA='/usr/local/vesta'
@@ -253,7 +253,7 @@ if [ ! -e '/usr/bin/wget' ]; then
 fi
 
 # Checking repository availability
-wget -q "r.webstudion.dev/GPG.txt" -O /dev/null
+wget -q "c.vestacp.com/GPG.txt" -O /dev/null
 check_result $? "No access to Vesta repository"
 
 # Checking installed packages
@@ -270,8 +270,7 @@ if [ ! -z "$conflicts" ] && [ -z "$force" ]; then
     echo
     echo 'Following packages are already installed:'
     echo "$conflicts"
-    echo 'If nginx not installed, search nginx file befo comand # yum list installed > tmp_listpack.txt'
-    echo 'meybe you need remove pack pcp-pmda-nginx'
+    echo
     echo 'It is highly recommended to remove them before proceeding.'
     echo 'If you want to force installation run this script with -f option:'
     echo "Example: bash $0 --force"
@@ -339,7 +338,7 @@ fi
 
 # Database stack
 if [ "$mysql" = 'yes' ]; then
-    if [ $release -ge 7 ] || [ $release -ge 8 ]; then
+    if [ $release -ge 7 ]; then
         echo '   - MariaDB Database Server'
     else
         echo '   - MySQL Database Server'
@@ -426,7 +425,7 @@ echo "Installation backup directory: $vst_backups"
 
 # Printing start message and sleeping for 5 seconds
 echo -e "\n\n\n\nInstallation will take about 15 minutes ...\n"
-# sleep 5
+sleep 5
 
 
 #----------------------------------------------------------#
