@@ -51,13 +51,7 @@ if [ -e '/usr/bin/wget' ]; then
 
  #   wget http://vestacp.com/pub/vst-install-$type.sh -O vst-install-$type.sh
  wget https://raw.githubusercontent.com/Devoleksiy/vesta/master/install/vst-install-$type.sh -O vst-install-$type.sh
-<<<<<<< HEAD
 #  wget https://raw.githubusercontent.com/Devoleksiy/vesta/master/install/vst-install-rhel.sh -O vst-install-rhel.sh
-=======
-
- wget https://raw.githubusercontent.com/Devoleksiy/vesta/master/install/vst-install-rhel.sh -O vst-install-rhel.sh
-
->>>>>>> 9b85d7a6cc308c2f9ddf68a9b2dc7b4e394d148c
     if [ "$?" -eq '0' ]; then
         bash vst-install-$type.sh $*
         exit
