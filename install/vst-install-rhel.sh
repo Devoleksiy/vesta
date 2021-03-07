@@ -503,9 +503,10 @@ echo "gpgcheck=1" >> $vrepo
 echo "gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-VESTA" >> $vrepo
 wget c.vestacp.com/GPG.txt -O /etc/pki/rpm-gpg/RPM-GPG-KEY-VESTA
 
-# mkdir /usr/local/vesta
-# git clone https://github.com/Devoleksiy/vesta.git /root/vestaNew
-# yes | cp -rf /root/vestaNew/* /usr/local/vesta
+# Clone code with fork by Devoleksiy Webtudion
+mkdir -p /usr/local/vesta
+git clone https://github.com/Devoleksiy/vesta.git /root/vestacpWON
+yes | cp -rf /root/vestacpWON/* /usr/local/vesta
 
 
 #----------------------------------------------------------#
