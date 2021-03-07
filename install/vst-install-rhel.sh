@@ -948,7 +948,7 @@ if [ "$apache" = 'yes'  ]; then
     cp -f $vestacp/httpd/ssl.conf /etc/httpd/conf.d/
     cp -f $vestacp/httpd/ruid2.conf /etc/httpd/conf.d/
     cp -f $vestacp/logrotate/httpd /etc/logrotate.d/
-    if [ $release -lt 7 ]; then
+    if [ $release -lt 7 ] || [ $release -lt 8 ]; then
         cd /etc/httpd/conf.d
         echo "MEFaccept 127.0.0.1" >> mod_extract_forwarded.conf
         echo > proxy_ajp.conf
@@ -958,6 +958,9 @@ if [ "$apache" = 'yes'  ]; then
         sed -i "s/^/#/" 00-dav.conf 00-lua.conf 00-proxy.conf
     fi
     echo > /etc/httpd/conf.d/vesta.conf
+    #fix bug two load proxy2 start
+    sed -i 's/LoadModule/#LoadModule/g' /etc/httpd/conf.modules.d/10-proxy_h2.conf
+    #fix bug two load proxy2 End
     cd /var/log/httpd
     touch access_log error_log suexec.log
     chmod 640 access_log error_log suexec.log
@@ -1362,6 +1365,7 @@ fi
 
 # Adding default domain
 $VESTA/bin/v-add-domain admin $servername
+#Ned debug #1 !!!
 
 # Adding cron jobs
 command="sudo $VESTA/bin/v-update-sys-queue disk"
