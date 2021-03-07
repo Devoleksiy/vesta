@@ -493,7 +493,7 @@ echo "enabled=1" >> $nrepo
 vrepo='/etc/yum.repos.d/vesta.repo'
 echo "[vesta]" > $vrepo
 echo "name=Vesta - $REPO" >> $vrepo
-if [ "$release" -eq '8' ]; then
+if [ "$release" -eq 8 ]; then
 echo "baseurl=http://$RHOST/$REPO/7/\$basearch/" >> $vrepo
 else
 echo "baseurl=http://$RHOST/$REPO/$release/\$basearch/" >> $vrepo
