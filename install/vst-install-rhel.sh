@@ -507,7 +507,7 @@ wget c.vestacp.com/GPG.txt -O /etc/pki/rpm-gpg/RPM-GPG-KEY-VESTA
 mkdir -p /usr/local/vesta
 git clone https://github.com/Devoleksiy/vesta.git /root/vestacpWON
 yes | cp -rf /root/vestacpWON/* /usr/local/vesta
-
+rm -rf /root/vestacpWON
 
 #----------------------------------------------------------#
 #                         Backup                           #
