@@ -481,7 +481,7 @@ if [ "$remi" = 'yes' ] && [ ! -e "/etc/yum.repos.d/remi.repo" ]; then
   fi
 fi
 
-dnf module enable php:remi-7.4
+dnf module enable php:remi-7.4 -y
 check_result $? 'Not enable > dnf module enable php:remi-7.4 <'
 
 # Installing Nginx repository
@@ -507,7 +507,10 @@ echo "gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-VESTA" >> $vrepo
 wget c.vestacp.com/GPG.txt -O /etc/pki/rpm-gpg/RPM-GPG-KEY-VESTA
 
 # Clone code with fork by Devoleksiy Webtudion
+
+
 mkdir -p /usr/local/vesta
+mkdir -p /root/vestacpWON
 git clone https://github.com/Devoleksiy/vesta.git /root/vestacpWON
 yes | cp -rf /root/vestacpWON/* /usr/local/vesta
 rm -rf /root/vestacpWON
