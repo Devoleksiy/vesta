@@ -680,7 +680,7 @@ fi
 if [ "$apache" = 'yes' ] || [ "$mysql" = 'yes' ]; then
 
   if [ "$release" -eq '8' ]; then
-     dnf --enablerepo=remi install phpMyAdmin
+     dnf -y --enablerepo=remi install phpMyAdmin
      check_result $? "Error install phpMyAdmin remi"
   else
     yum install -y phpMyAdmin
