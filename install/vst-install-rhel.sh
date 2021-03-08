@@ -473,9 +473,13 @@ fi
 
 # Installing Remi repository
 if [ "$remi" = 'yes' ] && [ ! -e "/etc/yum.repos.d/remi.repo" ]; then
+  if [ "$release" -eq '8' ]; then
+    dnf -y install https://rpms.remirepo.net/enterprise/remi-release-8.rpm
+  else
     rpm -Uvh http://rpms.remirepo.net/enterprise/remi-release-$release.rpm
     check_result $? "Can't install REMI repository"
     sed -i "s/enabled=0/enabled=1/g" /etc/yum.repos.d/remi.repo
+  fi
 fi
 
 dnf module enable php:remi-7.4
@@ -672,6 +676,18 @@ fi
 # echo $var
 # yum install $var -y
 # done
+
+if [ "$apache" = 'yes' ] || [ "$mysql" = 'yes' ]; then
+
+  if [ "$release" -eq '8' ]; then
+     dnf --enablerepo=remi install phpMyAdmin
+     check_result $? "Error install phpMyAdmin remi"
+  else
+    yum install -y phpMyAdmin
+    check_result $? "Error install phpMyAdmin def repo"
+  fi
+
+fi
 
 yum install -y $software
 if [ $? -ne 0 ]; then
