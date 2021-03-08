@@ -745,7 +745,7 @@ echo "/sbin/nologin" >> /etc/shells
 echo "/usr/sbin/nologin" >> /etc/shells
 
 # Changing default systemd interval
-if [ "$release" -eq '7' ]; then
+if [ "$release" -eq '7' ] || [ "$release" -eq '8' ]; then
     # Hi Lennart
     echo "DefaultStartLimitInterval=1s" >> /etc/systemd/system.conf
     echo "DefaultStartLimitBurst=60" >> /etc/systemd/system.conf
