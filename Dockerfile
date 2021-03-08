@@ -8,25 +8,15 @@ RUN dnf install epel-release -y \
 && dnf upgrade -y \
 && dnf clean all
 
-RUN dnf groupinstall "Server with GUI" --allowerasing -y \
-&& dnf clean all
+# ------------------  Server with GUI  ------------------------------
+#RUN dnf groupinstall "Server with GUI" --allowerasing -y \
+#&& dnf clean all
+#RUN systemctl set-default graphical.target
 
-RUN systemctl set-default graphical.target
-
+# -------------------------------------------------------------------
 USER root
-#WORKDIR /home
-
+WORKDIR /root
 CMD ["/usr/sbin/init"]
-
-
-#RUN dnf install dnf-plugins-core; \
-#dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo -y;
-
-#RUN systemctl set-default graphical;
-#dnf install dnf-plugins-core; \
-#dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo;
-
-#		Graphical shell
 
 
 #RUN { \

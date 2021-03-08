@@ -461,10 +461,6 @@ fi
 yum -y update
 check_result $? 'yum update failed'
 
-dnf module enable php:remi-7.4
-check_result $? 'Not enable > dnf module enable php:remi-7.4 <'
-
-
 # Installing EPEL repository
 if [ "$release" -eq '8' ]; then
     dnf install epel-release -y
@@ -481,6 +477,9 @@ if [ "$remi" = 'yes' ] && [ ! -e "/etc/yum.repos.d/remi.repo" ]; then
     check_result $? "Can't install REMI repository"
     sed -i "s/enabled=0/enabled=1/g" /etc/yum.repos.d/remi.repo
 fi
+
+dnf module enable php:remi-7.4
+check_result $? 'Not enable > dnf module enable php:remi-7.4 <'
 
 # Installing Nginx repository
 nrepo="/etc/yum.repos.d/nginx.repo"
