@@ -26,10 +26,9 @@ phpV='php74'
 # echo $test
 
 # Defining software pack for all distros
-#fix for centos 8 = jwhois > whois, ntp > chrony, php-imap > phpXX-php-imap, php-mcrypt > phpXX-php-pecl-mcrypt,
-# php-mysql > php-mysqlnd, 
-# Test = cronyd, php-tidy > 
-software="nginx awstats bc bind bind-libs bind-utils clamav-server clamav-update
+#fix for centos 8 = jwhois > whois, ntp > chrony, php-mysql > php-mysqlnd,
+# !Temporarily disabled: awstats
+software="nginx bc bind bind-libs bind-utils clamav-server clamav-update
     curl dovecot e2fsprogs exim expect fail2ban flex freetype ftp GeoIP httpd
     ImageMagick iptables-services whois lsof mailx mariadb mariadb-server mc
     mod_fcgid mod_ruid2 mod_ssl net-tools chrony openssh-clients pcre php
