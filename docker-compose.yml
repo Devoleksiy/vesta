@@ -3,18 +3,12 @@ version: '3'
 services:
   php-dev:
     build: .
-#    image: devoleksiy/php-dev:v1
-    image: centos:latest
+    image: centos:8
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+#    pre_build_image: true
+#    privileged: true
 #    tty: true
-#    ports:
-#      - 80:80
-#    volumes:
-#      - ./:/app/
-      # - ./dev/etc/php/php.ini:/opt/docker/etc/php/php.ini
-      # - ./etc/apache2/sites-available:/etc/apache2/sites-available
-      # - ./etc/httpd/:/opt/docker/etc/httpd/
-      # - ./dev/log/:/var/log
-#    environment:
-##--------->  OPCACHE  <-------------------------
-#      - WEB_DOCUMENT_ROOT=/app
-#      - PHP_MEMORY_LIMIT=3G
+    ports:
+      - 8083:8083
