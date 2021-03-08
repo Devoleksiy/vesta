@@ -506,25 +506,6 @@ echo "gpgcheck=1" >> $vrepo
 echo "gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-VESTA" >> $vrepo
 wget c.vestacp.com/GPG.txt -O /etc/pki/rpm-gpg/RPM-GPG-KEY-VESTA
 
-# Clone code with fork by Devoleksiy Webtudion
-    mkdir -p /usr/local/vesta
-if [ rpm -q git ]; then
-  mkdir -p /root/vestacpWON
-  git clone https://github.com/Devoleksiy/vesta.git /root/vestacpWON
-  yes | cp -rf /root/vestacpWON/* /usr/local/vesta
-  rm -rf /root/vestacpWON
-else
-  wget https://github.com/Devoleksiy/vesta/archive/master.zip
-  unzip master.zip
-  yes | cp -rf /root/vesta-master/* /usr/local/vesta
-  rm -rf /root/master.zip
-  rm -rf /root/vesta-master
-fi
-
-
-
-
-
 #----------------------------------------------------------#
 #                         Backup                           #
 #----------------------------------------------------------#
@@ -777,6 +758,20 @@ if [ "$release" -eq '7' ] || [ "$release" -eq '8' ]; then
     systemctl daemon-reexec
 fi
 
+# Clone code with fork by Devoleksiy Webtudion
+    mkdir -p /usr/local/vesta
+if [ rpm -q git ]; then
+  mkdir -p /root/vestacpWON
+  git clone https://github.com/Devoleksiy/vesta.git /root/vestacpWON
+  yes | cp -rf /root/vestacpWON/* /usr/local/vesta
+  rm -rf /root/vestacpWON
+else
+  wget https://github.com/Devoleksiy/vesta/archive/master.zip
+  unzip master.zip
+  yes | cp -rf /root/vesta-master/* /usr/local/vesta
+  rm -rf /root/master.zip
+  rm -rf /root/vesta-master
+fi
 
 #----------------------------------------------------------#
 #                     Configure VESTA                      #
