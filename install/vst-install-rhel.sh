@@ -767,9 +767,9 @@ if [ rpm -q git ]; then
   rm -rf /root/vestacpWON
 else
   wget https://github.com/Devoleksiy/vesta/archive/master.zip
-  unzip master.zip
+  unzip -d /root/ master.zip
   yes | cp -rf /root/vesta-master/* /usr/local/vesta
-  rm -rf /root/master.zip
+  rm -rf master.zip
   rm -rf /root/vesta-master
 fi
 
