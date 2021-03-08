@@ -6,8 +6,6 @@
 #                  Variables&Functions                     #
 #----------------------------------------------------------#
 
-
-
 export PATH=$PATH:/sbin
 RHOST='r.vestacp.com'
 CHOST='c.vestacp.com'
@@ -983,7 +981,7 @@ if [ "$apache" = 'yes'  ]; then
     check_result $? "httpd start failed"
 
     # Workaround for OpenVZ/Virtuozzo
-    if [ "$release" -ge '7' ] && [ -e "/proc/vz/veinfo" ]; then
+    if [ "$release" -ge '7' ] || [ "$release" -ge '8' ] && [ -e "/proc/vz/veinfo" ]; then
         echo "#Vesta: workraround for networkmanager" >> /etc/rc.local
         echo "sleep 2 && service httpd restart" >> /etc/rc.local
     fi
@@ -1212,12 +1210,12 @@ if [ "$clamd" = 'yes' ]; then
     mkdir -p /var/log/clamav /var/run/clamav
     chown clam:clam /var/log/clamav /var/run/clamav
     chown -R clam:clam /var/lib/clamav
-    if [ "$release" -ge '7' ]; then
+    if [ "$release" -ge '7' ] || [ "$release" -ge '8' ]; then
         cp -f $vestacp/clamav/clamd.service /usr/lib/systemd/system/
         systemctl --system daemon-reload
     fi
     /usr/bin/freshclam
-    if [ "$release" -ge '7' ]; then
+    if [ "$release" -ge '7' ] || [ "$release" -ge '8' ]; then
         sed -i "s/nofork/foreground/" /usr/lib/systemd/system/clamd.service
         systemctl daemon-reload
     fi
@@ -1235,7 +1233,7 @@ if [ "$spamd" = 'yes' ]; then
     chkconfig spamassassin on
     service spamassassin start
     check_result $? "spamassassin start failed"
-    if [ "$release" -ge '7' ]; then
+    if [ "$release" -ge '7' ] || [ "$release" -ge '8' ]; then
         groupadd -g 1001 spamd
         useradd -u 1001 -g spamd -s /sbin/nologin -d \
             /var/lib/spamassassin spamd
@@ -1329,6 +1327,7 @@ if [ ! -z "$(grep ^admin: /etc/group)" ] && [ "$force" = 'yes' ]; then
     groupdel admin > /dev/null 2>&1
 fi
 
+# Need debug  'Creating mailbox file: File exists' 
 # Adding Vesta admin account
 $VESTA/bin/v-add-user admin $vpass $email default System Administrator
 check_result $? "can't create admin user"
@@ -1367,6 +1366,12 @@ if [ "$postgresql" = 'yes' ]; then
     $VESTA/bin/v-add-database admin db db $(gen_pass) pgsql
 fi
 
+# Ned debug #2 if installing twice
+# cat: 192.168.122.1: No such file or directory
+# grep: 192.168.122.1: No such file or directory
+# sed: -e expression #1, char 16: unterminated `s' command
+# grep: 192.168.122.1: No such file or directory
+# sed: can't read 192.168.122.1: No such file or directory
 # Adding default domain
 $VESTA/bin/v-add-domain admin $servername
 #Ned debug #1 !!!
