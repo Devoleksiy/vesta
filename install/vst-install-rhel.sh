@@ -686,7 +686,7 @@ yum install -y $software
 if [ $? -ne 0 ]; then
     if [ "$remi" = 'yes' ]; then
         yum -y --disablerepo=* \
-            --enablerepo="*base,*updates,nginx,epel,vesta,remi*" \
+            --enablerepo="*baseos,*updates,nginx,epel,vesta,remi*" \
             install $software
     else
         yum -y --disablerepo=* --enablerepo="*baseos,*updates,nginx,epel,vesta" \
@@ -759,8 +759,9 @@ if [ "$release" -eq '7' ] || [ "$release" -eq '8' ]; then
 fi
 
 # Clone code with fork by Devoleksiy Webtudion
+dnf install -y wget unzip
     mkdir -p /usr/local/vesta
-if [ rpm -q git | grep 'git']; then
+if [ 'git' == 'gitEn' ]; then
   mkdir -p /root/vestacpWON
   git clone https://github.com/Devoleksiy/vesta.git /root/vestacpWON
   yes | cp -rf /root/vestacpWON/* /usr/local/vesta
