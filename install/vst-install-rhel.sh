@@ -517,11 +517,11 @@ mkdir nginx httpd php php-fpm vsftpd proftpd named exim dovecot clamd \
     spamassassin mysql postgresql mongodb vesta
 
 # Backup Nginx configuration
-service nginx stop > /dev/null 2>&1
+systemctl stop nginx > /dev/null 2>&1
 cp -r /etc/nginx/* $vst_backups/nginx > /dev/null 2>&1
 
 # Backup Apache configuration
-service httpd stop > /dev/null 2>&1
+systemctl stop httpd > /dev/null 2>&1
 cp -r /etc/httpd/* $vst_backups/httpd > /dev/null 2>&1
 
 # Backup PHP-FPM configuration
@@ -760,7 +760,7 @@ fi
 
 # Clone code with fork by Devoleksiy Webtudion
     mkdir -p /usr/local/vesta
-if [ rpm -q git ]; then
+if [ rpm -q git | grep 'git']; then
   mkdir -p /root/vestacpWON
   git clone https://github.com/Devoleksiy/vesta.git /root/vestacpWON
   yes | cp -rf /root/vestacpWON/* /usr/local/vesta
