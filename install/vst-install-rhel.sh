@@ -701,7 +701,7 @@ check_result $? "yum install failed"
 #----------------------------------------------------------#
 
 # Restarting rsyslog
-service rsyslog restart > /dev/null 2>&1
+systemctl restart rsyslog > /dev/null 2>&1
 
 # Checking ipv6 on loopback interface
 check_lo_ipv6=$(/sbin/ip addr | grep 'inet6')
@@ -950,14 +950,14 @@ if [ "$nginx" = 'yes' ]; then
         echo "[Service]" > limits.conf
         echo "LimitNOFILE=500000" >> limits.conf
     fi
-    chkconfig nginx on
-    service nginx start
+    systemctl enable nginx
+    systemctl start nginx
     check_result $? "nginx start failed"
 
     # Workaround for OpenVZ/Virtuozzo
     if [ "$release" -ge '7' ] && [ -e "/proc/vz/veinfo" ]; then
         echo "#Vesta: workraround for networkmanager" >> /etc/rc.local
-        echo "sleep 3 && service nginx restart" >> /etc/rc.local
+        echo "sleep 3 && systemctl restart nginx" >> /etc/rc.local
     fi
 fi
 
@@ -998,8 +998,8 @@ if [ "$apache" = 'yes'  ]; then
         echo "[Service]" > limits.conf
         echo "LimitNOFILE=500000" >> limits.conf
     fi
-    chkconfig httpd on
-    service httpd start
+    systemctl enable httpd
+    systemctl start httpd
     check_result $? "httpd start failed"
 
     # Workaround for OpenVZ/Virtuozzo
