@@ -1016,8 +1016,8 @@ fi
 
 if [ "$phpfpm" = 'yes' ]; then
     cp -f $vestacp/php-fpm/www.conf /etc/php-fpm.d/
-    chkconfig php-fpm on
-    service php-fpm start
+    systemctl enable php-fpm
+    systemctl start php-fpm
     check_result $? "php-fpm start failed"
 fi
 
@@ -1045,8 +1045,8 @@ done
 
 if [ "$vsftpd" = 'yes' ]; then
     cp -f $vestacp/vsftpd/vsftpd.conf /etc/vsftpd/
-    chkconfig vsftpd on
-    service vsftpd start
+    systemctl enable vsftpd
+    systemctl start vsftpd
     check_result $? "vsftpd start failed"
 fi
 
@@ -1057,8 +1057,8 @@ fi
 
 if [ "$proftpd" = 'yes' ]; then
     cp -f $vestacp/proftpd/proftpd.conf /etc/
-    chkconfig proftpd on
-    service proftpd start
+    systemctl enable proftpd
+    systemctl start proftpd
     check_result $? "proftpd start failed"
 fi
 
@@ -1088,14 +1088,14 @@ if [ "$mysql" = 'yes' ]; then
     fi
 
     cp -f $vestacp/$service/$mycnf /etc/my.cnf
-    chkconfig $service on
-    service $service start
+    systemctl enable $service
+    systemctl start $service
     if [ "$?" -ne 0 ]; then
         if [ -e "/proc/user_beancounters" ]; then
             # Fix for aio on OpenVZ
             sed -i "s/#innodb_use_native/innodb_use_native/g" /etc/my.cnf
         fi
-        service $service start
+        systemctl start $service
         check_result $? "$service start failed"
     fi
 
@@ -1133,15 +1133,15 @@ fi
 if [ "$postgresql" = 'yes' ]; then
     ppass=$(gen_pass)
     if [ $release -eq 5 ]; then
-        service postgresql start
+        systemctl start postgresql
         sudo -u postgres psql -c "ALTER USER postgres WITH PASSWORD '$ppass'"
-        service postgresql stop
+        systemctl stop postgresql
         cp -f $vestacp/postgresql/pg_hba.conf /var/lib/pgsql/data/
-        service postgresql start
+        systemctl start postgresql
     else
-        service postgresql initdb
+        systemctl initdb postgresql
         cp -f $vestacp/postgresql/pg_hba.conf /var/lib/pgsql/data/
-        service postgresql start
+        systemctl start postgresql
         sudo -u postgres psql -c "ALTER USER postgres WITH PASSWORD '$ppass'"
     fi
     # Configuring phpPgAdmin
@@ -1160,8 +1160,8 @@ if [ "$named" = 'yes' ]; then
     cp -f $vestacp/named/named.conf /etc/
     chown root:named /etc/named.conf
     chmod 640 /etc/named.conf
-    chkconfig named on
-    service named start
+    systemctl enable named
+    systemctl start named
     check_result $? "named start failed"
 fi
 
@@ -1190,13 +1190,13 @@ if [ "$exim" = 'yes' ]; then
 
     rm -f /etc/alternatives/mta
     ln -s /usr/sbin/sendmail.exim /etc/alternatives/mta
-    chkconfig sendmail off 2>/dev/null
-    service sendmail stop 2>/dev/null
-    chkconfig postfix off 2>/dev/null
-    service postfix stop 2>/dev/null
+    systemctl disable sendmail 2>/dev/null
+    systemctl enable sendmail 2>/dev/null
+    systemctl disable postfix 2>/dev/null
+    systemctl enable postfix 2>/dev/null
 
-    chkconfig exim on
-    service exim start
+    systemctl enable exim
+    systemctl start exim
     check_result $? "exim start failed"
 fi
 
@@ -1213,8 +1213,8 @@ if [ "$dovecot" = 'yes' ]; then
     if [ "$release" -eq 7 ]; then
         sed -i "s#namespace inbox {#namespace inbox {\n  inbox = yes#" /etc/dovecot/conf.d/15-mailboxes.conf
     fi
-    chkconfig dovecot on
-    service dovecot start
+    systemctl enable dovecot
+    systemctl start dovecot
     check_result $? "dovecot start failed"
 fi
 
@@ -1241,8 +1241,8 @@ if [ "$clamd" = 'yes' ]; then
         sed -i "s/nofork/foreground/" /usr/lib/systemd/system/clamd.service
         systemctl daemon-reload
     fi
-    chkconfig clamd on
-    service clamd start
+    systemctl enable clamd
+    systemctl start clamd
     #check_result $? "clamd start failed"
 fi
 
@@ -1252,8 +1252,8 @@ fi
 #----------------------------------------------------------#
 
 if [ "$spamd" = 'yes' ]; then
-    chkconfig spamassassin on
-    service spamassassin start
+    systemctl enable spamassassin
+    systemctl start spamassassin
     check_result $? "spamassassin start failed"
     if [ "$release" -ge '7' ] || [ "$release" -ge '8' ]; then
         groupadd -g 1001 spamd
@@ -1320,7 +1320,7 @@ if [ "$fail2ban" = 'yes' ]; then
         fline=$(echo "$fline" |grep enabled |tail -n1 |cut -f 1 -d -)
         sed -i "${fline}s/false/true/" /etc/fail2ban/jail.local
     fi
-    chkconfig fail2ban on
+    systemctl enable fail2ban
     mkdir -p /var/run/fail2ban
     if [ -e "/usr/lib/systemd/system/fail2ban.service" ]; then
         exec_pre='ExecStartPre=/bin/mkdir -p /var/run/fail2ban'
@@ -1328,7 +1328,7 @@ if [ "$fail2ban" = 'yes' ]; then
             /usr/lib/systemd/system/fail2ban.service
         systemctl daemon-reload
     fi
-    service fail2ban start
+    systemctl start fail2ban
     check_result $? "fail2ban start failed"
 fi
 
@@ -1413,7 +1413,7 @@ command="sudo $VESTA/bin/v-update-user-stats"
 $VESTA/bin/v-add-cron-job 'admin' '20' '00' '*' '*' '*' "$command"
 command="sudo $VESTA/bin/v-update-sys-rrd"
 $VESTA/bin/v-add-cron-job 'admin' '*/5' '*' '*' '*' '*' "$command"
-service crond restart
+systemctl restart crond
 
 # Building RRD images
 $VESTA/bin/v-update-sys-rrd
@@ -1429,8 +1429,8 @@ if [ "$softaculous" = 'yes' ]; then
 fi
 
 # Starting Vesta service
-chkconfig vesta on
-service vesta start
+systemctl enable vesta
+systemctl start vesta
 check_result $? "vesta start failed"
 chown admin:admin $VESTA/data/sessions
 
