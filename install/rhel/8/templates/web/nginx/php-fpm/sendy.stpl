@@ -3,7 +3,7 @@ server {
     server_name %domain_idn% %alias_idn%;
     ssl_certificate      %ssl_pem%;
     ssl_certificate_key  %ssl_key%;
-    root        %sdocroot%;
+    root        %docroot%;
     index       index.php index.html index.htm;
     access_log  /var/log/nginx/domains/%domain%.log combined;
     access_log  /var/log/nginx/domains/%domain%.bytes bytes;
@@ -77,7 +77,7 @@ server {
 
     location /vstats/ {
         alias   %home%/%user%/web/%domain%/stats/;
-        include %home%/%user%/web/%domain%/stats/auth.conf*;
+        include %home%/%user%/conf/web/%domain%.auth;
     }
 
     include     /etc/nginx/conf.d/phpmyadmin.inc*;
