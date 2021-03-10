@@ -673,7 +673,7 @@ fi
 if [ "$apache" = 'yes' ] || [ "$mysql" = 'yes' ]; then
 
   if [ "$release" -eq '8' ]; then
-     dnf -y --enablerepo=remi install phpMyAdmin
+     dnf -y --enablerepo=remi install phpMyAdmin roundcubemail
      check_result $? "Error install phpMyAdmin remi"
   else
     yum install -y phpMyAdmin
