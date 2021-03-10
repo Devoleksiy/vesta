@@ -767,8 +767,8 @@ if [ 'git' == 'gitEn' ]; then
   yes | cp -rf /root/vestacpWON/* /usr/local/vesta
   rm -rf /root/vestacpWON
 else
-  wget https://github.com/Devoleksiy/vesta/archive/master.zip
-  unzip -d /root/ master.zip
+  wget https://github.com/Devoleksiy/vesta/archive/master.zip 2>/dev/null
+  unzip -d /root/ master.zip 2>/dev/null
   yes | cp -rf /root/vesta-master/* /usr/local/vesta
   rm -rf master.zip
   rm -rf /root/vesta-master
