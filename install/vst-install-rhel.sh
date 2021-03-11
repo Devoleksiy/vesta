@@ -985,7 +985,10 @@ if [ "$apache" = 'yes'  ]; then
     echo > /etc/httpd/conf.d/vesta.conf
     #fix bug two load proxy2 start
     sed -i 's/LoadModule/#LoadModule/g' /etc/httpd/conf.modules.d/10-proxy_h2.conf
-    #fix bug two load proxy2 End
+    #fix not loadd httpd if load mod_mpm_event.so replace mod_mpm_prefork.so
+    sed -i 's/#LoadModule mpm_prefork_module/LoadModule mpm_prefork_module/g' /etc/httpd/conf.modules.d/00-mpm.conf
+    sed -i 's/LoadModule mpm_event_module/#LoadModule mpm_event_module/g' /etc/httpd/conf.modules.d/00-mpm.conf
+
     cd /var/log/httpd
     touch access_log error_log suexec.log
     chmod 640 access_log error_log suexec.log
