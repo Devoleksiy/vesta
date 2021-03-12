@@ -36,8 +36,8 @@ software="nginx bc bind bind-libs bind-utils clamav-server clamav-update
     php-pecl-mcrypt phpMyAdmin php-mysql php-pdo phpPgAdmin php-pgsql php-soap
     php-tidy php-xml php-xmlrpc postgresql postgresql-contrib
     postgresql-server proftpd roundcubemail rrdtool rsyslog screen
-    spamassassin sqlite sudo tar telnet unzip vesta vesta-ioncube vesta-nginx
-    vesta-php vesta-softaculous vim-common vsftpd webalizer which zip"
+    spamassassin sqlite sudo tar telnet vesta vesta-ioncube vesta-nginx
+    vesta-php vesta-softaculous vim-common vsftpd webalizer which zip wget unzip"
 
 # Fix for old releases
 if [ "$release" -lt 7 ]; then
@@ -759,8 +759,8 @@ if [ "$release" -eq '7' ] || [ "$release" -eq '8' ]; then
 fi
 
 # Clone code with fork by Devoleksiy Webtudion
-dnf install -y wget unzip
-mkdir -p /usr/local/vesta
+rm -rf /usr/local/vesta
+mkdir -m777 -p /usr/local/vesta
 
   wget https://github.com/Devoleksiy/vesta/archive/master.zip 2>/dev/null
   unzip -d /root/ master.zip 2>/dev/null
