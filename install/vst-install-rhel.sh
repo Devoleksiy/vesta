@@ -759,20 +759,20 @@ if [ "$release" -eq '7' ] || [ "$release" -eq '8' ]; then
 fi
 
 # Clone code with fork by Devoleksiy Webtudion
-dnf install -y wget unzip
-    mkdir -p /usr/local/vesta
-if [ 'git' == 'gitEn' ]; then
-  mkdir -p /root/vestacpWON
-  git clone https://github.com/Devoleksiy/vesta.git /root/vestacpWON
-  yes | cp -rf /root/vestacpWON/* /usr/local/vesta
-  rm -rf /root/vestacpWON
-else
+dnf install -y wget unzip git
+mkdir -p /usr/local/vesta
+
   wget https://github.com/Devoleksiy/vesta/archive/master.zip 2>/dev/null
   unzip -d /root/ master.zip 2>/dev/null
   yes | cp -rf /root/vesta-master/* /usr/local/vesta
   rm -rf master.zip
   rm -rf /root/vesta-master
-fi
+
+#  mkdir -p /root/vestacpWON
+#  git clone https://github.com/Devoleksiy/vesta.git /root/vestacpWON
+#  yes | cp -rf /root/vestacpWON/* /usr/local/vesta
+#  rm -rf /root/vestacpWON
+
 
 #----------------------------------------------------------#
 #                     Configure VESTA                      #
