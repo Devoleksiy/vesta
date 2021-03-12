@@ -759,7 +759,7 @@ if [ "$release" -eq '7' ] || [ "$release" -eq '8' ]; then
 fi
 
 # Clone code with fork by Devoleksiy Webtudion
-dnf install -y wget unzip git
+dnf install -y wget unzip
 mkdir -p /usr/local/vesta
 
   wget https://github.com/Devoleksiy/vesta/archive/master.zip 2>/dev/null
