@@ -937,6 +937,7 @@ rm /tmp/vst.pem
 
 if [ "$nginx" = 'yes' ]; then
     rm -f /etc/nginx/conf.d/*.conf
+    rm -f /etc/nginx/default.d/*.conf
     cp -f $vestacp/nginx/nginx.conf /etc/nginx/
     cp -f $vestacp/nginx/status.conf /etc/nginx/conf.d/
     cp -f $vestacp/nginx/phpmyadmin.inc /etc/nginx/conf.d/
