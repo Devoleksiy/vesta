@@ -954,6 +954,7 @@ if [ "$nginx" = 'yes' ]; then
     fi
     systemctl enable nginx
     systemctl start nginx
+    systemctl daemon-reload
     check_result $? "nginx start failed"
 
     # Workaround for OpenVZ/Virtuozzo
@@ -1004,7 +1005,8 @@ if [ "$apache" = 'yes'  ]; then
         echo "LimitNOFILE=500000" >> limits.conf
     fi
     systemctl enable httpd
-    systemctl start httpd
+#    systemctl start httpd
+    systemctl daemon-reload
     check_result $? "httpd start failed"
 
     # Workaround for OpenVZ/Virtuozzo
