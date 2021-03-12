@@ -1005,7 +1005,7 @@ if [ "$apache" = 'yes'  ]; then
         echo "LimitNOFILE=500000" >> limits.conf
     fi
     systemctl enable httpd
-#    systemctl start httpd
+#   systemctl start httpd
     systemctl daemon-reload
     check_result $? "httpd start failed"
 
