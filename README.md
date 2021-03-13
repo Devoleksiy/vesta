@@ -35,6 +35,10 @@ Then run it:
 ```bash
 bash vst-install.sh
 ```
+Fix
+----------------------------
+Need work after installed
+After successful installation, recreate the user.
 
 License
 ----------------------------
