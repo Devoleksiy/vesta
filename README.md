@@ -40,7 +40,14 @@ Fix
 Need work after installed
 After successful installation, recreate the user.
 ```bash
-bash v-rebuild-user admin
+v-rebuild-user admin
+```
+
+You can still do:
+Delete file from ip in / usr / local / vesta / data / ips directory
+and run:
+```bash
+v-update-sys-ip
 ```
 
 License
