@@ -263,6 +263,7 @@ fi
 
 # Checking repository availability
 wget -q "c.vestacp.com/GPG.txt" -O /dev/null
+
 check_result $? "No access to Vesta repository"
 
 # Checking installed packages
