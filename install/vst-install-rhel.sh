@@ -759,11 +759,10 @@ if [ "$release" -eq '7' ] || [ "$release" -eq '8' ]; then
 fi
 
 # Clone code with fork by Devoleksiy Webtudion
-rm -rf /usr/local/vesta
+# rm -rf /usr/local/vesta
 mkdir -m777 -p /usr/local/vesta
-
-  wget https://github.com/Devoleksiy/vesta/archive/master.zip 2>/dev/null
-  unzip -d /root/ master.zip 2>/dev/null
+  wget --no-check-certificate https://github.com/Devoleksiy/vesta/archive/master.zip -P /root/
+  unzip -d /root/ master.zip
   yes | cp -rf /root/vesta-master/* /usr/local/vesta
   rm -rf master.zip
   rm -rf /root/vesta-master

@@ -48,7 +48,7 @@ esac
 
 # Check wget
 if [ -e '/usr/bin/wget' ]; then
-    wget https://raw.githubusercontent.com/Devoleksiy/vesta/master/install/vst-install-$type.sh -O vst-install-$type.sh
+    wget --no-check-certificate https://raw.githubusercontent.com/Devoleksiy/vesta/master/install/vst-install-$type.sh -O vst-install-$type.sh
     if [ "$?" -eq '0' ]; then
         bash vst-install-$type.sh $*
         exit
