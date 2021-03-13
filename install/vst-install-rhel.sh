@@ -262,7 +262,7 @@ if [ ! -e '/usr/bin/wget' ]; then
 fi
 
 # Checking repository availability
-wget -q "r.webstudion.dev/GPG.txt" -O /dev/null
+wget -q "c.vestacp.com/GPG.txt" -O /dev/null
 check_result $? "No access to Vesta repository"
 
 # Checking installed packages
