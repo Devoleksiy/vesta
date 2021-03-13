@@ -668,6 +668,9 @@ fi
 # yum install $var -y
 # done
 
+dnf module enable php:remi-7.4 -y
+check_result $? 'Not enable > dnf module enable php:remi-7.4 <'
+
 if [ "$apache" = 'yes' ] || [ "$mysql" = 'yes' ]; then
 
   if [ "$release" -eq '8' ]; then
@@ -680,8 +683,6 @@ if [ "$apache" = 'yes' ] || [ "$mysql" = 'yes' ]; then
 
 fi
 
-dnf module enable php:remi-7.4 -y
-check_result $? 'Not enable > dnf module enable php:remi-7.4 <'
 
 
 yum install -y $software
