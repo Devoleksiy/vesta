@@ -481,8 +481,6 @@ if [ "$remi" = 'yes' ] && [ ! -e "/etc/yum.repos.d/remi.repo" ]; then
   fi
 fi
 
-dnf module enable php:remi-7.4 -y
-check_result $? 'Not enable > dnf module enable php:remi-7.4 <'
 
 # Installing Nginx repository
 nrepo="/etc/yum.repos.d/nginx.repo"
@@ -681,6 +679,10 @@ if [ "$apache" = 'yes' ] || [ "$mysql" = 'yes' ]; then
   fi
 
 fi
+
+dnf module enable php:remi-7.4 -y
+check_result $? 'Not enable > dnf module enable php:remi-7.4 <'
+
 
 yum install -y $software
 if [ $? -ne 0 ]; then
