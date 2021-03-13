@@ -469,7 +469,7 @@ else
     check_result $? "Can't install EPEL repository"
 fi
 
-
+print $release
 # Installing Remi repository
 if [ "$remi" = 'yes' ] && [ ! -e "/etc/yum.repos.d/remi.repo" ]; then
   if [ "$release" -eq '8' ]; then
