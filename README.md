@@ -39,6 +39,9 @@ Fix
 ----------------------------
 Need work after installed
 After successful installation, recreate the user.
+```bash
+bash v-rebuild-user admin
+```
 
 License
 ----------------------------
