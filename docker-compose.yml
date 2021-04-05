@@ -2,13 +2,70 @@
 version: '3'
 services:
   php-dev:
-    build: .
-    image: centos:8
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    privileged: true
-#    pre_build_image: true
-#    privileged: true
-#    tty: true
+    #    image: devoleksiy/php-dev:v1
+    image: webdevops/php-apache-dev:7.4-alpine
     ports:
-      - 8083:8083
+      - 80:80
+    volumes:
+      - ./:/app/
+      # - ./dev/etc/php/php.ini:/opt/docker/etc/php/php.ini
+      # - ./etc/apache2/sites-available:/etc/apache2/sites-available
+      # - ./etc/httpd/:/opt/docker/etc/httpd/
+      # - ./dev/log/:/var/log
+    environment:
+      #--------->  OPCACHE  <-------------------------
+      - WEB_DOCUMENT_ROOT=/app/web
+      - PHP_MEMORY_LIMIT=3G
+      #--------->  OPCACHE  <-------------------------
+      - PHP_OPCACHE_MEMORY_CONSUMPTION=1024M
+      - PHP_OPCACHE_MAX_ACCELERATED_FILES=32531
+      - PHP_OPCACHE_INTERNED_STRINGS_BUFFER=16
+      #--------->  XDEBUG  <-------------------------
+      - XDEBUG_MODE=debug
+      - XDEBUG_CLIENT_HOST=host.docker.internal
+      - XDEBUG_CLIENT_PORT=9003
+    #      - XDEBUG_START_WITH_REQUEST=yes
+    #      - XDEBUG_REMOTE_PORT=9003
+    #      - PHP_DEBUGGER=xdebug
+    #      - XDEBUG_PROFILER_ENABLE=1
+    #      - XDEBUG_IDE_KEY=PHPSTORM
+    #      - XDEBUG_REMOTE_CONNECT_BACK=0
+    #      - XDEBUG_REMOTE_AUTOSTART=1
+#    depends_on:
+#      - Mariadb
+  #      - memcached
+#  Mariadb:
+#    image: mariadb
+#    hostname: mariadb
+#    environment:
+#      MYSQL_ROOT_PASSWORD: example
+#    volumes:
+#      - ./dev/data/mysql:/var/lib/mysql
+#  phpmyadmin:
+#    image: phpmyadmin/phpmyadmin:latest
+#    ports:
+#      - 8000:80
+#    environment:
+#      - PMA_ARBITRARY=1
+#      - PMA_HOST=Mariadb
+#      - UPLOAD_LIMIT=200M
+#    depends_on:
+#      - Mariadb
+#  memcached:
+#    image: memcached:latest
+#    hostname: memcached
+#    ports:
+#      - "11211:11211"
+
+
+# IF INSTALL VESTACP    image: devoleksiy/php-dev:v1 # с webdevops/php-apache-dev:7.4-alpine
+#version: '3'
+#services:
+#  php-dev:
+#    build: .
+#    image: centos:8
+#    volumes:
+#      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+#    privileged: true
+#    ports:
+#      - 8083:8083

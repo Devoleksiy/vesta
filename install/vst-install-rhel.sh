@@ -37,7 +37,7 @@ software="nginx bc bind bind-libs bind-utils clamav-server clamav-update
     php-tidy php-xml php-xmlrpc postgresql postgresql-contrib
     postgresql-server proftpd roundcubemail rrdtool rsyslog screen
     spamassassin sqlite sudo tar telnet vesta vesta-ioncube vesta-nginx
-    vesta-php vesta-softaculous vim-common vsftpd webalizer which zip wget unzip"
+    vesta-php vesta-softaculous vim-common vsftpd webalizer which zip wget unzip patch"
 
 # Fix for old releases
 if [ "$release" -lt 7 ]; then
@@ -683,6 +683,60 @@ if [ "$apache" = 'yes' ] || [ "$mysql" = 'yes' ]; then
   fi
 
 fi
+
+################################################
+# ------ install and config Git server --------
+# install Git with the following command:
+dnf install git -y
+# Now, create a dedicated user git with the following command
+useradd --create-home --shell /bin/bash git
+# Now, login as the git user with the following command
+su - git
+# Now, create a new directory ~/.ssh as follows
+mkdir ~/.ssh
+# Only the git user should have read, write and execute permission to the ~/.ssh directory.
+# To do that, run the following command:
+chmod 700 ~/.ssh/
+# As you can see, now only the user git has read, write and execute permission to the directory.
+ls -ld ~/.ssh/
+# Now, create a new file ~/.ssh/authorized_keys as follows:
+touch ~/.ssh/authorized_keys
+# Only the git user should have read and write permission to the ~/.ssh/authorized_keys file.
+# To do that, run the following command:
+chmod 600 ~/.ssh/authorized_keys
+# Adding Client public Key to the Git Server:
+# To access the git repositories on the Git server, the users of the repository must add their public keys to the Git server.
+# The users can generate their SSH keys with the following command:
+ssh-keygen
+# Press <Enter>. Press <Enter>. Press <Enter>.
+# Now, the users can find their public key in the ~/.ssh/id_rsa.pub file.
+cat ~ / .ssh / id_rsa.pub
+# Now, the users should send their public keys to the Git server administrator and the server administrator can add these keys to the Git server.
+# Let’s say, the server administrator has uploaded the public key file to the Git server. The file is in the path /tmp/shovon-key.pub.
+#
+# Now, the server administrator can add the contents of the public key to the ~/.ssh/authorized_keys file as follows:
+cat /tmp/ssh/devoleksiy_id_rsa_2048.pub >> ~/.ssh/authorized_keys
+# The public key should be appended to the end of the ~/.ssh/authorized_keys file.
+
+# Creating an Empty Git Repository on the Git Server:
+# In the home directory of the git user, we will keep all our Git repositories that authorized people can access.
+#
+# To create an empty Git repository test on the Git server, run the following command:
+git init --bare test.git
+#
+#
+#
+
+git config --global user.name "devoleksiy"
+git config --global user.email "devoleksiy@gmail.com"
+
+#
+#
+#
+#
+#
+#
+#################################################
 
 
 

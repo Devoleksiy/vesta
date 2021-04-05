@@ -34,6 +34,24 @@ $valiases = explode(",", $data[$v_domain]['ALIAS']);
 $v_tpl = $data[$v_domain]['IP'];
 $v_cgi = $data[$v_domain]['CGI'];
 $v_elog = $data[$v_domain]['ELOG'];
+// GIT
+$v_git = $data[$v_domain]['GIT'];
+if (!empty($v_git)) {
+  exec (VESTA_CMD."v-list-web-domain-ssl ".$user." ".escapeshellarg($v_domain)." json", $output, $return_var);
+  $git_str = json_decode(implode('', $output), true);
+  unset($output);
+  $v_git = $git_str[$v_domain]['GIT'];
+  $v_git_clone_url = $git_str[$v_domain]['GIT_CLONE_URL'];
+  $v_git_user_pub_key = $git_str[$v_domain]['GIT_USER_PUB_KEY'];
+
+
+  // Git
+  $v_git = $_POST['v_git'];
+  $v_git_clone_url = $_POST['v_git_clone_url'];
+  $v_git_user_pub_key = $_POST['v_git_user_pub_key'];
+}
+
+
 $v_ssl = $data[$v_domain]['SSL'];
 if (!empty($v_ssl)) {
     exec (VESTA_CMD."v-list-web-domain-ssl ".$user." ".escapeshellarg($v_domain)." json", $output, $return_var);

@@ -33,6 +33,9 @@ json_list() {
         "ALIAS": "'$ALIAS'",
         "STATS": "'$STATS'",
         "STATS_USER": "'$STATS_USER'",
+        "GIT": "'$GIT'",
+        "GIT_CLONE_URL": "'$GIT_CLONE_URL'",
+        "GIT_USER_PUB_KEY": "'$GIT_USER_PUB_KEY'",
         "SSL": "'$SSL'",
         "SSL_HOME": "'$SSL_HOME'",
         "LETSENCRYPT": "'$LETSENCRYPT'",
@@ -59,11 +62,11 @@ json_list() {
 # SHELL list function
 shell_list() {
     IFS=$'\n'
-    echo "DOMAIN   IP   TPL   SSL   DISK   BW   SPND   DATE"
-    echo "------   --   ---   ---   ----   --   ----   -----"
+    echo "DOMAIN   IP   TPL   GIT   SSL   DISK   BW   SPND   DATE"
+    echo "------   --   ---   ---   ---   ----   --   ----   -----"
     while read str; do
         eval $str
-        echo "$DOMAIN $IP $TPL $SSL $U_DISK $U_BANDWIDTH $SUSPENDED $DATE"
+        echo "$DOMAIN $IP $TPL $GIT $SSL $U_DISK $U_BANDWIDTH $SUSPENDED $DATE"
     done < <(cat $USER_DATA/web.conf)
 }
 
@@ -73,7 +76,7 @@ plain_list() {
     while read str; do
         eval $str
         echo -ne "$DOMAIN\t$IP\t$IP6\t$U_DISK\t$U_BANDWIDTH\t$TPL\t"
-        echo -ne "$ALIAS\t$STATS\t$STATS_USER\t$SSL\t$SSL_HOME\t$LETSENCRYPT\t"
+        echo -ne "$ALIAS\t$STATS\t$STATS_USER\t$GIT\t$GIT_CLONE_URL\t$GIT_USER_PUB_KEY\t$SSL\t$SSL_HOME\t$LETSENCRYPT\t"
         echo -ne "$FTP_USER\t$FTP_PATH\t$AUTH_USER\t$BACKEND\t$PROXY\t"
         echo -e "$PROXY_EXT\t$SUSPENDED\t$TIME\t$DATE"
     done < <(cat $USER_DATA/web.conf)
@@ -88,7 +91,7 @@ csv_list() {
     while read str; do
         eval $str
         echo -n "$DOMAIN,$IP,$IP6,$U_DISK,$U_BANDWIDTH,$TPL,"
-        echo -n "\"$ALIAS\",$STATS,\"$STATS_USER\",$SSL,$SSL_HOME,$LETSENCRYPT,"
+        echo -n "\"$ALIAS\",$STATS,\"$STATS_USER\",$GIT,$GIT_CLONE_URL,$GIT_USER_PUB_KEY,$SSL,$SSL_HOME,$LETSENCRYPT,"
         echo -n "\"$FTP_USER\",\"$FTP_PATH\",\"$AUTH_USER\",$BACKEND,$PROXY,"
         echo "\"$PROXY_EXT\",$SUSPENDED,$TIME,$DATE"
     done < <(cat $USER_DATA/web.conf)

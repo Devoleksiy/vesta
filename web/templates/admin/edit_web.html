@@ -179,6 +179,38 @@
                                 </td>
                             </tr>
                             <?php } ?>
+                            <!--  Suport GIT Start  -->
+                            <tr>
+                                <td class="vst-text step-top">
+                                    <label><input type="checkbox" size="20" class="vst-checkbox" name="v_git" <?php if ($v_git == 'yes') echo "checked=yes" ?> onclick="javascript:elementHideShow('gittable');"> <?php print __('GIT Support');?></label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="step-left">
+                                    <table style="display:<?php if ($v_git == 'no' ) { echo 'none';} else {echo 'block';}?> ;" id="gittable">
+                                        <!--  v_git_clone_url  -->
+                                        <tr>
+                                            <td>
+                                                <input type="text" size="20" class="vst-input" name="v_git_clone_url" value="<?=htmlentities(trim($v_git_clone_url, "'"))?>" disabled>
+                                                <input type="hidden" name="v_git_clone_url" value="<?=htmlentities(trim($v_git_clone_url, "'"))?>">
+                                            </td>
+                                        </tr>
+                                        <!--  v_git_user_pub_key  -->
+                                        <tr>
+                                            <td class="vst-text input-label">
+                                                <?php print __('Aliases');?>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <textarea size="20" class="vst-textinput" name="v_aliases"><?=htmlentities(trim($v_aliases, "'"))?></textarea>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <!--  Suport GIT End  -->
+                            <!--  Suport SSL Start  -->
                             <tr>
                                 <td class="vst-text step-top">
                                     <label><input type="checkbox" size="20" class="vst-checkbox" name="v_ssl" <?php if ($v_ssl == 'yes') echo "checked=yes" ?> onclick="javascript:elementHideShow('ssltable');"> <?php print __('SSL Support');?></label>
@@ -311,6 +343,7 @@
                                     </table>
                                 </td>
                             </tr>
+                            <!--  Suport SSL End  -->
                             <tr>
                                 <td class="vst-text step-top">
                                     <?php print __('Web Statistics');?>

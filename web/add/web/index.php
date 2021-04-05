@@ -86,6 +86,11 @@ if (!empty($_POST['ok'])) {
 
     // Define other options
     $v_elog = $_POST['v_elog'];
+    // Git
+    $v_git = $_POST['v_git'];
+    $v_git_clone_url = $_POST['v_git_clone_url'];
+    $v_git_user_pub_key = $_POST['v_git_user_pub_key'];
+
     $v_ssl = $_POST['v_ssl'];
     $v_ssl_crt = $_POST['v_ssl_crt'];
     $v_ssl_key = $_POST['v_ssl_key'];
@@ -106,6 +111,7 @@ if (!empty($_POST['ok'])) {
     if (!empty($_POST['v_ftp'])) $v_adv = 'yes';
     if ($_POST['v_proxy_ext'] != $v_proxy_ext) $v_adv = 'yes';
     if ((!empty($_POST['v_aliases'])) && ($_POST['v_aliases'] != 'www.'.$_POST['v_domain'])) $v_adv = 'yes';
+
     if ((!empty($_POST['v_ssl'])) || (!empty($_POST['v_elog']))) $v_adv = 'yes';
     if ((!empty($_POST['v_ssl_crt'])) || (!empty($_POST['v_ssl_key']))) $v_adv = 'yes';
     if ((!empty($_POST['v_ssl_ca'])) || ($_POST['v_stats'] != 'none')) $v_adv = 'yes';
@@ -156,6 +162,43 @@ if (!empty($_POST['ok'])) {
         exec (VESTA_CMD."v-delete-web-domain-proxy ".$user." ".$v_domain." no", $output, $return_var);
         check_return_code($return_var,$output);
         unset($output);
+    }
+
+
+    // Add Git general repo support !!!!
+    if ((!empty($_POST['v_git'])) && (empty($_SESSION['error_msg']))) {
+      exec ('mktemp -d', $output, $return_var);
+      $tmpdir = $output[0];
+      unset($output);
+
+      // Save certificate
+      if (!empty($_POST['v_ssl_crt'])) {
+        $fp = fopen($tmpdir."/".$_POST['v_domain'].".crt", 'w');
+        fwrite($fp, str_replace("\r\n", "\n", $_POST['v_ssl_crt']));
+        fwrite($fp, "\n");
+        fclose($fp);
+      }
+
+      // Save private key
+      if (!empty($_POST['v_ssl_key'])) {
+        $fp = fopen($tmpdir."/".$_POST['v_domain'].".key", 'w');
+        fwrite($fp, str_replace("\r\n", "\n", $_POST['v_ssl_key']));
+        fwrite($fp, "\n");
+        fclose($fp);
+      }
+
+      // Save CA bundle
+      if (!empty($_POST['v_ssl_ca'])) {
+        $fp = fopen($tmpdir."/".$_POST['v_domain'].".ca", 'w');
+        fwrite($fp, str_replace("\r\n", "\n", $_POST['v_ssl_ca']));
+        fwrite($fp, "\n");
+        fclose($fp);
+      }
+
+      $v_ssl_home = escapeshellarg($_POST['v_ssl_home']);
+      exec (VESTA_CMD."v-add-web-domain-ssl ".$user." ".$v_domain." ".$tmpdir." ".$v_ssl_home." no", $output, $return_var);
+      check_return_code($return_var,$output);
+      unset($output);
     }
 
     // Add Lets Encrypt support

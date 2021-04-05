@@ -1,0 +1,95 @@
+#!/bin/bash
+# info: list web domain ssl certificate
+# options: USER DOMAIN [FORMAT]
+#
+# The function of obtaining domain ssl files.
+
+
+#----------------------------------------------------------#
+#                    Variable&Function                     #
+#----------------------------------------------------------#
+
+# Argument definition
+user=$1
+domain=$2
+format=${3-shell}
+
+# Includes
+source $VESTA/func/main.sh
+
+# JSON list function
+json_list() {
+    issuer=$(echo "$issuer" |sed -e 's/"/\\"/g' -e "s/%quote%/'/g")
+    echo '{'
+    echo -e "\t\"$domain\": {"
+    echo "        \"GIT\": \"$git\","
+    echo "        \"GIT_CLONE_URL\": \"$v_git_clone_url\","
+    echo "        \"GIT_USER_PUB_KEY\": \"$v_git_user_pub_key\""
+    echo -e "\t}\n}"
+}
+
+# SHELL list function
+shell_list() {
+    if [ ! -z "$git" ]; then
+        echo -e "$git"
+    fi
+    if [ ! -z "$v_git_clone_url" ]; then
+        echo -e "\n$v_git_clone_url"
+    fi
+    if [ ! -z "$v_git_user_pub_key" ]; then
+        echo -e "\n$v_git_user_pub_key"
+    fi
+
+}
+
+# PLAIN list function
+plain_list() {
+    if [ ! -z "$git" ]; then
+        echo -e "$git"
+    fi
+    if [ ! -z "$v_git_clone_url" ]; then
+        echo -e "\n$v_git_clone_url"
+    fi
+    if [ ! -z "$v_git_user_pub_key" ]; then
+        echo -e "\n$v_git_user_pub_key"
+    fi
+
+}
+
+# CSV list function
+csv_list() {
+    echo -n "GIT,GIT_CLONE_URL,GIT_USER_PUB_KEY,"
+    echo -n "\"$git\",\"$v_git_clone_url\",\"$v_git_user_pub_key\""
+}
+
+
+#----------------------------------------------------------#
+#                    Verifications                         #
+#----------------------------------------------------------#
+
+check_args '2' "$#" 'USER DOMAIN [FORMAT]'
+is_format_valid 'user' 'domain'
+is_object_valid 'user' 'USER' "$user"
+is_object_valid 'web' 'DOMAIN' "$domain"
+
+
+#----------------------------------------------------------#
+#                       Action                             #
+#----------------------------------------------------------#
+# Parsing domain Git on/off
+
+
+# Listing data
+case $format in
+    json)   json_list ;;
+    plain)  plain_list ;;
+    csv)    csv_list ;;
+    shell)  shell_list ;;
+esac
+
+
+#----------------------------------------------------------#
+#                       Vesta                              #
+#----------------------------------------------------------#
+
+exit

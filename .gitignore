@@ -5,3 +5,11 @@
 .vscode
 .DS_Store
 .idea
+conf/
+data/
+ioncube/
+log/
+nginx/
+php/
+softaculous/
+ssl/
