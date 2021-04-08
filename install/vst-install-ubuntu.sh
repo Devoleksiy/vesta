@@ -478,18 +478,18 @@ mkdir nginx apache2 php vsftpd proftpd bind exim4 dovecot clamd
 mkdir spamassassin mysql postgresql mongodb vesta
 
 # Backup nginx configuration
-service nginx stop > /dev/null 2>&1
+systemctl stop nginx > /dev/null 2>&1
 cp -r /etc/nginx/* $vst_backups/nginx >/dev/null 2>&1
 
 # Backup Apache configuration
-service apache2 stop > /dev/null 2>&1
+systemctl stop apache2 > /dev/null 2>&1
 cp -r /etc/apache2/* $vst_backups/apache2 > /dev/null 2>&1
 rm -f /etc/apache2/conf.d/* > /dev/null 2>&1
 
 # Backup PHP-FPM configuration
-service php7.0-fpm stop > /dev/null 2>&1
-service php5-fpm stop > /dev/null 2>&1
-service php-fpm stop > /dev/null 2>&1
+systemctl stop php7.0-fpm > /dev/null 2>&1
+systemctl stop php5-fpm > /dev/null 2>&1
+systemctl stop php-fpm > /dev/null 2>&1
 cp -r /etc/php7.0/* $vst_backups/php/ > /dev/null 2>&1
 cp -r /etc/php5/* $vst_backups/php/ > /dev/null 2>&1
 cp -r /etc/php/* $vst_backups/php/ > /dev/null 2>&1

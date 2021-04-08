@@ -79,7 +79,7 @@ if [ "$restart" != 'no' ]; then
     if [ -e "/var/run/vesta-nginx.pid" ]; then
         kill -HUP $(cat /var/run/vesta-nginx.pid)
     else
-        service vesta restart
+        systemctl restart vesta
     fi
 fi
 

@@ -19,8 +19,8 @@ send_email_report() {
     email=$(echo "$email" | cut -f 2 -d "'")
     tmpfile=$(mktemp)
     subj="$(hostname): $PROXY_SYSTEM restart failed"
-    service $PROXY_SYSTEM configtest >> $tmpfile 2>&1
-    service $PROXY_SYSTEM restart >> $tmpfile 2>&1
+    systemctl configtest $PROXY_SYSTEM >> $tmpfile 2>&1
+    systemctl restart $PROXY_SYSTEM >> $tmpfile 2>&1
     cat $tmpfile |$SENDMAIL -s "$subj" $email
     rm -f $tmpfile
 }

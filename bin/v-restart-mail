@@ -19,8 +19,8 @@ send_email_report() {
     email=$(echo "$email" | cut -f 2 -d "'")
     tmpfile=$(mktemp)
     subj="$(hostname): $MAIL_SYSTEM restart failed"
-    service $MAIL_SYSTEM configtest >> $tmpfile 2>&1
-    service $MAIL_SYSTEM restart >> $tmpfile 2>&1
+    systemctl configtest $MAIL_SYSTEM >> $tmpfile 2>&1
+    systemctl restart $MAIL_SYSTEM >> $tmpfile 2>&1
     cat $tmpfile |$SENDMAIL -s "$subj" $email
     rm -f $tmpfile
 }
@@ -50,7 +50,7 @@ if [ -z "$MAIL_SYSTEM" ] || [ "$MAIL_SYSTEM" = 'remote' ]; then
 fi
 
 # Restart system
-service $MAIL_SYSTEM restart >/dev/null 2>&1
+systemctl restart $MAIL_SYSTEM >/dev/null 2>&1
 if [ $? -ne 0 ]; then
     send_email_report
     check_result $E_RESTART "$MAIL_SYSTEM restart failed"

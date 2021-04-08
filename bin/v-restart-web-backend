@@ -19,8 +19,8 @@ send_email_report() {
     email=$(echo "$email" | cut -f 2 -d "'")
     tmpfile=$(mktemp)
     subj="$(hostname): $WEB_BACKEND restart failed"
-    service $WEB_BACKEND configtest >> $tmpfile 2>&1
-    service $WEB_BACKEND restart >> $tmpfile 2>&1
+    systemctl configtest $WEB_BACKEND >> $tmpfile 2>&1
+    systemctl restart $WEB_BACKEND >> $tmpfile 2>&1
     cat $tmpfile |$SENDMAIL -s "$subj" $email
     rm -f $tmpfile
 }
@@ -52,9 +52,9 @@ fi
 # Restart system
 php_fpm=$(ls /etc/init.d/php*-fpm* 2>/dev/null |cut -f 4 -d / |head -n 1)
 if [ -z "$php_fpm" ]; then
-    service $WEB_BACKEND restart >/dev/null 2>&1
+    systemctl restart $WEB_BACKEND >/dev/null 2>&1
 else
-    service $php_fpm restart >/dev/null 2>&1
+    systemctl restart $php_fpm >/dev/null 2>&1
 fi
 
 if [ $? -ne 0 ]; then

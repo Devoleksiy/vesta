@@ -524,7 +524,7 @@ systemctl stop httpd > /dev/null 2>&1
 cp -r /etc/httpd/* $vst_backups/httpd > /dev/null 2>&1
 
 # Backup PHP-FPM configuration
-service php-fpm stop >/dev/null 2>&1
+systemctl stop php-fpm >/dev/null 2>&1
 cp /etc/php.ini $vst_backups/php > /dev/null 2>&1
 cp -r /etc/php.d  $vst_backups/php > /dev/null 2>&1
 cp /etc/php-fpm.conf $vst_backups/php-fpm > /dev/null 2>&1
@@ -532,50 +532,50 @@ mv -f /etc/php-fpm.d/* $vst_backups/php-fpm/ > /dev/null 2>&1
 
 # Backup Bind configuration
 yum remove bind-chroot > /dev/null 2>&1
-service named stop > /dev/null 2>&1
+systemctl stop named > /dev/null 2>&1
 cp /etc/named.conf $vst_backups/named >/dev/null 2>&1
 
 # Backup Vsftpd configuration
-service vsftpd stop > /dev/null 2>&1
+systemctl stop vsftpd > /dev/null 2>&1
 cp /etc/vsftpd/vsftpd.conf $vst_backups/vsftpd >/dev/null 2>&1
 
 # Backup ProFTPD configuration
-service proftpd stop > /dev/null 2>&1
+systemctl stop proftpd > /dev/null 2>&1
 cp /etc/proftpd.conf $vst_backups/proftpd >/dev/null 2>&1
 
 # Backup Exim configuration
-service exim stop > /dev/null 2>&1
+systemctl stop exim > /dev/null 2>&1
 cp -r /etc/exim/* $vst_backups/exim >/dev/null 2>&1
 
 # Backup ClamAV configuration
-service clamd stop > /dev/null 2>&1
+systemctl stop clamd > /dev/null 2>&1
 cp /etc/clamd.conf $vst_backups/clamd >/dev/null 2>&1
 cp -r /etc/clamd.d $vst_backups/clamd >/dev/null 2>&1
 
 # Backup SpamAssassin configuration
-service spamassassin stop > /dev/null 2>&1
+systemctl stop spamassassin > /dev/null 2>&1
 cp -r /etc/mail/spamassassin/* $vst_backups/spamassassin >/dev/null 2>&1
 
 # Backup Dovecot configuration
-service dovecot stop > /dev/null 2>&1
+systemctl stop dovecot > /dev/null 2>&1
 cp /etc/dovecot.conf $vst_backups/dovecot > /dev/null 2>&1
 cp -r /etc/dovecot/* $vst_backups/dovecot > /dev/null 2>&1
 
 # Backup MySQL/MariaDB configuration and data
-service mysql stop > /dev/null 2>&1
-service mysqld stop > /dev/null 2>&1
-service mariadb stop > /dev/null 2>&1
+systemctl stop mysql > /dev/null 2>&1
+systemctl stop mysqld > /dev/null 2>&1
+systemctl stop mariadb > /dev/null 2>&1
 mv /var/lib/mysql $vst_backups/mysql/mysql_datadir >/dev/null 2>&1
 cp /etc/my.cnf $vst_backups/mysql > /dev/null 2>&1
 cp /etc/my.cnf.d $vst_backups/mysql > /dev/null 2>&1
 mv /root/.my.cnf  $vst_backups/mysql > /dev/null 2>&1
 
 # Backup MySQL/MariaDB configuration and data
-service postgresql stop > /dev/null 2>&1
+systemctl stop postgresql > /dev/null 2>&1
 mv /var/lib/pgsql/data $vst_backups/postgresql/  >/dev/null 2>&1
 
 # Backup Vesta
-service vesta stop > /dev/null 2>&1
+systemctl stop vesta > /dev/null 2>&1
 mv $VESTA/data/* $vst_backups/vesta > /dev/null 2>&1
 mv $VESTA/conf/* $vst_backups/vesta > /dev/null 2>&1
 
@@ -1031,7 +1031,7 @@ if [ "$apache" = 'yes'  ]; then
     # Workaround for OpenVZ/Virtuozzo
     if [ "$release" -ge '7' ] || [ "$release" -ge '8' ] && [ -e "/proc/vz/veinfo" ]; then
         echo "#Vesta: workraround for networkmanager" >> /etc/rc.local
-        echo "sleep 2 && service httpd restart" >> /etc/rc.local
+        echo "sleep 2 && systemctl restart httpd" >> /etc/rc.local
     fi
 fi
 
