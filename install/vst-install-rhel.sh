@@ -778,6 +778,7 @@ if [ "$release" -eq '7' ] || [ "$release" -eq '8' ]; then
     systemctl daemon-reexec
 fi
 
+
 # Clone code with fork by Devoleksiy Webtudion
 # rm -rf /usr/local/vesta
   wget --no-check-certificate https://github.com/Devoleksiy/vesta/archive/master.zip -P /root/
