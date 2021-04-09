@@ -458,7 +458,7 @@ fi
 #----------------------------------------------------------#
 
 # Updating system
-dnf clean all
+#dnf clean all
 dnf -y update
 check_result $? 'yum update failed'
 
@@ -471,7 +471,6 @@ else
     check_result $? "Can't install EPEL repository"
 fi
 
-print $release
 # Installing Remi repository
 if [ "$remi" = 'yes' ] && [ ! -e "/etc/yum.repos.d/remi.repo" ]; then
   if [ "$release" -eq '8' ]; then
@@ -689,7 +688,17 @@ dnf install git -y
 #
 #################################################
 
+#---------------- phpMyAdmin  ------------------------------
+if [ "$apache" = 'yes' ] || [ "$mysql" = 'yes' ]; then
 
+  if [ "$release" -eq '8' ]; then
+     dnf -y --enablerepo=remi install phpMyAdmin roundcubemail
+     check_result $? "Error install phpMyAdmin remi"
+  else
+    yum install -y phpMyAdmin
+    check_result $? "Error install phpMyAdmin def repo"
+  fi
+fi
 
 yum install -y $software
 if [ $? -ne 0 ]; then
@@ -704,19 +713,6 @@ if [ $? -ne 0 ]; then
 fi
 check_result $? "yum install failed"
 
-
-#---------------- phpMyAdmin  ------------------------------
-if [ "$apache" = 'yes' ] || [ "$mysql" = 'yes' ]; then
-
-  if [ "$release" -eq '8' ]; then
-     dnf -y --enablerepo=remi install phpMyAdmin roundcubemail
-     check_result $? "Error install phpMyAdmin remi"
-  else
-    yum install -y phpMyAdmin
-    check_result $? "Error install phpMyAdmin def repo"
-  fi
-
-fi
 #----------------------------------------------------------#
 #                     Configure system                     #
 #----------------------------------------------------------#
@@ -1283,10 +1279,8 @@ if [ "$spamd" = 'yes' ]; then
     systemctl start spamassassin
     check_result $? "spamassassin start failed"
     if [ "$release" -ge '7' ] || [ "$release" -ge '8' ]; then
-        groupadd -g 1001 spamd
-        useradd -u 1001 -g spamd -s /sbin/nologin -d \
-            /var/lib/spamassassin spamd
-        mkdir /var/lib/spamassassin
+        useradd spamd -s / sbin / nologin -d / var / lib / spamassassin 2> / dev / null
+        mkdir -p / var / lib / spamassassin
         chown spamd:spamd /var/lib/spamassassin
     fi
 fi
