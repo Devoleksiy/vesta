@@ -458,7 +458,8 @@ fi
 #----------------------------------------------------------#
 
 # Updating system
-yum -y update
+dnf clean all
+dnf -y update
 check_result $? 'yum update failed'
 
 # Installing EPEL repository
