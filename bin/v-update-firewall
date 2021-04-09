@@ -104,21 +104,23 @@ for line in $(sort -r -n -k 2 -t \' $rules); do
         fi
 
         # Adding firewall rule
-        echo "$iptables -A INPUT $proto $port $ip $state $action" >> $tmp
+        echo "$iptables -A INPUT $proto $port $ip $state $action" >> "$tmp"
     fi
 done
 
 # Switching chain policy to DROP
-echo "$iptables -P INPUT DROP" >> $tmp
+echo "$iptables -P INPUT DROP" >> "$tmp"
 
 # Adding vesta chain
-echo "$iptables -N vesta" >> $tmp
+echo "$iptables -N vesta" >> "$tmp"
 
-# Applying rules
-bash $tmp 2>/dev/null
+# Applying rules if installed
+if [ "$INSTALLED" == 'yes' ]; then
+  bash "$tmp" 2>/dev/null
+fi
 
 # Deleting temporary file
-rm -f $tmp
+rm -f "$tmp"
 
 # Checking custom trigger
 if [ -x "$VESTA/data/firewall/custom.sh" ]; then
