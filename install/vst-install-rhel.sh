@@ -33,11 +33,11 @@ software="nginx bc bind bind-libs bind-utils clamav-server clamav-update
     ImageMagick iptables-services whois lsof mailx mariadb mariadb-server mc
     mod_fcgid mod_ruid2 mod_ssl net-tools chrony openssh-clients pcre php
     php-bcmath php-cli php-common php-fpm php-gd php-imap php-mbstring
-    php-pecl-mcrypt phpMyAdmin php-mysql php-pdo phpPgAdmin php-pgsql php-soap
+    php-pecl-mcrypt php-mysql php-pdo phpPgAdmin php-pgsql php-soap
     php-tidy php-xml php-xmlrpc postgresql postgresql-contrib
     postgresql-server proftpd roundcubemail rrdtool rsyslog screen
     spamassassin sqlite sudo tar telnet vesta vesta-ioncube vesta-nginx
-    vesta-php vesta-softaculous vim-common vsftpd webalizer which zip wget unzip patch"
+    vesta-php vesta-softaculous vim-common vsftpd webalizer which zip wget unzip patch phpMyAdmin"
 
 # Fix for old releases
 if [ "$release" -lt 7 ]; then
@@ -672,18 +672,6 @@ fi
 dnf module enable php:remi-7.4 -y
 check_result $? 'Not enable > dnf module enable php:remi-7.4 <'
 
-if [ "$apache" = 'yes' ] || [ "$mysql" = 'yes' ]; then
-
-  if [ "$release" -eq '8' ]; then
-     dnf -y --enablerepo=remi install phpMyAdmin roundcubemail
-     check_result $? "Error install phpMyAdmin remi"
-  else
-    yum install -y phpMyAdmin
-    check_result $? "Error install phpMyAdmin def repo"
-  fi
-
-fi
-
 ################################################
 # ------ install and config Git server --------
 # install Git with the following command:
@@ -716,6 +704,18 @@ fi
 check_result $? "yum install failed"
 
 
+#---------------- phpMyAdmin  ------------------------------
+if [ "$apache" = 'yes' ] || [ "$mysql" = 'yes' ]; then
+
+  if [ "$release" -eq '8' ]; then
+     dnf -y --enablerepo=remi install phpMyAdmin roundcubemail
+     check_result $? "Error install phpMyAdmin remi"
+  else
+    yum install -y phpMyAdmin
+    check_result $? "Error install phpMyAdmin def repo"
+  fi
+
+fi
 #----------------------------------------------------------#
 #                     Configure system                     #
 #----------------------------------------------------------#
