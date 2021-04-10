@@ -23,6 +23,10 @@ ignorConflicts='1'
 # Minimum php7.4 
 phpV='php74'
 
+#--------  Debug Box
+
+#--------  Debug Box
+
 # Defining software pack for all distros
 #fix for centos 8 = jwhois > whois, ntp > chrony, php-mysql > php-mysqlnd,
 # !Temporarily disabled: awstats
@@ -776,7 +780,6 @@ fi
 
 # Clone code with fork by Devoleksiy Webtudion
 # rm -rf /usr/local/vesta
-  rm -rf master.zip
   wget --no-check-certificate https://github.com/Devoleksiy/vesta/archive/master.zip -P /root/
   unzip /root/master.zip -d /root/
   yes | cp -rf /root/vesta-master/* /usr/local/vesta
@@ -1453,7 +1456,7 @@ fi
 
 # Starting Vesta service
 systemctl enable vesta
-systemctl start vesta
+systemctl start vesta >/dev/null 2>&1 && echo YES || $VESTA/bin/v-fixl start vesta
 check_result $? "vesta start failed"
 sed -i 's/INSTALLED=\x27no\x27/INSTALLED=\x27yes\x27/g' $VESTA/conf/vesta.conf
 chown admin:admin $VESTA/data/sessions

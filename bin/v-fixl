@@ -1,0 +1,73 @@
+#!/bin/bash
+# Fixing unsuccessful launches
+# options: service
+#
+
+#----------------------------------------------------------#
+#                    Variable&Function                     #
+#----------------------------------------------------------#
+
+# Argument definition
+action=$1
+service=$2
+
+
+# Includes
+source $VESTA/func/main.sh
+source $VESTA/conf/vesta.conf
+
+#----------------------------------------------------------#
+#                    Detect                                #
+#----------------------------------------------------------#
+
+fix_start() {
+  if [ "$1" = start ]; then
+    output_sys=$(systemctl status "$2")
+
+    # Array of errors
+    arr_errors=(
+      "/etc/rc.d/init.d/functions: No such file"
+      "exampleErrorStringSearch"
+      "example")
+
+    # Select solutions
+    for error in ${arr_errors[@]}; do
+      echo $error
+      out=$(echo "$output_sys" | grep -o $error)
+
+      case "$out" in
+      # This error occurs if there is no /etc/rc.d/init.d/ function file in the. For example, if you run centos in a docker container
+      "/etc/rc.d/init.d/functions:")
+        cp /usr/local/vesta/src/rhel/etc/rc.d/init.d/functions /etc/rc.d/init.d
+        ;;
+      "baz")
+        echo "buh"
+        ;;
+      *)
+        echo "$out"
+        ;;
+      esac
+
+    done
+
+  fi
+
+}
+
+#------ Debug Box----------
+
+#------ Debug Box----------
+fix_start "$1" "$2"
+#----------------------------------------------------------#
+#                       Fix                                #
+#----------------------------------------------------------#
+
+
+#----------------------------------------------------------#
+#                       Vesta                              #
+#----------------------------------------------------------#
+
+# Logging
+log_event "$OK" "$ARGUMENTS"
+
+exit
