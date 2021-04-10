@@ -104,23 +104,21 @@ for line in $(sort -r -n -k 2 -t \' $rules); do
         fi
 
         # Adding firewall rule
-        echo "$iptables -A INPUT $proto $port $ip $state $action" >> "$tmp"
+        echo "$iptables -A INPUT $proto $port $ip $state $action" >> $tmp
     fi
 done
 
 # Switching chain policy to DROP
-echo "$iptables -P INPUT DROP" >> "$tmp"
+echo "$iptables -P INPUT DROP" >> $tmp
 
 # Adding vesta chain
-echo "$iptables -N vesta" >> "$tmp"
+echo "$iptables -N vesta" >> $tmp
 
-# Applying rules if installed
-if [ "$INSTALLED" == 'yes' ]; then
-  bash "$tmp" 2>/dev/null
-fi
+# Applying rules
+bash $tmp 2>/dev/null
 
 # Deleting temporary file
-rm -f "$tmp"
+rm -f $tmp
 
 # Checking custom trigger
 if [ -x "$VESTA/data/firewall/custom.sh" ]; then
@@ -170,6 +168,13 @@ else
     fi
 fi
 
+# If not ping FIX when installing via remote access, the firewall blocked access.
+if [ "$INSTALLED" == 'no' ]; then
+    dig @8.8.8.8 google.com +time=1 +tries=1 >/dev/null 2>&1
+    if [ "$?" -ne 0 ]; then
+        $BIN/v-stop-firewall
+    fi
+fi
 # Worarkound for OpenVZ
 if [ -e "/proc/vz/veinfo" ]; then
     dig @8.8.8.8 google.com +time=1 +tries=1 >/dev/null 2>&1
