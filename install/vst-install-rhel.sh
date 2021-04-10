@@ -22,8 +22,6 @@ vestacp="$VESTA/install/$VERSION/$release"
 ignorConflicts='1'
 # Minimum php7.4 
 phpV='php74'
-# test="$phpV"'php'
-# echo $test
 
 # Defining software pack for all distros
 #fix for centos 8 = jwhois > whois, ntp > chrony, php-mysql > php-mysqlnd,
@@ -517,7 +515,7 @@ mkdir nginx httpd php php-fpm vsftpd proftpd named exim dovecot clamd \
 
 # Backup Nginx configuration
 systemctl stop nginx > /dev/null 2>&1
-cp -r /etc/nginx/* $vst_backups/nginx > /dev/null 2>&1
+cp -r /etc/nginx/* "$vst_backups"/nginx > /dev/null 2>&1
 
 # Backup Apache configuration
 systemctl stop httpd > /dev/null 2>&1
@@ -912,6 +910,8 @@ echo "LANGUAGE='$lang'" >> $VESTA/conf/vesta.conf
 
 # Version
 echo "VERSION='0.9.8'" >> $VESTA/conf/vesta.conf
+
+echo "INSTALLED='no'" >> $VESTA/conf/vesta.conf
 
 # Installing hosting packages
 cp -rf $vestacp/packages $VESTA/data/
@@ -1453,6 +1453,7 @@ fi
 systemctl enable vesta
 systemctl start vesta
 check_result $? "vesta start failed"
+sed -i 's/INSTALLED=\x27no\x27/INSTALLED=\x27yes\x27/g' $VESTA/conf/vesta.conf
 chown admin:admin $VESTA/data/sessions
 
 # Adding notifications
