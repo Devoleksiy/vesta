@@ -698,15 +698,15 @@ if [ "$apache" = 'yes' ] || [ "$mysql" = 'yes' ]; then
   fi
 fi
 
-yum install -y "$software"
+dnf install $software -y
 if [ $? -ne 0 ]; then
     if [ "$remi" = 'yes' ]; then
-        yum -y --disablerepo=* \
-            --enablerepo="*baseos,*updates,nginx,epel,vesta,remi*" \
-            install "$software"
+        dnf -y --disablerepo=* \
+            --enablerepo="*baseos,nginx,epel,vesta,remi*" \
+            install $software
     else
-        yum -y --disablerepo=* --enablerepo="*baseos,*updates,nginx,epel,vesta" \
-            install "$software"
+        dnf -y --disablerepo=* --enablerepo="*baseos,nginx,epel,vesta" \
+            install $software
     fi
 fi
 check_result $? "yum install failed"
