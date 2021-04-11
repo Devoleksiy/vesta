@@ -131,6 +131,21 @@ App.Actions.WEB.toggle_additional_ftp_accounts = function(elm) {
         });
     }
 }
+// support for subversions GIT
+App.Actions.WEB.toggle_letsencrypt = function(elm) {
+    if ($(elm).attr('checked')) {
+        $('#gittable textarea[name=git_pub_user_keys],#gittable textarea[name=v_ssl_key], #gittable textarea[name=v_ssl_ca]').attr('disabled', 'disabled');
+        $('#generate-csr').hide();
+        if(!$('.lets-encrypt-note').hasClass('enabled')){
+            $('.lets-encrypt-note').show();
+        }
+    }
+    else {
+        $('#gittable textarea[name=git_pub_user_keys],#gittable textarea[name=v_ssl_key], #gittable textarea[name=v_ssl_ca]').removeAttr('disabled');
+        $('#generate-csr').show();
+        $('.lets-encrypt-note').hide();
+    }
+}
 
 App.Actions.WEB.toggle_letsencrypt = function(elm) {
     if ($(elm).attr('checked')) {

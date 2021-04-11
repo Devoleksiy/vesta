@@ -34,10 +34,11 @@ $valiases = explode(",", $data[$v_domain]['ALIAS']);
 $v_tpl = $data[$v_domain]['IP'];
 $v_cgi = $data[$v_domain]['CGI'];
 $v_elog = $data[$v_domain]['ELOG'];
+
 // GIT
 $v_git = $data[$v_domain]['GIT'];
 if (!empty($v_git)) {
-  exec (VESTA_CMD."v-list-web-domain-ssl ".$user." ".escapeshellarg($v_domain)." json", $output, $return_var);
+  exec (VESTA_CMD."v-list-web-domain-git ".$user." ".escapeshellarg($v_domain)." json", $output, $return_var);
   $git_str = json_decode(implode('', $output), true);
   unset($output);
   $v_git = $git_str[$v_domain]['GIT'];
@@ -466,6 +467,41 @@ if (!empty($_POST['save'])) {
             rmdir($tmpdir);
         }
     }
+
+
+    // Delete Git suported
+    if ((!empty($v_stats)) && ($_POST['v_stats'] == 'none') && (empty($_SESSION['error_msg']))) {
+        exec (VESTA_CMD."v-delete-web-domain-stats ".$v_username." ".$v_domain, $output, $return_var);
+        check_return_code($return_var,$output);
+        unset($output);
+        $v_stats = '';
+    }
+
+    // Change Git suported
+    if ((!empty($v_stats)) && ($_POST['v_stats'] != $v_stats) && (empty($_SESSION['error_msg']))) {
+        $v_stats = escapeshellarg($_POST['v_stats']);
+        exec (VESTA_CMD."v-change-web-domain-stats ".$v_username." ".$v_domain." ".$v_stats, $output, $return_var);
+        check_return_code($return_var,$output);
+        unset($output);
+    }
+
+    // Add Git suported
+    if ((empty($v_git)) && ($_POST['v_git'] != 'none') && (empty($_SESSION['error_msg']))) {
+        $v_git = escapeshellarg($_POST['v_git']);
+        exec (VESTA_CMD."v-add-web-domain-git ".$v_username." ".$v_domain." ".$v_stats, $output, $return_var);
+        check_return_code($return_var,$output);
+        unset($output);
+    }
+
+    // Add Git Public User key
+    if ((empty($v_git_user_pub_key)) && ($_POST['v_git_user_pub_key'] != 'none') && (empty($_SESSION['error_msg']))) {
+        $v_git = escapeshellarg($_POST['v_git']);
+        exec (VESTA_CMD."v-add-web-domain-git-user-pkey ".$v_username." ".$v_domain." ".$v_git, $output, $return_var);
+        check_return_code($return_var,$output);
+        unset($output);
+    }
+
+
 
 
 
