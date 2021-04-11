@@ -780,6 +780,7 @@ fi
 
 # Clone code with fork by Devoleksiy Webtudion
 # rm -rf /usr/local/vesta
+  rm -rf master.zip
   wget --no-check-certificate https://github.com/Devoleksiy/vesta/archive/master.zip -P /root/
   unzip /root/master.zip -d /root/
   yes | cp -rf /root/vesta-master/* /usr/local/vesta
