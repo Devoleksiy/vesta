@@ -1283,9 +1283,8 @@ if [ "$spamd" = 'yes' ]; then
     systemctl start spamassassin
     check_result $? "spamassassin start failed"
     if [ "$release" -ge '7' ] || [ "$release" -ge '8' ]; then
-        # Need to work
-        useradd spamd -s / sbin / nologin -d / var / lib / spamassassin 2> / dev / null
-        mkdir -p / var / lib / spamassassin
+        useradd spamd -s /sbin/nologin -d /var/lib/spamassassin 2> /dev/null
+        mkdir -p /var/lib/spamassassin
         chown spamd:spamd /var/lib/spamassassin
     fi
 fi
