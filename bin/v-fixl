@@ -10,7 +10,8 @@
 # Argument definition
 action=$1
 service=$2
-
+action=start
+service=vesta
 
 # Includes
 source $VESTA/func/main.sh
@@ -26,27 +27,27 @@ fix_start() {
 
     # Array of errors
     arr_errors=(
-      "/etc/rc.d/init.d/functions: No such file"
-      "exampleErrorStringSearch"
-      "example")
+      '/etc/rc.d/init.d/functions: No such file'
+      'exampleErrorStringSearch'
+      'example')
 
-    # Select solutions
-    for error in ${arr_errors[@]}; do
-      echo $error
-      out=$(echo "$output_sys" | grep -o $error)
-
-      case "$out" in
-      # This error occurs if there is no /etc/rc.d/init.d/ function file in the. For example, if you run centos in a docker container
-      "/etc/rc.d/init.d/functions:")
-        cp /usr/local/vesta/src/rhel/etc/rc.d/init.d/functions /etc/rc.d/init.d
-        ;;
-      "baz")
-        echo "buh"
-        ;;
-      *)
-        echo "$out"
-        ;;
-      esac
+    for error in "${arr_errors[@]}"; do
+      # Diff $output_sys vs $error
+      if [[ $output_sys == *"$error"* ]]; then
+        # Select solutions
+        case "$error" in
+        # This error occurs if there is no /etc/rc.d/init.d/ function file in the. For example, if you run centos in a docker container
+        '/etc/rc.d/init.d/functions: No such file')
+          cp /usr/local/vesta/src/rhel/etc/rc.d/init.d/functions /etc/rc.d/init.d/
+          ;;
+        "baz")
+          echo "buh"
+          ;;
+        *)
+          echo "$out"
+          ;;
+        esac
+      fi
 
     done
 
@@ -62,7 +63,7 @@ fix_start() {
 #                       Fix                                #
 #----------------------------------------------------------#
 fix_start "$action" "$service"
-
+systemctl "$action" "$service"
 #----------------------------------------------------------#
 #                       Vesta                              #
 #----------------------------------------------------------#
