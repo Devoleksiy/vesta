@@ -1,0 +1,89 @@
+#!/bin/bash
+# info: Add the user's public key to access the repository
+# options: USER DOMAIN [IP] [v_git_user_pub_key]
+#
+# Add the user's public key to access the repository
+
+#----------------------------------------------------------#
+#                    Variable&Function                     #
+#----------------------------------------------------------#
+
+# Argument definition
+user=$1
+domain=$2
+ip=$3
+v_git_user_pub_key=$4
+
+# Includes
+source $VESTA/func/main.sh
+source $VESTA/func/domain.sh
+source $VESTA/func/ip.sh
+source $VESTA/conf/vesta.conf
+
+# Additional argument formatting
+format_domain
+format_domain_idn
+format_aliases
+
+#----------------------------------------------------------#
+#                    Verifications                         #
+#----------------------------------------------------------#
+
+check_args '2' "$#" 'USER DOMAIN'
+is_format_valid 'user' 'domain'
+is_object_valid 'user' 'USER' "$user"
+is_object_unsuspended 'user' 'USER' "$user"
+is_dir_symlink $HOMEDIR/$user/web
+if [ ! -z "$ip" ]; then
+    is_ip_valid "$ip" "$user"
+else
+    get_user_ip
+fi
+
+#----------------------------------------------------------#
+#                       Action                             #
+#----------------------------------------------------------#
+
+# Reading user values
+#source $USER_DATA/user.conf
+
+# Create dir .ssh for public user keys
+if ! [ -d "$HOMEDIR"/$user/.ssh ]; then
+    mkdir "$HOMEDIR"/$user/.ssh
+fi
+
+# Create file authorized_keys
+if ! [ -f "$HOMEDIR"/$user/.ssh/authorized_keys ]; then
+    touch "$HOMEDIR"/$user/.ssh/authorized_keys
+fi
+
+# Debug example pub key
+#v_git_user_pub_key='ssh-rsa AAA+D1QvZt+8iiiiVeryLOngiiiii7Ql8QCNEOvPnZ blablablNNa@domiFirstLevel'
+
+# List v_git_user_pub_key
+f_authorized_keys="$HOMEDIR"/$user/.ssh/authorized_keys
+
+mails=$(grep -o '[[:alnum:]]\+@[[:alnum:]]\+' $f_authorized_keys)
+
+write=0
+for mail in $mails; do
+
+    if grep -q "$mail" <<<"$v_git_user_pub_key"; then
+        write=1
+    fi
+
+done
+
+if [ ! $write = 1 ]; then
+    echo $v_git_user_pub_key >>$f_authorized_keys
+fi
+
+#----------------------------------------------------------#
+#                       Vesta                              #
+#----------------------------------------------------------#
+
+# Logging
+log_history "Added git user pub key web domain $domain user email $mail"
+log_event "$OK" "$ARGUMENTS"
+
+exit
