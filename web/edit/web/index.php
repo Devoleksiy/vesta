@@ -36,20 +36,17 @@ $v_cgi = $data[$v_domain]['CGI'];
 $v_elog = $data[$v_domain]['ELOG'];
 
 // GIT
+$v_git_user_pub_key = null;
+
 $v_git = $data[$v_domain]['GIT'];
 if (!empty($v_git)) {
-  exec (VESTA_CMD."v-list-web-domain-git ".$user." ".escapeshellarg($v_domain)." json", $output, $return_var);
-  $git_str = json_decode(implode('', $output), true);
-  unset($output);
-  $v_git = $git_str[$v_domain]['GIT'];
-  $v_git_clone_url = $git_str[$v_domain]['GIT_CLONE_URL'];
-  $v_git_user_pub_key = $git_str[$v_domain]['GIT_USER_PUB_KEY'];
 
+    // user@127.0.0.100:/home/admin/mywebsite.git
+    $web_ip = $data[$v_domain]['IP'];
+    $docroot = $data[$v_domain]['DOCUMENT_ROOT'];
+    $git_patch_repo = str_replace('public_html',$v_domain.'.git', $docroot);
+    $v_git_clone_url = $user.'@'.$web_ip.':'.$git_patch_repo;
 
-  // Git
-  $v_git = $_POST['v_git'];
-  $v_git_clone_url = $_POST['v_git_clone_url'];
-  $v_git_user_pub_key = $_POST['v_git_user_pub_key'];
 }
 
 
@@ -477,7 +474,7 @@ if (!empty($_POST['save'])) {
         $v_stats = '';
     }
 
-    // Change Git suported
+    // Delete web stats
     if ((!empty($v_stats)) && ($_POST['v_stats'] != $v_stats) && (empty($_SESSION['error_msg']))) {
         $v_stats = escapeshellarg($_POST['v_stats']);
         exec (VESTA_CMD."v-change-web-domain-stats ".$v_username." ".$v_domain." ".$v_stats, $output, $return_var);
@@ -486,17 +483,17 @@ if (!empty($_POST['save'])) {
     }
 
     // Add Git suported
-    if ((empty($v_git)) && ($_POST['v_git'] != 'none') && (empty($_SESSION['error_msg']))) {
-        $v_git = escapeshellarg($_POST['v_git']);
-        exec (VESTA_CMD."v-add-web-domain-git ".$v_username." ".$v_domain." ".$v_stats, $output, $return_var);
+    if ((empty($v_git)) || ($v_git == 'no') && ($_POST['v_git'] != 'none') && (empty($_SESSION['error_msg']))) {
+
+        exec (VESTA_CMD."v-add-web-domain-git ".$v_username." ".$v_domain." ".$v_git, $output, $return_var);
         check_return_code($return_var,$output);
         unset($output);
     }
 
     // Add Git Public User key
     if ((empty($v_git_user_pub_key)) && ($_POST['v_git_user_pub_key'] != 'none') && (empty($_SESSION['error_msg']))) {
-        $v_git = escapeshellarg($_POST['v_git']);
-        exec (VESTA_CMD."v-add-web-domain-git-user-pkey ".$v_username." ".$v_domain." ".$v_git, $output, $return_var);
+        $v_git_user_pub_key = escapeshellarg($_POST['v_git_user_pub_key']);
+        exec (VESTA_CMD."v-add-web-domain-git-user-pkey ".$v_username." ".$v_domain." ".$v_ip." ".$v_git_user_pub_key, $output, $return_var);
         check_return_code($return_var,$output);
         unset($output);
     }

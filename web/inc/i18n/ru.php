@@ -193,6 +193,7 @@ $LANG['ru'] = array(
     'Backup System'  => 'Система резервного копирования',
     'backup exclusions' => 'исключения',
     'template' => 'шаблон',
+    'Public key of the user to access the repository' => 'Публичный ключ пользователя для доступа к репозиторию',
     'SSL Support' => 'Поддержка SSL',
     'SSL Home Directory' => 'Директория SSL',
     'Lets Encrypt Support'  => 'Поддержка Lets Encrypt',

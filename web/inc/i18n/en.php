@@ -191,6 +191,7 @@ $LANG['en'] = array(
     'Backup System'  => 'Backup System',
     'backup exclusions' => 'backup exclusions',
     'template'  => 'template',
+    'Public key of the user to access the repository' => 'Public key of the user to access the repository',
     'SSL Support'  => 'SSL Support',
     'SSL Home Directory'  => 'SSL Home',
     'Lets Encrypt Support'  => 'Lets Encrypt Support',

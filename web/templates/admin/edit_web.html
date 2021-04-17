@@ -191,21 +191,23 @@
                                         <!--  v_git_clone_url  -->
                                         <tr>
                                             <td>
-                                                <input type="text" size="20" class="vst-input" name="v_git_clone_url" value="<?=htmlentities(trim($v_git_clone_url, "'"))?>" disabled>
-                                                <input type="hidden" name="v_git_clone_url" value="<?=htmlentities(trim($v_git_clone_url, "'"))?>">
+                                                <input id="myInput" style="width: 80%; font-size: 1em;" type="text" size="30" class="vst-input" name="v_git_clone_url" value="<?=htmlentities(trim($v_git_clone_url, "'"))?>">
+
+                                                <!-- The button used to copy the text -->
+                                                <a style="padding: 0.8em; border: 1px solid olivedrab; cursor: pointer;" onclick="func_copy()">Copy</a>
                                             </td>
                                         </tr>
                                         <!--  v_git_user_pub_key  -->
                                         <tr>
                                             <td class="vst-text input-label">
-                                                <?php print __('Aliases');?>
+                                                <?php print __('Public key of the user to access the repository');?>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td>
-<!--                                                <textarea size="20" class="vst-textinput" name="v_aliases"><?=htmlentities(trim($v_aliases, "'"))?></textarea>-->
+<!--                                                <textarea size="20" class="vst-textinput" name="v_aliases"><?=htmlentities(trim($v_git_user_pub_key, "'"))?></textarea>-->
 <!--                                                Public user keys for version control-->
-                                                <textarea size="20" class="vst-textinput" name="git_pub_user_keys"><?=htmlentities(trim($v_aliases, "'"))?></textarea>
+                                                <textarea size="20" class="vst-textinput" name="v_git_user_pub_key"><?=htmlentities(trim($v_git_user_pub_key, "'"))?></textarea>
 
                                             </td>
                                         </tr>
