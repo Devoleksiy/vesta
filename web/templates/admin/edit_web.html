@@ -180,23 +180,32 @@
                             </tr>
                             <?php } ?>
                             <!--  Suport GIT Start  -->
-                            <tr>
+                            <div class="col-12">
                                 <td class="vst-text step-top">
-                                    <label><input type="checkbox" size="20" class="vst-checkbox" name="v_git" <?php if ($v_git == 'yes') echo "checked=yes" ?> onclick="javascript:elementHideShow('gittable');"> <?php print __('GIT Support');?></label>
+
+                                    <div class="form-check form-switch">
+                                        <input name="v_git" class="form-check-input" type="checkbox" id="v_git" <?php if ($v_git == 'yes') echo "checked=yes" ?> onclick="javascript:elementHideShow('gittable');">
+                                        <label class="form-check-label" for="v_git"><?php print __('GIT Support');?></label>
+                                    </div>
+
                                 </td>
-                            </tr>
+                            </div>
                             <tr>
                                 <td class="step-left">
                                     <table style="display:<?php if ($v_git == 'no' ) { echo 'none';} else {echo 'block';}?> ;" id="gittable">
                                         <!--  v_git_clone_url  -->
-                                        <tr>
-                                            <td>
-                                                <input id="myInput" style="width: 80%; font-size: 1em;" type="text" size="30" class="vst-input" name="v_git_clone_url" value="<?=htmlentities(trim($v_git_clone_url, "'"))?>">
 
-                                                <!-- The button used to copy the text -->
-                                                <a style="padding: 0.8em; border: 1px solid olivedrab; cursor: pointer;" onclick="func_copy()">Copy</a>
-                                            </td>
-                                        </tr>
+                                                <div id="v-git-box" class="col-12 row">
+                                                    <div class="col-7">
+                                                        <label for="myInput" class="form-label"><?php print __('Cloning address');?></label>
+                                                        <input name="v_git_clone_url" type="text" class="form-control" id="myInput" value="<?=htmlentities(trim($v_git_clone_url, "'"))?>">
+                                                        <!-- The button used to copy the text -->
+                                                    </div>
+                                                    <div class="col-3">
+                                                        <a class="p-2" style="border: 1px solid olivedrab; cursor: pointer;" onclick="func_copy()">Copy</a>
+                                                    </div>
+                                                </div>
+
                                         <!--  v_git_user_pub_key  -->
                                         <tr>
                                             <td class="vst-text input-label">
