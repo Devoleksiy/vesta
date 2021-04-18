@@ -134,18 +134,19 @@ App.Actions.WEB.toggle_additional_ftp_accounts = function(elm) {
 // support for subversions GIT
 App.Actions.WEB.toggle_letsencrypt = function(elm) {
     if ($(elm).attr('checked')) {
-        $('#v-git-box textarea[name=git_pub_user_keys],#v-git-box textarea[name=v_ssl_key], #v-git-box textarea[name=v_ssl_ca]').attr('disabled', 'disabled');
+        $('#ssltable input[name=v_git_clone_url],#ssltable textarea[name=v_git_user_pub_key], #ssltable textarea[name=v_ssl_ca]').attr('disabled', 'disabled');
         $('#generate-csr').hide();
         if(!$('.lets-encrypt-note').hasClass('enabled')){
             $('.lets-encrypt-note').show();
         }
     }
     else {
-        $('#v-git-box textarea[name=git_pub_user_keys],#v-git-box textarea[name=v_ssl_key], #v-git-box textarea[name=v_ssl_ca]').removeAttr('disabled');
+        $('#ssltable textarea[name=git_pub_user_keys],#ssltable textarea[name=v_ssl_key], #ssltable textarea[name=v_ssl_ca]').removeAttr('disabled');
         $('#generate-csr').show();
         $('.lets-encrypt-note').hide();
     }
 }
+
 
 App.Actions.WEB.toggle_letsencrypt = function(elm) {
     if ($(elm).attr('checked')) {

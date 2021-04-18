@@ -3390,3 +3390,7 @@ form#vstobjects.suspended {
     display: none;
   }
 }
+
+.hidden-div {
+  display: none;
+}
