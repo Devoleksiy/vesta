@@ -7,14 +7,14 @@ services:
     ports:
       - 80:80
     volumes:
-      - ./:/app/
+      - ./:/usr/local/vesta/
       # - ./dev/etc/php/php.ini:/opt/docker/etc/php/php.ini
       # - ./etc/apache2/sites-available:/etc/apache2/sites-available
       # - ./etc/httpd/:/opt/docker/etc/httpd/
       # - ./dev/log/:/var/log
     environment:
       #--------->  OPCACHE  <-------------------------
-      - WEB_DOCUMENT_ROOT=/app/web
+      - WEB_DOCUMENT_ROOT=/usr/local/vesta/web
       - PHP_MEMORY_LIMIT=3G
       #--------->  OPCACHE  <-------------------------
       - PHP_OPCACHE_MEMORY_CONSUMPTION=1024M

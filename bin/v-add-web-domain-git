@@ -3,11 +3,7 @@
 # options: USER DOMAIN TYPE
 #
 # The call is used for enabling log analyzer system to a domain.  At this time
-# two types of these system is supported - awstats and webalizer. For viewing
-# the domain statistics use http://domain.tld/vstats/ link. Access this page
-# is not protected by default. If you want to secure it with passwords you
-# should use v-add-web-domain_stat_auth script.
-
+# Add subversion of files using GIT for GITLAB
 
 #----------------------------------------------------------#
 #                    Variable&Function                     #
@@ -21,7 +17,7 @@ git=$3
 type="GIT"
 #git_template=$3
 # default bare
-git_template="bare"
+git_template="default"
 # Includes
 source $VESTA/func/main.sh
 source $VESTA/func/domain.sh
@@ -55,6 +51,10 @@ get_domain_values 'web'
 # Adding statistic config
 prepare_web_domain_values
 
+
+# su current user
+sudo su "$user"
+
 git_docroot=$(echo "${sdocroot//\/public_html/}")
 
 # GIT Template |> Default <|
@@ -65,8 +65,14 @@ if [ $git_template = "default" ]; then
 if ! [ -d "$git_docroot"/.git/ ]; then
     cd "$git_docroot" || exit
     git init
-    git add --all
-    git commit -m "Firs main committed by VESTA for $user user"
+    git add public_html
+
+#    git remote add origin "remote-Url-repository"
+    git remote add origin git@10.0.2.15:vpoltave/vpoltave.net.git
+
+    git commit -m "Initial firs commit by $user user"
+    git push -u origin master
+
     git='yes'
 fi
 

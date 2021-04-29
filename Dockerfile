@@ -1,8 +1,8 @@
 FROM centos:8
 
-#RUN dnf install epel-release -y \
-#&& dnf upgrade -y \
-#&& dnf clean all
+RUN dnf install epel-release -y \
+&& dnf upgrade -y \
+&& dnf clean all
 
 # ------------------  Server with GUI  ------------------------------
 #RUN dnf groupinstall "Server with GUI" --allowerasing -y \
