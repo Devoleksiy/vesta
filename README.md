@@ -5,6 +5,8 @@
 
 This is a fork of the legendary vectacp from [Serghey Rodin](https://github.com/serghey-rodin). Thank you Sergey.
 ----------------------------
+
+The fork is targeting **centos 8** and new releases, for other versions I have not tested.
 * Vesta is an open source hosting control panel. 
 * Vesta has a clean and focused interface without the clutter.
 * Vesta has the latest of very innovative technologies.
