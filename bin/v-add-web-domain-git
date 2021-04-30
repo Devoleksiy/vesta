@@ -60,17 +60,17 @@ if [ $git_template = "default" ]; then
 
 
 if ! [ -d "$git_docroot"/.git/ ]; then
-    cd "$git_docroot" /dev/null 2>&1 || exit
-    git init /dev/null 2>&1 || exit
-    chown -R "$user":"$user" "$git_docroot"/.git /dev/null 2>&1
+    cd "$git_docroot" || exit
+    git init || exit
+    chown -R "$user":"$user" "$git_docroot"/.git > /dev/null 2>&1
 
     # git remote add origin git@10.0.2.15:vpoltave/vpoltave.net.git
 
-    git remote add origin "$remote_url_repository" /dev/null 2>&1
-    git add public_html /dev/null 2>&1
+    git remote add origin "$remote_url_repository" > /dev/null 2>&1
+    git add public_html > /dev/null 2>&1
 
-    git commit -m "Initial firs commit by $user user" /dev/null 2>&1 || exit
-    git push -u origin master /dev/null 2>&1 || echo "push -u origin master NOT WORKING"
+    git commit -m "Initial firs commit by $user user" > /dev/null 2>&1 || exit
+    git push -u origin master > /dev/null 2>&1 || echo "push -u origin master NOT WORKING"
     git='on'
 fi
 
