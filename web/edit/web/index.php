@@ -484,16 +484,24 @@ if (!empty($_POST['save'])) {
     }
 
     // Add Gitlab remote repository suported
-    if ((empty($v_git)) || ($v_git == 'no') && ($_POST['v_git'] != 'none') && ($_POST['v_gitlab_rem_url_repo'] != 'none') && (empty($_SESSION['error_msg']))) {
+    if ((empty($v_git)) || ($v_git == 'no') && ($_POST['v_git'] == 'on') && (empty($_SESSION['error_msg']))) {
 
-        $v_gitlab_rem_url_repo = escapeshellarg($_POST['v_gitlab_rem_url_repo']);
-        exec (VESTA_CMD."v-add-web-domain-git ".$v_username." ".$v_domain." ".$v_gitlab_rem_url_repo." ".$v_git, $output, $return_var);
-        check_return_code($return_var,$output);
 
-        if($output != 0){
-            $v_git = 'yes';
+        if (($_POST['v_gitlab_set_url_repo']) != ""){
+            $v_gitlab_set_url_repo = escapeshellarg($_POST['v_gitlab_set_url_repo']);
+            exec (VESTA_CMD."v-add-web-domain-git ".$v_username." ".$v_domain." ".$v_gitlab_set_url_repo." ".$v_git, $output, $return_var);
+            check_return_code($return_var,$output);
+            if($output == 0){
+                $v_git = 'on';
+            }
+            unset($output);
+
         }
-        unset($output);
+        else{
+            print_r("Remoote URL empty");
+        }
+
+
     }
 
     // Add Git Public User key
