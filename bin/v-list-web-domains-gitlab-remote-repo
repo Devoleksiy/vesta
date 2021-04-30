@@ -1,0 +1,81 @@
+#!/bin/bash
+# info: list git remote -v
+# options: USER DOMAIN TYPE
+
+
+#----------------------------------------------------------#
+#                    Variable&Function                     #
+#----------------------------------------------------------#
+
+# Argument definition
+user=$1
+domain=$2
+type="GIT"
+
+# Includes
+source $VESTA/func/main.sh
+source $VESTA/func/domain.sh
+source $VESTA/conf/vesta.conf
+
+# Additional argument formatting
+format_domain
+format_domain_idn
+
+log_history "added web domain $user $domain $git"
+
+#----------------------------------------------------------#
+#                    Verifications                         #
+#----------------------------------------------------------#
+
+#check_args '2' "$#" 'USER DOMAIN'
+is_format_valid 'user' 'domain'
+is_object_valid 'user' 'USER' "$user" "$user"
+is_object_unsuspended 'user' 'USER' "$user"
+is_object_valid 'web' 'DOMAIN' "$domain"
+is_object_unsuspended 'web' 'DOMAIN' "$domain"
+is_object_value_exist 'web' 'DOMAIN' "$domain" 'GIT'
+
+#----------------------------------------------------------#
+#                       Action                             #
+#----------------------------------------------------------#
+
+# Parse aliases
+get_domain_values 'web'
+
+# Adding statistic config
+prepare_web_domain_values
+
+git_docroot=$(echo "${sdocroot//\/public_html/}")
+
+# List git remote -v
+
+if [ -d "$git_docroot"/.git/ ]; then
+    cd "$git_docroot" || exit
+
+    result=$(git remote -v)
+
+fi
+
+# JSON list function
+json_list() {
+    issuer=$(echo "$issuer" |sed -e 's/"/\\"/g' -e "s/%quote%/'/g")
+    echo '{'
+    echo -e "\t\"$domain\": {"
+    echo "        \"GITLAB_REMOTE_REPO\": \"$result\","
+    echo -e "\t}\n}"
+}
+
+# Listing data
+case $format in
+    json)   json_list ;;
+    plain)  plain_list ;;
+    csv)    csv_list ;;
+    shell)  shell_list ;;
+esac
+
+
+# Logging
+#log_history "enabled control versions GIT template $git_template for $domain"
+log_event "$OK" "$ARGUMENTS"
+
+exit

@@ -175,6 +175,35 @@
                                     </div>
                                 </div>
 
+                                <!--  SET Remote repository gitlab-->
+                                <div class="mb-4">
+                                    <label for="v_gitlab_set_url_repo" class="form-label"><?php print __('SET Remote repository gitlab');?></label>
+                                    <div id="" class="row">
+                                        <div class="col-7">
+                                            <input name="v_gitlab_set_url_repo" type="text" class="form-control" id="v_gitlab_set_url_repo" value="<?=htmlentities(trim($v_gitlab_set_url_repo, "'"))?>">
+                                        </div>
+                                        <div class="col-3">
+                                            <!-- The button used to copy the text -->
+                                            <a class="btn p-2" style="border: 1px solid olivedrab; cursor: pointer;" onclick="func_copy_gitlab()">Copy</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--  GET Remote repository gitlab-->
+<!--                                <div class="mb-4">-->
+<!--                                    <label for="v_gitlab_get_url_repo" class="form-label"><?php print __('GET Remote repository gitlab');?></label>-->
+<!--                                    <div id="" class="row">-->
+<!--                                        <div class="col-7">-->
+<!--                                            <input name="v_gitlab_get_url_repo" type="text" class="form-control" id="v_gitlab_get_url_repo" value="<?=htmlentities(trim($v_gitlab_get_url_repo, "'"))?>">-->
+<!--                                        </div>-->
+<!--                                        <div class="col-3">-->
+<!--                                            &lt;!&ndash; The button used to copy the text &ndash;&gt;-->
+<!--                                            <a class="btn p-2" style="border: 1px solid olivedrab; cursor: pointer;" onclick="func_copy_gitlab()">Copy</a>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+
+
                                 <!--  v_git_user_pub_key  -->
                                 <div class="mb-4">
                                     <label for="form-v-git-user-pub-key" class="form-label"><?php print __('Public key of the user to access the repository');?></label>
