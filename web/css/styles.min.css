@@ -2440,17 +2440,21 @@ label:hover {
 }
 
 .vst-input {
+  display: block;
+  width: 100%;
+  padding: .375rem .75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
   background-color: #fff;
-  border: 1px solid #cfcfcf;
-  border-radius: 0px;
-  color: #555;
-  font-family: Arial;
-  font-size: 19px;
-  height: 28px;
-  margin: 2px 6px 0 0;
-  padding: 7px 3px 9px 14px;
-  width: 360px;
-  font-weight: normal;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border-radius: .25rem;
+  transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
 .vst-input:hover {
   border: 1px solid #909090;
