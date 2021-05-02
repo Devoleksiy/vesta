@@ -7,17 +7,16 @@ upstream gitlab-workhorse {
 
 ## Redirects all HTTP traffic to the HTTPS host
 server {
-  ## Either remove "default_server" from the listen line below,
-  ## or delete the /etc/nginx/sites-enabled/default file. This will cause gitlab
-  ## to be served if you visit any address that your server responds to, eg.
-  ## the ip address of the server (http://x.x.x.x/)
-  listen 0.0.0.0:80;
-  listen [::]:80 ipv6only=on default_server;
-  server_name YOUR_SERVER_FQDN; ## Replace this with something like gitlab.example.com
-  server_tokens off; ## Don't show the nginx version number, a security best practice
+
+  listen %ip%:%web_port;
+  server_name %domain_idn% %alias_idn%;
+  server_tokens off;
   return 301 https://$http_host$request_uri;
-  access_log  /var/log/nginx/gitlab_access.log;
-  error_log   /var/log/nginx/gitlab_error.log;
+
+  access_log     /var/log/httpd/domains/%domain%.log combined;
+  access_log     /var/log/httpd/domains/%domain%.bytes bytes;
+
+
 }
 
 
@@ -36,7 +35,7 @@ server {
 	ssl_session_timeout 5m;
 
 	
-    error_log  /var/log/httpd/domains/%domain%.error.log error;
+    error_log  /var/log/nginx/domains/%domain%.error.log error;
 
     location / {
 
@@ -57,28 +56,16 @@ server {
 		proxy_set_header    X-Forwarded-For     $proxy_add_x_forwarded_for;
 		proxy_set_header    X-Forwarded-Proto   $scheme;
 
-        proxy_pass      http://127.0.0.1:8080;
-		
-        location ~* ^.+\.(%proxy_extentions%)$ {
-            root           /opt/gitlab/embedded/service/gitlab-rails/public;
-            #access_log     /var/log/httpd/domains/%domain%.log combined;
-            #access_log     /var/log/httpd/domains/%domain%.bytes bytes;
-            expires        max;
-            try_files      $uri @fallback;
-        }
+        proxy_pass      http://gitlab-workhorse;
+
     }
 
     location /error/ {
         alias   %home%/%user%/web/%domain%/document_errors/;
     }
 
-    location @fallback {
-        proxy_pass      http://127.0.0.1:8080;
-    }
-
     location ~ /\.ht    {return 404;}
     location ~ /\.svn/  {return 404;}
-    location ~ /\.git/  {return 404;}
     location ~ /\.hg/   {return 404;}
     location ~ /\.bzr/  {return 404;}
 
