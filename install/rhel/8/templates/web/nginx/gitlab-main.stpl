@@ -8,7 +8,7 @@ upstream gitlab-workhorse {
 ## Redirects all HTTP traffic to the HTTPS host
 server {
 
-  listen %ip%:%web_port%;
+  listen %ip%:80;
   server_name %domain_idn% %alias_idn%;
   server_tokens off;
   return 301 https://$http_host$request_uri;
