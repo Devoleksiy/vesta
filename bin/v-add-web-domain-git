@@ -58,36 +58,45 @@ git_docroot=$(echo "${sdocroot//\/public_html/}")
 # Add git suporeted for web domain
 if [ $git_template = "default" ]; then
 
-
-if ! [ -d "$git_docroot"/.git/ ]; then
+  if ! [ -d "$git_docroot"/.git/ ]; then
     cd "$git_docroot" || exit
     git init || exit
-    chown -R "$user":"$user" "$git_docroot"/.git > /dev/null 2>&1
+    chown -R "$user":"$user" "$git_docroot"/.git >/dev/null 2>&1
 
     # git remote add origin git@10.0.2.15:vpoltave/vpoltave.net.git
 
-    git remote add origin "$remote_url_repository" > /dev/null 2>&1
-    git add public_html > /dev/null 2>&1
+    git remote add origin "$remote_url_repository" >/dev/null 2>&1
+    git add public_html >/dev/null 2>&1
 
-    git commit -m "Initial firs commit by $user user" > /dev/null 2>&1 || exit
-    git push -u origin master > /dev/null 2>&1 || echo "push -u origin master NOT WORKING"
+    git commit -m "Initial firs commit by $user user" >/dev/null 2>&1 || exit
+    timeout 10s git push -u origin master >/dev/null 2>&1 || echo "push -u origin master NOT WORKING"
     git='on'
-fi
+  fi
 
+  if [ -d "$git_docroot"/.git/ ]; then
+
+    cd "$git_docroot" || exit
+    result=$(git remote -v)
+    if [ "$result" ]; then
+       echo "$result"
+       git='on'
+    fi
+
+  fi
 fi
 
 # GIT Template |> Bare <|
 if [ $git_template = "bare" ]; then
-    git_repo="$git_docroot"/"$domain".git
-    if ! [ -d "$git_repo" ]; then
-        cd "$git_docroot" || exit
-        git init --bare "$domain".git #creates a bare repo named myweb.git
-        cd "$domain".git || exit
-        echo '#!/bin/sh' > hooks/post-receive
-        echo "GIT_WORK_TREE=$sdocroot git checkout -f" >> hooks/post-receive
-        chmod +x hooks/post-receive
-        git='on'
-    fi
+  git_repo="$git_docroot"/"$domain".git
+  if ! [ -d "$git_repo" ]; then
+    cd "$git_docroot" || exit
+    git init --bare "$domain".git #creates a bare repo named myweb.git
+    cd "$domain".git || exit
+    echo '#!/bin/sh' >hooks/post-receive
+    echo "GIT_WORK_TREE=$sdocroot git checkout -f" >>hooks/post-receive
+    chmod +x hooks/post-receive
+    git='on'
+  fi
 fi
 
 # Update config

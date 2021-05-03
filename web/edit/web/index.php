@@ -45,13 +45,17 @@ if (!empty($v_git)) {
     exec (VESTA_CMD."v-list-web-domains-gitlab-remote-repo ".$user." ".escapeshellarg($v_domain)." json", $output, $return_var);
     $v_gitlab_data = json_decode(implode('', $output), true);
     unset($output);
-    $v_gitlab_get_url_repo = $v_gitlab_data[$v_domain]['GITLAB_REMOTE_REPO'];
+    $v_git_clone_url = $v_gitlab_data[$v_domain]['GITLAB_REMOTE_REPO'];
+
+    if(!$v_git_clone_url){
+
+    }
 
     // user@127.0.0.100:/home/admin/mywebsite.git
-    $web_ip = $data[$v_domain]['IP'];
-    $docroot = $data[$v_domain]['DOCUMENT_ROOT'];
-    $git_patch_repo = str_replace('public_html',$v_domain.'.git', $docroot);
-    $v_git_clone_url = $user.'@'.$web_ip.':'.$git_patch_repo;
+//    $web_ip = $data[$v_domain]['IP'];
+//    $docroot = $data[$v_domain]['DOCUMENT_ROOT'];
+//    $git_patch_repo = str_replace('public_html',$v_domain.'.git', $docroot);
+//    $v_git_clone_url = $user.'@'.$web_ip.':'.$git_patch_repo;
 
 
 

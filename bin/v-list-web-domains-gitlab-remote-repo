@@ -2,7 +2,6 @@
 # info: list git remote -v
 # options: USER DOMAIN TYPE
 
-
 #----------------------------------------------------------#
 #                    Variable&Function                     #
 #----------------------------------------------------------#
@@ -10,6 +9,7 @@
 # Argument definition
 user=$1
 domain=$2
+format=$3
 type="GIT"
 
 # Includes
@@ -20,8 +20,6 @@ source $VESTA/conf/vesta.conf
 # Additional argument formatting
 format_domain
 format_domain_idn
-
-log_history "added web domain $user $domain $git"
 
 #----------------------------------------------------------#
 #                    Verifications                         #
@@ -48,31 +46,43 @@ prepare_web_domain_values
 git_docroot=$(echo "${sdocroot//\/public_html/}")
 
 # List git remote -v
-
+  declare -a arr_git_url
 if [ -d "$git_docroot"/.git/ ]; then
-    cd "$git_docroot" || exit
+  cd "$git_docroot" || exit
 
-    result=$(git remote -v)
+  result=$(git remote -v)
+
+  b="${result/origin	/}"
+
+  for var in $(git remote -v); do
+    a="${var/origin/}"
+    b="${a/(fetch)/}"
+    c="${b/(push)/}"
+    if [ "$c" ]; then
+      arr_git_url=($c)
+    fi
+
+  done
 
 fi
 
 # JSON list function
+# JSON list function
 json_list() {
-    issuer=$(echo "$issuer" |sed -e 's/"/\\"/g' -e "s/%quote%/'/g")
     echo '{'
-    echo -e "\t\"$domain\": {"
-    echo "        \"GITLAB_REMOTE_REPO\": \"$result\","
-    echo -e "\t}\n}"
+    echo '    "'$DOMAIN'": {
+        "GITLAB_REMOTE_REPO": "'$arr_git_url'"
+    }'
+    echo '}'
 }
 
 # Listing data
 case $format in
-    json)   json_list ;;
-    plain)  plain_list ;;
-    csv)    csv_list ;;
-    shell)  shell_list ;;
+json) json_list ;;
+plain) plain_list ;;
+csv) csv_list ;;
+shell) shell_list ;;
 esac
-
 
 # Logging
 #log_history "enabled control versions GIT template $git_template for $domain"
