@@ -3,11 +3,7 @@
 # options: USER DOMAIN TYPE
 #
 # The call is used for enabling log analyzer system to a domain.  At this time
-# two types of these system is supported - awstats and webalizer. For viewing
-# the domain statistics use http://domain.tld/vstats/ link. Access this page
-# is not protected by default. If you want to secure it with passwords you
-# should use v-add-web-domain_stat_auth script.
-
+# Add subversion of files using GIT for GITLAB
 
 #----------------------------------------------------------#
 #                    Variable&Function                     #
@@ -17,11 +13,12 @@
 user=$1
 domain=$2
 domain_idn=$2
-git=$3
+remote_url_repository=$3
+git=$4
 type="GIT"
 #git_template=$3
 # default bare
-git_template="bare"
+git_template="default"
 # Includes
 source $VESTA/func/main.sh
 source $VESTA/func/domain.sh
@@ -64,10 +61,17 @@ if [ $git_template = "default" ]; then
 
 if ! [ -d "$git_docroot"/.git/ ]; then
     cd "$git_docroot" || exit
-    git init
-    git add --all
-    git commit -m "Firs main committed by VESTA for $user user"
-    git='yes'
+    git init || exit
+    chown -R "$user":"$user" "$git_docroot"/.git > /dev/null 2>&1
+
+    # git remote add origin git@10.0.2.15:vpoltave/vpoltave.net.git
+
+    git remote add origin "$remote_url_repository" > /dev/null 2>&1
+    git add public_html > /dev/null 2>&1
+
+    git commit -m "Initial firs commit by $user user" > /dev/null 2>&1 || exit
+    git push -u origin master > /dev/null 2>&1 || echo "push -u origin master NOT WORKING"
+    git='on'
 fi
 
 fi
@@ -82,7 +86,7 @@ if [ $git_template = "bare" ]; then
         echo '#!/bin/sh' > hooks/post-receive
         echo "GIT_WORK_TREE=$sdocroot git checkout -f" >> hooks/post-receive
         chmod +x hooks/post-receive
-        git='yes'
+        git='on'
     fi
 fi
 
