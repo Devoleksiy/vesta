@@ -1,0 +1,101 @@
+#!/bin/bash
+# info: add support for git versioning for a domain
+# options: USER DOMAIN TYPE
+#
+# The call is used for enabling log analyzer system to a domain.  At this time
+# Add subversion of files using GIT for GITLAB
+
+#----------------------------------------------------------#
+#                    Variable&Function                     #
+#----------------------------------------------------------#
+
+# Argument definition
+user=$1
+domain=$2
+domain_idn=$2
+v_git_post=$3
+type="GIT"
+#git_template=$3
+# default bare
+git_template="default"
+# Includes
+source $VESTA/func/main.sh
+source $VESTA/func/domain.sh
+source $VESTA/conf/vesta.conf
+
+# Additional argument formatting
+format_domain
+format_domain_idn
+
+log_history "added web domain $user $domain $git"
+
+#----------------------------------------------------------#
+#                    Verifications                         #
+#----------------------------------------------------------#
+
+#check_args '2' "$#" 'USER DOMAIN'
+is_format_valid 'user' 'domain'
+is_object_valid 'user' 'USER' "$user" "$user"
+is_object_unsuspended 'user' 'USER' "$user"
+is_object_valid 'web' 'DOMAIN' "$domain"
+is_object_unsuspended 'web' 'DOMAIN' "$domain"
+is_object_value_exist 'web' 'DOMAIN' "$domain" 'GIT'
+
+#----------------------------------------------------------#
+#                       Action                             #
+#----------------------------------------------------------#
+
+# Parse aliases
+get_domain_values 'web'
+
+# Adding statistic config
+prepare_web_domain_values
+
+git_docroot=$(echo "${sdocroot//\/public_html/}")
+
+# GIT Template |> Default <|
+# Add git suporeted for web domain
+if [ $git_template = "default" ]; then
+
+  if [ -d "$git_docroot"/.git/ ]; then
+
+    cd "$git_docroot" || exit
+    yes | rm -R .git
+
+    v_git_post='no'
+  fi
+
+  if [ -d "$git_docroot"/.git/ ]; then
+
+    cd "$git_docroot" || exit
+    result=$(git remote -v)
+    if [ "$result" ]; then
+       echo "$result"
+       v_git_post='no'
+    fi
+
+  fi
+fi
+
+# GIT Template |> Bare <|
+if [ $git_template = "bare" ]; then
+  git_repo="$git_docroot"/"$domain".git
+  if ! [ -d "$git_repo" ]; then
+    cd "$git_docroot" || exit
+    git init --bare "$domain".git #creates a bare repo named myweb.git
+    cd "$domain".git || exit
+    echo '#!/bin/sh' >hooks/post-receive
+    echo "GIT_WORK_TREE=$sdocroot git checkout -f" >>hooks/post-receive
+    chmod +x hooks/post-receive
+    v_git_post='no'
+  fi
+fi
+
+# Update config
+update_object_value 'web' 'DOMAIN' "$domain" '$GIT' "$v_git_post"
+
+# Logging
+log_history "enabled control versions GIT template $git_template for $domain"
+log_event "$OK" "$ARGUMENTS"
+
+exit

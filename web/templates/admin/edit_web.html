@@ -152,14 +152,14 @@
                 <!--  GIT Support  -->
                 <div class="mb-4">
                     <div class="form-check form-switch">
-                        <input name="v_git" class="form-check-input" type="checkbox" id="v_git" <?php if ($v_git == 'on') echo "checked=on" ?> onclick="javascript:elementHideShow('gittable');">
+                        <input name="v_git" class="form-check-input" type="checkbox" id="v_git" <?php if ($v_git == 'on') echo "checked=yes" ?> onclick="javascript:elementHideShow('gittable');">
                         <label class="form-check-label" for="v_git"><?php print __('GIT Support');?></label>
                     </div>
                 </div>
                 <div id="gittable" class="p-3" style="display:<?php if ($v_git == 'no' ) { echo 'none!important';} else {echo 'block';}?> ;">
 
                     <!--  v_git_clone_url  -->
-                    <div class="mb-4">
+                    <div class="mb-4" style='<?php if (!$v_git_clone_url) echo "display:none" ?>'>
                         <label for="myInput" class="form-label"><?php print __('Cloning address');?></label>
                         <div id="" class="row">
                             <div class="col-7">
@@ -175,19 +175,32 @@
                     <!--  SET Remote repository gitlab-->
                     <div class="mb-4">
 
+
+
+
+
                         <div class="guide-git" style='<?php if ($v_git_clone_url) echo "display:none" ?>' >
-                            <div data-quickedit-field-id="node/5/body/uk/full" class="clearfix text-formatted field field--name-body field--type-text-with-summary field--label-hidden field__item quickedit-field"><p>You need to paste in the "<strong>SET Remote repository gitlab</strong>" field in the following format:&nbsp;<em><strong>ssh://</strong></em> OR&nbsp;<em><strong>https://</strong></em><br>
-                                See the following examples:</p>
 
-                                <p><strong>ssh://git@gitlab.domainname.com:2525/username/repo.git</strong><br>
-                                    &nbsp;Replace <strong>2525 </strong>with the port your ssh is running on.</p>
-
-                                <p><strong>https://gitlab.domainname.com/username/repo.git</strong><br>
-                                    <br>
-                                    If you have not added the keys of the current user to the Gitlab instance, you can use access tokens (generate them in the admin panel of the Gitlab) .&nbsp;And add the address of the console in the following format:</p>
-
-                                <p><strong>https://username:access-token@gitlab.domainname.com/username/repo.git</strong></p>
+                            <!-- Guide Set remote repository -->
+                            <div class="d-md-flex justify-content-md-end">
+                                <a class="btn btn-outline-secondary guide-help" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                    Help</a>
                             </div>
+                            <div class="collapse" id="collapseExample">
+                                <div class="card card-body">
+
+                                    <div class=""><p>You need to paste in the "<strong>SET Remote repository gitlab</strong>" field in the following format:&nbsp;<em><strong>ssh://</strong></em> OR&nbsp;<em><strong>https://</strong></em><br>
+                                        See the following examples:</p>
+                                        <p><strong>ssh://git@gitlab.domainname.com:2525/username/repo.git</strong><br>
+                                            Replace <strong>2525 </strong>with the port your ssh is running on.</p>
+                                        <p><strong>https://gitlab.domainname.com/username/repo.git</strong><br><br>
+                                            If you have not added the keys of the current user to the Gitlab instance, you can use access tokens (generate them in the admin panel of the Gitlab) .&nbsp;And add the address of the console in the following format:</p>
+                                        <p><strong>https://username:access-token@gitlab.domainname.com/username/repo.git</strong></p>
+                                    </div>
+
+                                </div>
+                            </div>
+
                         </div>
 
                         <label for="v_gitlab_set_url_repo" class="form-label"><?php print __('SET Remote repository gitlab');?></label>

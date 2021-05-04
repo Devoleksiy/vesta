@@ -479,12 +479,13 @@ if (!empty($_POST['save'])) {
 
 
     // Delete Git suported
-    if ((!empty($v_git)) && ($_POST['v_git'] == 'none') && (empty($_SESSION['error_msg']))) {
-        // Need to work
-        exec (VESTA_CMD."v-delete-web-domain-git ".$v_username." ".$v_domain, $output, $return_var);
+    if ((!empty($v_git)) && ($_POST['v_git'] == null) && (empty($_SESSION['error_msg']))) {
+        // Need to work ntw
+        $v_git_post = $_POST['v_git'];
+        exec (VESTA_CMD."v-delete-web-domain-git ".$v_username." ".$v_domain." ".$v_git_post, $output, $return_var);
         check_return_code($return_var,$output);
         unset($output);
-        $v_stats = '';
+
     }
 
     // Add Gitlab remote repository suported
