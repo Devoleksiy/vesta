@@ -791,17 +791,17 @@ input[type="checkbox"] {
 }
 
 .l-profile__notifications {
-  background: url("/images/sprite.png?1446554103") no-repeat scroll -129px -135px;
+  background: url("/images/sprite.png?1446554103") no-repeat scroll -135px -137px;
   border-radius: 30px;
   color: #fff;
   cursor: pointer;
   float: left;
   font-weight: bold;
-  height: 15px;
+  height: 20px;
   margin-right: 4px;
   margin-top: 5px;
   padding: 10px 5px 0;
-  width: 15px;
+  width: 20px;
 }
 .l-profile__notifications.active {
   background-color: #454545;
@@ -2266,8 +2266,8 @@ body.mobile .l-icon-shortcuts {
 .timer-container .refresh-timer {
   border: 2px solid #9f9f9f;
   border-radius: 14px;
-  height: 14px;
-  width: 14px;
+  height: 17px;
+  width: 17px;
   float: left;
   margin: 2px 10px 0 0;
 }
