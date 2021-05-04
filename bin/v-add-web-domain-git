@@ -3,7 +3,11 @@
 # options: USER DOMAIN TYPE
 #
 # The call is used for enabling log analyzer system to a domain.  At this time
-# Add subversion of files using GIT for GITLAB
+# two types of these system is supported - awstats and webalizer. For viewing
+# the domain statistics use http://domain.tld/vstats/ link. Access this page
+# is not protected by default. If you want to secure it with passwords you
+# should use v-add-web-domain_stat_auth script.
+
 
 #----------------------------------------------------------#
 #                    Variable&Function                     #
@@ -13,12 +17,11 @@
 user=$1
 domain=$2
 domain_idn=$2
-remote_url_repository=$3
-git=$4
+git=$3
 type="GIT"
 #git_template=$3
 # default bare
-git_template="default"
+git_template="bare"
 # Includes
 source $VESTA/func/main.sh
 source $VESTA/func/domain.sh
@@ -58,45 +61,29 @@ git_docroot=$(echo "${sdocroot//\/public_html/}")
 # Add git suporeted for web domain
 if [ $git_template = "default" ]; then
 
-  if ! [ -d "$git_docroot"/.git/ ]; then
+
+if ! [ -d "$git_docroot"/.git/ ]; then
     cd "$git_docroot" || exit
-    git init || exit
-    chown -R "$user":"$user" "$git_docroot"/.git >/dev/null 2>&1
+    git init
+    git add --all
+    git commit -m "Firs main committed by VESTA for $user user"
+    git='yes'
+fi
 
-    # git remote add origin git@10.0.2.15:vpoltave/vpoltave.net.git
-
-    git remote add origin "$remote_url_repository" >/dev/null 2>&1
-    git add public_html >/dev/null 2>&1
-
-    git commit -m "Initial firs commit by $user user" >/dev/null 2>&1 || exit
-    timeout 10s git push -u origin master >/dev/null 2>&1 || echo "push -u origin master NOT WORKING"
-    git='on'
-  fi
-
-  if [ -d "$git_docroot"/.git/ ]; then
-
-    cd "$git_docroot" || exit
-    result=$(git remote -v)
-    if [ "$result" ]; then
-       echo "$result"
-       git='on'
-    fi
-
-  fi
 fi
 
 # GIT Template |> Bare <|
 if [ $git_template = "bare" ]; then
-  git_repo="$git_docroot"/"$domain".git
-  if ! [ -d "$git_repo" ]; then
-    cd "$git_docroot" || exit
-    git init --bare "$domain".git #creates a bare repo named myweb.git
-    cd "$domain".git || exit
-    echo '#!/bin/sh' >hooks/post-receive
-    echo "GIT_WORK_TREE=$sdocroot git checkout -f" >>hooks/post-receive
-    chmod +x hooks/post-receive
-    git='on'
-  fi
+    git_repo="$git_docroot"/"$domain".git
+    if ! [ -d "$git_repo" ]; then
+        cd "$git_docroot" || exit
+        git init --bare "$domain".git #creates a bare repo named myweb.git
+        cd "$domain".git || exit
+        echo '#!/bin/sh' > hooks/post-receive
+        echo "GIT_WORK_TREE=$sdocroot git checkout -f" >> hooks/post-receive
+        chmod +x hooks/post-receive
+        git='yes'
+    fi
 fi
 
 # Update config

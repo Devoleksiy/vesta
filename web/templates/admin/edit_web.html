@@ -1,25 +1,25 @@
-<div class="l-center edit">
-    <div class="l-sort clearfix">
+    <div class="l-center edit">
+      <div class="l-sort clearfix">
         <div class="l-sort-toolbar clearfix float-left">
-            <span class="title edit"><b><?=__('Editing Domain')?></b></span>
+          <span class="title edit"><b><?=__('Editing Domain')?></b></span>
             <?php
               if (!empty($_SESSION['error_msg'])) {
                 echo "<span class=\"vst-error\"> → ".htmlentities($_SESSION['error_msg'])."</span>";
-            } else {
-            if (!empty($_SESSION['ok_msg'])) {
-            echo "<span class=\"vst-ok\"> → ".$_SESSION['ok_msg']."</span>";
-            }
-            }
+              } else {
+                if (!empty($_SESSION['ok_msg'])) {
+                  echo "<span class=\"vst-ok\"> → ".$_SESSION['ok_msg']."</span>";
+                }
+              }
             ?>
         </div>
+      </div>
     </div>
-</div>
 
-<div class="l-separator"></div>
-<!-- /.l-separator -->
+    <div class="l-separator"></div>
+    <!-- /.l-separator -->
 
-<div class="container">
-    <?php
+    <div class="l-center">
+      <?php
         $back = $_SESSION['back'];
         if (empty($back)) {
           $back = "location.href='/list/web/'";
@@ -27,547 +27,490 @@
           $back = "location.href='".$back."'";
         }
       ?>
-    <form id="vstobjects" name="v_edit_web" method="post"  class="<?=$v_status?>">
-        <input type="hidden" name="token" value="<?=$_SESSION['token']?>" />
-        <input type="hidden" name="save" value="save" />
+        <form id="vstobjects" name="v_edit_web" method="post"  class="<?=$v_status?>">
+            <input type="hidden" name="token" value="<?=$_SESSION['token']?>" />
+            <input type="hidden" name="save" value="save" />
 
-        <div class='data row'>
+            <table class='data'>
+                <tr class="data-add">
+                    <td class="data-dotted">
+                        <table class="data-col1">
+                            <tr>
+                                <td>
+                                    <a class="data-date"><?=translate_date($v_date)?></a><br>
+                                    <a class="data-date"><?=$v_time?></a>
+                                </td>
+                            </tr>
+                            <tr><td class="data-<?=$v_status ?>"><b><?=__($v_status) ?></b></td></tr>
+                        </table>
+                    </td>
+                    <td class="data-dotted">
+                        <table class="data-col2">
 
-            <div class="col-sm-3">
+                            <!--  Domain  -->
+                            <div class="mb-4">
+                                <label for="formGroupExampleInput" class="form-label"><?php print __('Domain');?></label>
+                                <input type="text" class="w-50 form-control" id="formGroupExampleInput" name="v_domain" value="<?=htmlentities(trim($v_domain, "'"))?>" disabled>
+                            </div>
 
-                        <a class="data-date"><?=translate_date($v_date)?></a><br>
-                        <a class="data-date"><?=$v_time?></a>
-
-                    <div class="data-<?=$v_status ?>"><b><?=__($v_status) ?></b></div>
-
-            </div>
-
-            <div class="col-sm-5">
-
-                <!--  Domain  -->
-                <div class="mb-4">
-                    <label for="formGroupExampleInput" class="form-label"><?php print __('Domain');?></label>
-                    <input type="text" class="form-control" id="formGroupExampleInput" name="v_domain" value="<?=htmlentities(trim($v_domain, "'"))?>" disabled>
-                </div>
-
-                <!--  IP Address  -->
-                <div class="mb-4">
-                    <label for="form-ip-address" class="form-label"><?php print __('IP Address');?></label>
-                    <select id="form-ip-address" name="v_ip" class="form-select" aria-label="Default select example">
-                        <?php
+                            <!--  IP Address  -->
+                            <div class="mb-4">
+                                <label for="form-ip-address" class="form-label"><?php print __('IP Address');?></label>
+                                <select id="form-ip-address" name="v_ip" class="w-50 form-select" aria-label="Default select example">
+                                    <?php
                                             foreach ($ips as $ip => $value) {
-                        $display_ip = htmlentities(empty($value['NAT']) ? $ip : "{$value['NAT']}");
-                        $ip_selected = ((!empty($v_ip) && $ip == $v_ip) || $v_ip == "'{$ip}'")  ? 'selected' : '';
-                        echo "\n\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"{$ip}\" {$ip_selected}>{$display_ip}</option>\n";
-                        }
-                        ?>
-                    </select>
-                </div>
+                                    $display_ip = htmlentities(empty($value['NAT']) ? $ip : "{$value['NAT']}");
+                                    $ip_selected = ((!empty($v_ip) && $ip == $v_ip) || $v_ip == "'{$ip}'")  ? 'selected' : '';
+                                    echo "\n\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"{$ip}\" {$ip_selected}>{$display_ip}</option>\n";
+                                    }
+                                    ?>
+                                </select>
+                            </div>
 
-                <!--  Aliases  -->
-                <div class="mb-4">
-                    <label for="form-aliases" class="form-label"><?php print __('Aliases');?></label>
-                    <textarea id="form-aliases" class="form-control" name="v_aliases" rows="3"><?=htmlentities(trim($v_aliases, "'"))?></textarea>
-                </div>
+                            <!--  Aliases  -->
+                            <div class="mb-4">
+                                <label for="form-aliases" class="form-label"><?php print __('Aliases');?></label>
+                                <textarea id="form-aliases" class="form-control" name="v_aliases" rows="3"><?=htmlentities(trim($v_aliases, "'"))?></textarea>
+                            </div>
 
-                <!--  Web Template  -->
-                <div class="mb-4">
-                    <label for="form-web-template" class="form-label"><?php print __('Web Template')  . "<span class='optional'>" .strtoupper($_SESSION['WEB_SYSTEM']) . "</span>";?></label>
-                    <select id="form-web-template" name="v_template" class="form-select" aria-label="Default select example">
-                        <?php
+                            <!--  Web Template  -->
+                            <div class="mb-4">
+                                <label for="form-web-template" class="form-label"><?php print __('Web Template')  . "<span class='optional'>" .strtoupper($_SESSION['WEB_SYSTEM']) . "</span>";?></label>
+                                <select id="form-web-template" name="v_template" class="w-50 form-select" aria-label="Default select example">
+                                    <?php
                                             foreach ($templates as $key => $value) {
-                        echo "\t\t\t\t<option value=\"".htmlentities($value)."\"";
-                                              $svalue = "'".$value."'";
-                        if ((!empty($v_template)) && ( $value == $v_template ) || ($svalue == $v_template)){
-                        echo ' selected' ;
-                        }
-                        echo ">".htmlentities($value)."</option>\n";
-                        }
-                        ?>
-                    </select>
-                </div>
-                <?php if (!empty($_SESSION['WEB_BACKEND'])) { ?>
+                                    echo "\t\t\t\t<option value=\"".htmlentities($value)."\"";
+                                                          $svalue = "'".$value."'";
+                                    if ((!empty($v_template)) && ( $value == $v_template ) || ($svalue == $v_template)){
+                                    echo ' selected' ;
+                                    }
+                                    echo ">".htmlentities($value)."</option>\n";
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                            <?php if (!empty($_SESSION['WEB_BACKEND'])) { ?>
 
-                <!--  Backend Template  -->
-                <div class="mb-4">
-                    <label for="form-backend-template" class="form-label"><?php print __('Backend Template') . " <span class='optional'>" . strtoupper($_SESSION['WEB_BACKEND']) . "</span>";?></label>
-                    <select id="form-backend-template" name="v_backend_template" class="form-select" aria-label="Default select example">
-                        <?php
+                            <!--  Backend Template  -->
+                            <div class="mb-4">
+                                <label for="form-backend-template" class="form-label"><?php print __('Backend Template') . " <span class='optional'>" . strtoupper($_SESSION['WEB_BACKEND']) . "</span>";?></label>
+                                <select id="form-backend-template" name="v_backend_template" class="w-50 form-select" aria-label="Default select example">
+                                    <?php
                                             foreach ($backend_templates as $key => $value) {
-                        echo "\t\t\t\t<option value=\"".$value."\"";
-                                              $svalue = "'".$value."'";
-                        if ((!empty($v_backend_template)) && ( $value == $v_backend_template ) || ($svalue == $v_backend_template)){
-                        echo ' selected' ;
-                        }
-                        if ((empty($v_backend_template)) && ($value == 'default')){
-                        echo ' selected' ;
-                        }
-                        echo ">".htmlentities($value)."</option>\n";
-                        }
-                        ?>
-                    </select>
-                </div>
-
-                <?php }?>
-
-                <!--  PROXY_SYSTEM  -->
-                <?php if (!empty($_SESSION['PROXY_SYSTEM'])) { ?>
-
-                <div class="mb-4">
-                    <div class="form-check form-switch">
-                        <label> <input name="v_proxy" class="form-check-input" type="checkbox" id="v_proxy" <?php if (!empty($v_proxy)) echo "checked=yes" ?> onclick="javascript:elementHideShow('proxytable');"> <?php print __('Proxy Support') . "<span class='optional'>" . strtoupper($_SESSION['PROXY_SYSTEM']) . "</span>";?></label>
-                    </div>
-                </div>
-
-                <!--  Proxy Template  -->
-                <div id="proxytable" class="p-4" style="display:<?php if (empty($v_proxy)) { echo 'none';} else {echo 'block';}?> ;">
-
-                    <div class="mb-4">
-                        <label for="form-proxy-template" class="form-label"><?php print __('Proxy Template');?></label>
-                        <select id="form-proxy-template" name="v_proxy_template" class="form-select" aria-label="Default select example">
-                            <?php
-                                                        foreach ($proxy_templates as $key => $value) {
-                            echo "\t\t\t\t<option value=\"".htmlentities($value)."\"";
-                                                  $svalue = "'".$value."'";
-                            if ((!empty($v_proxy_template)) && ( $value == $v_proxy_template ) || ($svalue == $v_proxy_template)){
-                            echo ' selected' ;
-                            }
-                            if ((empty($v_proxy_template)) && ($value == 'default')){
-                            echo ' selected' ;
-                            }
-                            echo ">".htmlentities($value)."</option>\n";
-                            }
-                            ?>
-                        </select>
-                    </div>
-
-                    <div class="mb-4">
-                        <label for="form-proxy-extensions" class="form-label"><?php print __('Proxy Extensions');?></label>
-                        <textarea id="form-proxy-extensions" class="form-control" name="v_proxy_ext" rows="5"><?php if (!empty($v_proxy_ext)) { echo htmlentities(trim($v_proxy_ext, "'"));} else { echo 'jpg, jpeg, gif, png, ico, svg, css, zip, tgz, gz, rar, bz2, exe, pdf, doc, xls, ppt, txt, odt, ods, odp, odf, tar, bmp, rtf, js, mp3, avi, mpeg, flv, html, htm'; }  ?></textarea>
-                    </div>
-
-                </div>
-                <?php } ?>
-
-                <!--  GIT Support  -->
-                <div class="mb-4">
-                    <div class="form-check form-switch">
-                        <input name="v_git" class="form-check-input" type="checkbox" id="v_git" <?php if ($v_git == 'on') echo "checked=yes" ?> onclick="javascript:elementHideShow('gittable');">
-                        <label class="form-check-label" for="v_git"><?php print __('GIT Support');?></label>
-                    </div>
-                </div>
-                <div id="gittable" class="p-3" style="display:<?php if ($v_git == 'no' ) { echo 'none!important';} else {echo 'block';}?> ;">
-
-                    <!--  v_git_clone_url  -->
-                    <div class="mb-4" style='<?php if (!$v_git_clone_url) echo "display:none" ?>'>
-                        <label for="myInput" class="form-label"><?php print __('Cloning address');?></label>
-                        <div id="" class="row">
-                            <div class="col-7">
-                                <input name="v_git_clone_url" type="text" class="form-control" id="myInput" value="<?=htmlentities(trim($v_git_clone_url, "'"))?>">
+                                    echo "\t\t\t\t<option value=\"".$value."\"";
+                                                          $svalue = "'".$value."'";
+                                    if ((!empty($v_backend_template)) && ( $value == $v_backend_template ) || ($svalue == $v_backend_template)){
+                                    echo ' selected' ;
+                                    }
+                                    if ((empty($v_backend_template)) && ($value == 'default')){
+                                    echo ' selected' ;
+                                    }
+                                    echo ">".htmlentities($value)."</option>\n";
+                                    }
+                                    ?>
+                                </select>
                             </div>
-                            <div class="col-3">
-                                <!-- The button used to copy the text -->
-                                <a class="btn p-2" style="border: 1px solid olivedrab; cursor: pointer;" onclick="func_copy()">Copy</a>
-                            </div>
-                        </div>
-                    </div>
 
-                    <!--  SET Remote repository gitlab-->
-                    <div class="mb-4">
+                            <?php }?>
 
+                            <!--  PROXY_SYSTEM  -->
+                            <?php if (!empty($_SESSION['PROXY_SYSTEM'])) { ?>
 
-
-
-
-                        <div class="guide-git" style='<?php if ($v_git_clone_url) echo "display:none" ?>' >
-
-                            <!-- Guide Set remote repository -->
-                            <div class="d-md-flex justify-content-md-end">
-                                <a class="btn btn-outline-secondary guide-help" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                                    Help</a>
-                            </div>
-                            <div class="collapse" id="collapseExample">
-                                <div class="card card-body">
-
-                                    <div class=""><p>You need to paste in the "<strong>SET Remote repository gitlab</strong>" field in the following format:&nbsp;<em><strong>ssh://</strong></em> OR&nbsp;<em><strong>https://</strong></em><br>
-                                        See the following examples:</p>
-                                        <p><strong>ssh://git@gitlab.domainname.com:2525/username/repo.git</strong><br>
-                                            Replace <strong>2525 </strong>with the port your ssh is running on.</p>
-                                        <p><strong>https://gitlab.domainname.com/username/repo.git</strong><br><br>
-                                            If you have not added the keys of the current user to the Gitlab instance, you can use access tokens (generate them in the admin panel of the Gitlab) .&nbsp;And add the address of the console in the following format:</p>
-                                        <p><strong>https://username:access-token@gitlab.domainname.com/username/repo.git</strong></p>
-                                    </div>
-
+                            <div class="mb-4">
+                                <div class="form-check form-switch">
+                                    <label> <input name="v_proxy" class="form-check-input" type="checkbox" id="v_proxy" <?php if (!empty($v_proxy)) echo "checked=yes" ?> onclick="javascript:elementHideShow('proxytable');"> <?php print __('Proxy Support') . "<span class='optional'>" . strtoupper($_SESSION['PROXY_SYSTEM']) . "</span>";?></label>
                                 </div>
                             </div>
 
-                        </div>
+                            <!--  Proxy Template  -->
+                            <div id="proxytable" class="p-4" style="display:<?php if (empty($v_proxy)) { echo 'none';} else {echo 'block';}?> ;">
 
-                        <label for="v_gitlab_set_url_repo" class="form-label"><?php print __('SET Remote repository gitlab');?></label>
+                                <div class="mb-4">
+                                    <label for="form-proxy-template" class="form-label"><?php print __('Proxy Template');?></label>
+                                    <select id="form-proxy-template" name="v_proxy_template" class="w-50 form-select" aria-label="Default select example">
+                                        <?php
+                                                        foreach ($proxy_templates as $key => $value) {
+                                        echo "\t\t\t\t<option value=\"".htmlentities($value)."\"";
+                                                              $svalue = "'".$value."'";
+                                        if ((!empty($v_proxy_template)) && ( $value == $v_proxy_template ) || ($svalue == $v_proxy_template)){
+                                        echo ' selected' ;
+                                        }
+                                        if ((empty($v_proxy_template)) && ($value == 'default')){
+                                        echo ' selected' ;
+                                        }
+                                        echo ">".htmlentities($value)."</option>\n";
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
 
-                        <div id="none" class="row">
-                            <div class="col-7">
-                                <input name="v_gitlab_set_url_repo" type="text" class="form-control" id="v_gitlab_set_url_repo" value="<?=htmlentities(trim($v_gitlab_set_url_repo, "'"))?>">
+                                <div class="mb-4">
+                                    <label for="form-proxy-extensions" class="form-label"><?php print __('Proxy Extensions');?></label>
+                                    <textarea id="form-proxy-extensions" class="form-control" name="v_proxy_ext" rows="5"><?php if (!empty($v_proxy_ext)) { echo htmlentities(trim($v_proxy_ext, "'"));} else { echo 'jpg, jpeg, gif, png, ico, svg, css, zip, tgz, gz, rar, bz2, exe, pdf, doc, xls, ppt, txt, odt, ods, odp, odf, tar, bmp, rtf, js, mp3, avi, mpeg, flv, html, htm'; }  ?></textarea>
+                                </div>
+
                             </div>
-                            <div class="col-3">
-                                <!-- The button used to copy the text -->
-                                <a class="btn p-2" style="border: 1px solid olivedrab; cursor: pointer;" onclick="func_copy_gitlab()">Copy</a>
+                            <?php } ?>
+
+                            <!--  GIT Support  -->
+                            <div class="mb-4">
+                                <div class="form-check form-switch">
+                                    <input name="v_git" class="form-check-input" type="checkbox" id="v_git" <?php if ($v_git == 'yes') echo "checked=yes" ?> onclick="javascript:elementHideShow('gittable');">
+                                    <label class="form-check-label" for="v_git"><?php print __('GIT Support');?></label>
+                                </div>
                             </div>
-                        </div>
-                    </div>
+                            <div id="gittable" class="p-3" style="display:<?php if ($v_git == 'no' ) { echo 'none!important';} else {echo 'block';}?> ;">
 
-                    <!--  GET Remote repository gitlab-->
-                    <!--                                <div class="mb-4">-->
-                    <!--                                    <label for="v_gitlab_get_url_repo" class="form-label"><?php print __('GET Remote repository gitlab');?></label>-->
-                    <!--                                    <div id="" class="row">-->
-                    <!--                                        <div class="col-7">-->
-                    <!--                                            <input name="v_gitlab_get_url_repo" type="text" class="form-control" id="v_gitlab_get_url_repo" value="<?=htmlentities(trim($v_gitlab_get_url_repo, "'"))?>">-->
-                    <!--                                        </div>-->
-                    <!--                                        <div class="col-3">-->
-                    <!--                                            &lt;!&ndash; The button used to copy the text &ndash;&gt;-->
-                    <!--                                            <a class="btn p-2" style="border: 1px solid olivedrab; cursor: pointer;" onclick="func_copy_gitlab()">Copy</a>-->
-                    <!--                                        </div>-->
-                    <!--                                    </div>-->
-                    <!--                                </div>-->
+                                <!--  v_git_clone_url  -->
+                                <div class="mb-4">
+                                    <label for="myInput" class="form-label"><?php print __('Cloning address');?></label>
+                                    <div id="" class="row">
+                                        <div class="col-7">
+                                            <input name="v_git_clone_url" type="text" class="form-control" id="myInput" value="<?=htmlentities(trim($v_git_clone_url, "'"))?>">
+                                        </div>
+                                        <div class="col-3">
+                                            <!-- The button used to copy the text -->
+                                            <a class="btn p-2" style="border: 1px solid olivedrab; cursor: pointer;" onclick="func_copy()">Copy</a>
+                                        </div>
+                                    </div>
+                                </div>
 
+                                <!--  v_git_user_pub_key  -->
+                                <div class="mb-4">
+                                    <label for="form-v-git-user-pub-key" class="form-label"><?php print __('Public key of the user to access the repository');?></label>
+                                    <textarea id="form-v-git-user-pub-key" class="form-control" name="v_git_user_pub_key" rows="3"><?=htmlentities(trim($v_git_user_pub_key, "'"))?></textarea>
+                                </div>
 
-                    <!--  v_git_user_pub_key  -->
-                    <div class="mb-4">
-                        <label for="form-v-git-user-pub-key" class="form-label"><?php print __('Public key of the user to access the repository');?></label>
-                        <textarea id="form-v-git-user-pub-key" class="form-control" name="v_git_user_pub_key" rows="3"><?=htmlentities(trim($v_git_user_pub_key, "'"))?></textarea>
-                    </div>
+                            </div>
 
-                </div>
+                            <!--  SSL Support  -->
+                            <div class="mb-4">
+                                <div class="form-check form-switch">
+                                    <input name="v_ssl" class="form-check-input" type="checkbox" id="v_ssl" <?php if ($v_ssl == 'yes') echo "checked=yes" ?> onclick="javascript:elementHideShow('ssltable');">
+                                    <label class="form-check-label" for="v_ssl"><?php print __('SSL Support');?></label>
+                                </div>
+                            </div>
 
-                <!--  SSL Support  -->
-                <div class="mb-4">
-                    <div class="form-check form-switch">
-                        <input name="v_ssl" class="form-check-input" type="checkbox" id="v_ssl" <?php if ($v_ssl == 'yes') echo "checked=yes" ?> onclick="javascript:elementHideShow('ssltable');">
-                        <label class="form-check-label" for="v_ssl"><?php print __('SSL Support');?></label>
-                    </div>
-                </div>
+                            <div id="ssltable" class="p-3" style="display:<?php if ($v_ssl == 'no' ) { echo 'none';} else {echo 'block';}?> ;">
 
-                <div id="ssltable" class="p-3" style="display:<?php if ($v_ssl == 'no' ) { echo 'none';} else {echo 'block';}?> ;">
+                                <div class="mb-4 mr-2">
+                                    <div class="form-check form-switch">
+                                        <input name="v_letsencrypt" class="form-check-input" type="checkbox" id="form-lets-encrypt-support" <?php if($v_letsencrypt == 'yes' || $v_letencrypt == 'on') echo "checked=yes" ?> onclick="App.Actions.WEB.toggle_letsencrypt(this)">
+                                        <label class="form-check-label" for="form-lets-encrypt-support"><?php print __('Lets Encrypt Support');?></label>
+                                    </div>
+                                </div>
 
-                    <div class="mb-4 mr-2">
-                        <div class="form-check form-switch">
-                            <input name="v_letsencrypt" class="form-check-input" type="checkbox" id="form-lets-encrypt-support" <?php if($v_letsencrypt == 'yes' || $v_letencrypt == 'on') echo "checked=yes" ?> onclick="App.Actions.WEB.toggle_letsencrypt(this)">
-                            <label class="form-check-label" for="form-lets-encrypt-support"><?php print __('Lets Encrypt Support');?></label>
-                        </div>
-                    </div>
+                                <div class="mb-4">
+                                    <label for="form-ssl-home-directory" class="form-label"><?php print __('SSL Home Directory');?></label>
+                                    <select id="form-ssl-home-directory" name="v_ssl_home" class="w-50 form-select" aria-label="Default select example">
+                                        <option value='same' <?php if ($v_ssl_home == 'same') echo "selected";?>>
+                                        public_html
+                                        </option>
+                                        <option value='single' <?php if ($v_ssl_home == 'single') echo "selected";?>>
+                                        public_shtml
+                                        </option>
+                                    </select>
+                                </div>
 
-                    <div class="mb-4">
-                        <label for="form-ssl-home-directory" class="form-label"><?php print __('SSL Home Directory');?></label>
-                        <select id="form-ssl-home-directory" name="v_ssl_home" class="form-select" aria-label="Default select example">
-                            <option value='same' <?php if ($v_ssl_home == 'same') echo "selected";?>>
-                            public_html
-                            </option>
-                            <option value='single' <?php if ($v_ssl_home == 'single') echo "selected";?>>
-                            public_shtml
-                            </option>
-                        </select>
-                    </div>
+                                <div class="mb-4">
+                                    <label for="form-ssl-certificate" class="form-label"><?php print __('SSL Certificate');?></label>
+                                    <span id="generate-csr"> / <a class="generate" target="_blank" href="/generate/ssl/?domain=<?=$v_domain?>"><?=__('Generate CSR')?></a></span>
+                                    <textarea id="form-ssl-certificate" class="form-control" name="v_ssl_crt" rows="3"><?=htmlentities(trim($v_ssl_crt, "'"))?></textarea>
+                                </div>
 
-                    <div class="mb-4">
-                        <label for="form-ssl-certificate" class="form-label"><?php print __('SSL Certificate');?></label>
-                        <span id="generate-csr"> / <a class="generate" target="_blank" href="/generate/ssl/?domain=<?=$v_domain?>"><?=__('Generate CSR')?></a></span>
-                        <textarea id="form-ssl-certificate" class="form-control" name="v_ssl_crt" rows="3"><?=htmlentities(trim($v_ssl_crt, "'"))?></textarea>
-                    </div>
+                                <div class="mb-4">
+                                    <label for="form-ssl-key" class="form-label"><?php print __('SSL Key');?></label>
+                                    <textarea id="form-ssl-key" class="form-control" name="v_ssl_key" rows="3"><?=htmlentities(trim($v_ssl_key, "'"))?></textarea>
+                                </div>
 
-                    <div class="mb-4">
-                        <label for="form-ssl-key" class="form-label"><?php print __('SSL Key');?></label>
-                        <textarea id="form-ssl-key" class="form-control" name="v_ssl_key" rows="3"><?=htmlentities(trim($v_ssl_key, "'"))?></textarea>
-                    </div>
+                                <div class="mb-4">
+                                    <label for="form-ssl-key" class="form-label"><?php print __('SSL Certificate Authority / Intermediate');?> <span class="optional">(<?php print __('optional');?>)</span></label>
+                                    <textarea id="form-ssl-key" class="form-control" name="v_ssl_ca" rows="3"><?=htmlentities(trim($v_ssl_ca, "'"))?></textarea>
+                                </div>
 
-                    <div class="mb-4">
-                        <label for="form-ssl-key" class="form-label"><?php print __('SSL Certificate Authority / Intermediate');?> <span class="optional">(<?php print __('optional');?>)</span></label>
-                        <textarea id="form-ssl-key" class="form-control" name="v_ssl_ca" rows="3"><?=htmlentities(trim($v_ssl_ca, "'"))?></textarea>
-                    </div>
-
-                    <?
+                                <?
                                         if ($v_ssl != 'no' ) { ?>
 
-                    <table class="table">
-                        <tr>
-                            <td>
-                                <?=__('SUBJECT')?>:
-                            </td>
-                            <td class="details">
-                                <?=$v_ssl_subject?>
-                            </td>
-                        </tr>
-                        <? if($v_ssl_aliases){?>
-                        <tr>
-                            <td>
-                                <?=__('ALIASES')?>:
-                            </td>
-                            <td class="details">
-                                <?=$v_ssl_aliases?>
-                            </td>
-                        </tr>
-                        <? } ?>
-                        <tr>
-                            <td>
-                                <?=__('NOT_BEFORE')?>:
-                            </td>
-                            <td class="details">
-                                <?=$v_ssl_not_before?>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <?=__('NOT_AFTER')?>:
-                            </td>
-                            <td class="details">
-                                <?=$v_ssl_not_after?>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <?=__('SIGNATURE')?>:
-                            </td>
-                            <td class="details">
-                                <?=$v_ssl_signature?>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <?=__('PUB_KEY')?>:
-                            </td>
-                            <td class="details">
-                                <?=$v_ssl_pub_key?>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <?=__('ISSUER')?>:
-                            </td>
-                            <td class="details">
-                                <?=$v_ssl_issuer?>
-                            </td>
-                        </tr>
-                    </table>
+                                <table class="table">
+                                    <tr>
+                                        <td>
+                                            <?=__('SUBJECT')?>:
+                                        </td>
+                                        <td class="details">
+                                            <?=$v_ssl_subject?>
+                                        </td>
+                                    </tr>
+                                    <? if($v_ssl_aliases){?>
+                                    <tr>
+                                        <td>
+                                            <?=__('ALIASES')?>:
+                                        </td>
+                                        <td class="details">
+                                            <?=$v_ssl_aliases?>
+                                        </td>
+                                    </tr>
+                                    <? } ?>
+                                    <tr>
+                                        <td>
+                                            <?=__('NOT_BEFORE')?>:
+                                        </td>
+                                        <td class="details">
+                                            <?=$v_ssl_not_before?>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <?=__('NOT_AFTER')?>:
+                                        </td>
+                                        <td class="details">
+                                            <?=$v_ssl_not_after?>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <?=__('SIGNATURE')?>:
+                                        </td>
+                                        <td class="details">
+                                            <?=$v_ssl_signature?>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <?=__('PUB_KEY')?>:
+                                        </td>
+                                        <td class="details">
+                                            <?=$v_ssl_pub_key?>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <?=__('ISSUER')?>:
+                                        </td>
+                                        <td class="details">
+                                            <?=$v_ssl_issuer?>
+                                        </td>
+                                    </tr>
+                                </table>
 
 
-                    <? } // if ssl is enabled ?>
-                </div>
+                                <? } // if ssl is enabled ?>
+                            </div>
 
 
 
-                <!--  Web Statistics  -->
-                <div class="mb-4">
-                    <label for="form-web-statistics" class="form-label"><?php print __('Web Statistics');?></label>
-                    <select id="form-web-statistics" name="v_stats" class="form-select" aria-label="Default select example">
-                        <?php
+                            <!--  Web Statistics  -->
+                            <div class="mb-4">
+                                <label for="form-web-statistics" class="form-label"><?php print __('Web Statistics');?></label>
+                                <select id="form-web-statistics" name="v_stats" class="w-50 form-select" aria-label="Default select example">
+                                    <?php
                                             foreach ($stats as $key => $value) {
-                        $svalue = "'".$value."'";
-                        echo "\t\t\t\t<option value=\"".htmlentities($value)."\"";
-                                              if (empty($v_stats)) $v_stats = 'none';
-                                              if (( $value == $v_stats ) || ($svalue == $v_stats )){
-                                              echo ' selected' ;
-                        }
-                        echo ">". htmlentities(__($value)) ."</option>\n";
-                        }
-                        ?>
-                    </select>
-                </div>
-
-                <!--  Web Statistics  -->
-                <div class="mb-4 stats-auth" style="<? if ($v_stats == 'none') { ?>display:none<? } ?>">
-                    <div class="form-check form-switch">
-                        <input name="v_stats_auth" class="form-check-input" type="checkbox" id="input-statistics-authorization" <?php if (!empty($v_stats_user)) echo "checked=yes" ?> onclick="javascript:elementHideShow('statstable');">
-                        <label class="form-check-label" for="input-statistics-authorization"><?php print __('Statistics Authorization');?></label>
-                    </div>
-                </div>
+                                    $svalue = "'".$value."'";
+                                    echo "\t\t\t\t<option value=\"".htmlentities($value)."\"";
+                                                          if (empty($v_stats)) $v_stats = 'none';
+                                                          if (( $value == $v_stats ) || ($svalue == $v_stats )){
+                                                          echo ' selected' ;
+                                    }
+                                    echo ">". htmlentities(__($value)) ."</option>\n";
+                                    }
+                                    ?>
+                                </select>
+                            </div>
 
 
-                <div id="statstable" name="v-add-web-domain-stats-user" class="p-3" style="display:<?php if (empty($v_stats_user)) { echo 'none';} else {echo 'block';}?> ;">
 
-                    <div class="vst-text input-label">
-                        <?php print __('Username');?>
-                    </div>
 
-                    <div>
-                        <input type="text" size="20" class="vst-input" name="v_stats_user" value="<?=htmlentities(trim($v_stats_user, "'"))?>">
-                    </div>
+                            <div class="mb-4 stats-auth" style="<? if ($v_stats == 'none') { ?>display:none<? } ?>">
+                                <div class="form-check form-switch">
+                                    <input name="v_stats_auth" class="form-check-input" type="checkbox" id="input-statistics-authorization" <?php if (!empty($v_stats_user)) echo "checked=yes" ?> onclick="javascript:elementHideShow('statstable');">
+                                    <label class="form-check-label" for="input-statistics-authorization"><?php print __('Statistics Authorization');?></label>
+                                </div>
+                            </div>
 
-                    <div class="vst-text input-label">
-                        <?php print __('Password');?> / <a href="javascript:WEBrandom();" class="generate"><?php print __('generate');?></a>
-                    </div>
 
-                    <div>
-                        <input type="text" size="20" class="vst-input password" name="v_stats_password" value="<?=htmlentities(trim($v_stats_password, "'"))?>" id="v_password">
-                    </div>
 
-                </div>
 
-                <!--  Additional FTP Account  -->
-                <div class="mb-4">
-                    <div class="form-check form-switch">
-                        <label class="form-check-label" for="v_ftp"><?php print __('Additional FTP Account');?></label>
-                        <input name="v_ftp" class="form-check-input" type="checkbox" id="v_ftp" <?php if (!empty($v_ftp_user)) echo "checked=yes" ?> onclick="App.Actions.WEB.toggle_additional_ftp_accounts(this)">
-                    </div>
-                </div>
+                            <tr class="stats-auth">
+                                <td class="step-left">
+                                    <table style="display:<?php if (empty($v_stats_user)) { echo 'none';} else {echo 'block';}?> ;" id="statstable" name="v-add-web-domain-stats-user">
+                                        <tr>
+                                            <td class="vst-text input-label">
+                                                <?php print __('Username');?>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <input type="text" size="20" class="vst-input" name="v_stats_user" value="<?=htmlentities(trim($v_stats_user, "'"))?>">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="vst-text input-label">
+                                                <?php print __('Password');?> / <a href="javascript:WEBrandom();" class="generate"><?php print __('generate');?></a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <input type="text" size="20" class="vst-input password" name="v_stats_password" value="<?=htmlentities(trim($v_stats_password, "'"))?>" id="v_password">
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="vst-text step-top">
+                                    <label><input type="checkbox" size="20" class="vst-checkbox" name="v_ftp" <?php if (!empty($v_ftp_user)) echo "checked=yes" ?> onclick="App.Actions.WEB.toggle_additional_ftp_accounts(this)"> <?php print __('Additional FTP Account');?></label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
 
-                <div class="mb-4">
-
-                    <?php foreach ($v_ftp_users as $i => $ftp_user): ?>
-                    <?php
+                                    <?php foreach ($v_ftp_users as $i => $ftp_user): ?>
+                                    <?php
                                         $v_ftp_user     = $ftp_user['v_ftp_user'];
                                         $v_ftp_password = $ftp_user['v_ftp_password'];
                                         $v_ftp_path     = $ftp_user['v_ftp_path'];
                                         $v_ftp_email    = $ftp_user['v_ftp_email'];
                                         $v_ftp_pre_path = $ftp_user['v_ftp_pre_path'];
                                     ?>
+                                    <table style="display:<?php if (empty($v_ftp_user)) { echo 'none';} else {echo 'block';}?> ;" class="ftptable ftptable-nrm" name="v_add_domain_ftp">
+                                        <tr>
+                                            <td class="vst-text input-label">
+                                                <?php print __('FTP') ?> #<span class="ftp-user-number"><?php print $i + 1; ?></span> <a class="ftp-remove-user additional-control" onCLick="App.Actions.WEB.remove_ftp_user(this)">(<?=__('delete')?>)</a>
+                                                <input type="hidden" class="v-ftp-user-deleted" name="v_ftp_user[<?php print $i ?>][delete]" value="0" />
+                                                <input type="hidden" class="v-ftp-user-is-new" name="v_ftp_user[<?php print $i ?>][is_new]" value="<?php print htmlentities($ftp_user['is_new']) ?>" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="vst-text step-left input-label">
+                                                <?php print __('Username');?><br>
+                                                <span style="font-size: 10pt; color:#777;"><?php print __('Prefix will be automaticaly added to username',$user."_");?></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="step-left">
+                                                <input type="text" size="20" class="vst-input v-ftp-user" <?php print $ftp_user['is_new'] != 1 ? 'disabled="disabled"' : '' ?> 
+                                                name="v_ftp_user[<?php print $i ?>][v_ftp_user]" value="<?=htmlentities(trim($v_ftp_user, "'"))?>">
+                                                <small class="hint"></small>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="vst-text step-left  input-label">
+                                                <?php print __('Password');?> / <a href="javascript:void(0);" onClick="FTPrandom(this)"; class="generate" ><?php print __('generate');?></a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="step-left">
+                                                <input type="text" class="vst-input v-ftp-user-psw password" name="v_ftp_user[<?php print $i ?>][v_ftp_password]" value="<?=htmlentities(trim($v_ftp_password, "'"))?>">
+                                            </td>
+                                        </tr>
 
-                    <div name="v_add_domain_ftp" class="p-3 ftptable ftptable-nrm" style="display:<?php if (empty($v_ftp_user)) { echo 'none';} else {echo 'block';}?> ;" >
+                                        <tr>
+                                            <td class="vst-text step-left input-label">
+                                                 <?php print __('Path');?>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="step-left">
+                                                <input type="hidden" class="vst-input v-ftp-pre-path" name="v_ftp_pre_path" value="<?php print !empty($v_ftp_pre_path) ? htmlentities(trim($v_ftp_pre_path, "'")) : '/'; ?>">
+                                                <input type="hidden"  class="vst-input v-ftp-path" name="v_ftp_user[<?php print $i ?>][v_ftp_path_prev]" value="<?php if (!empty($v_ftp_path)) echo ($v_ftp_path[0] != '/' ? '/' : '').htmlentities(trim($v_ftp_path, "'")) ?>">
+                                                <input type="text"  class="vst-input v-ftp-path" name="v_ftp_user[<?php print $i ?>][v_ftp_path]" value="<?php if (!empty($v_ftp_path)) echo ($v_ftp_path[0] != '/' ? '/' : '').htmlentities(trim($v_ftp_path, "'")); ?>">
+                                                <br /><span class="ftp-path-prefix"><?=htmlentities(trim($v_ftp_pre_path, "'"))?></span><span class="ftp-path-value v-ftp-path-hint"></span>
+                                            </td>
+                                        </tr>
+                                        <?php if ($ftp_user['is_new'] == 1): ?>
+                                        <tr>
+                                            <td class="vst-text step-left input-label">
+                                                 <?php print __('Send FTP credentials to email');?>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="step-left">
+                                                <input type="text"  class="vst-input vst-email-alert-on-psw" name="v_ftp_user[<?php print $i ?>][v_ftp_email]" value="<?=htmlentities(trim($v_ftp_email, "'"))?>">
+                                            </td>
+                                        </tr>
+                                        <?php endif; ?>
+                                </table>
+                                    <?php endforeach; ?>
+                                </td>
+                            </tr>
 
-                        <div class="mb-4">
-                            <div class="form-check form-switch">
-                                <?php print __('FTP') ?> #<span class="ftp-user-number"><?php print $i + 1; ?></span> <a class="ftp-remove-user additional-control" onCLick="App.Actions.WEB.remove_ftp_user(this)">(<?=__('delete')?>)</a>
-                                <!--                                                <label class="form-check-label" for="v_ftp"><?php print __('Additional FTP Account');?></label>-->
-                                <input type="hidden" class="form-check-input v-ftp-user-deleted" name="v_ftp_user[<?php print $i ?>][delete]" value="0" />
-                                <input type="hidden" class="form-check-input v-ftp-user-is-new" name="v_ftp_user[<?php print $i ?>][is_new]" value="<?php print htmlentities($ftp_user['is_new']) ?>" />
+                            <tr class="add-new-ftp-user-button" style="<?php print !empty($v_ftp_user) ? '' : 'display:none;' ?>">
+                                <td class="vst-text step-top v-add-new-user step-bottom">
+                                    <a class="additional-control" onClick="App.Actions.WEB.add_ftp_user_form()"><?php print __('Add one more FTP Account');?></a>
+                                </td>
+                            </tr>
+                        </table>
+                        <table class="data-col2">
+                            <tr>
+                                <td class="step-top" width="116px">
+                                    <input type="submit" class="button" name="save" value="<?=__('Save')?>">
+                                </td>
+                                <td class="step-top">
+                                    <input type="button" class="button cancel" value="<?=__('Back')?>" onclick="<?=$back?>">
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </form>
 
-                            </div>
-                        </div>
+        <div id="templates" class="hidden">
+            <table class="ftptable ftptable-nrm" name="v_add_domain_ftp">
+                <tr>
+                    <td class="vst-text input-label">
+                        <?php print __('FTP') ?> #<span class="ftp-user-number"></span> <a class="ftp-remove-user additional-control" onCLick="App.Actions.WEB.remove_ftp_user(this)">(<?=__('delete')?>)</a>
+                        <input type="hidden"  class="v-ftp-user-deleted" name="v_ftp_user[%INDEX%][delete]" value="0" />
+                        <input type="hidden" class="v-ftp-user-is-new" name="v_ftp_user[%INDEX%][is_new]" value="1" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vst-text step-left input-label">
+                        <?php print __('Username');?><br>
+                        <span style="font-size: 10pt; color:#777;"><?php print __('Prefix will be automaticaly added to username',$user."_");?></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="step-left">
+                        <input type="text" size="20" class="vst-input v-ftp-user" name="v_ftp_user[%INDEX%][v_ftp_user]" value="">
+                        <small class="hint"></small>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vst-text step-left  input-label">
+                        <?php print __('Password');?> / <a href="javascript:void(0);" onClick="FTPrandom(this)"; class="generate" ><?php print __('generate');?></a>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="step-left">
+                        <input type="text" class="vst-input v-ftp-user-psw password" name="v_ftp_user[%INDEX%][v_ftp_password]" value="">
+                    </td>
+                </tr>
 
-                        <div class="mb-4">
-                            <div class="form-check form-switch">
-                                <?php print __('Username');?><br>
-                                <span style="font-size: 10pt; color:#777;"><?php print __('Prefix will be automaticaly added to username',$user."_");?></span>                                                </div>
-                        </div>
-
-
-
-                        <div class="step-left">
-
-                            <input type="text" size="20" class="vst-input v-ftp-user" <?php print $ftp_user['is_new'] != 1 ? 'disabled="disabled"' : '' ?>
-                            name="v_ftp_user[<?php print $i ?>][v_ftp_user]" value="<?=htmlentities(trim($v_ftp_user, "'"))?>">
-                            <small class="hint"></small>
-                        </div>
-
-
-                        <div class="vst-text step-left  input-label">
-                            <?php print __('Password');?> / <a href="javascript:void(0);" onClick="FTPrandom(this)"; class="generate" ><?php print __('generate');?></a>
-                        </div>
-
-
-                        <div class="step-left">
-                            <input type="text" class="vst-input v-ftp-user-psw password" name="v_ftp_user[<?php print $i ?>][v_ftp_password]" value="<?=htmlentities(trim($v_ftp_password, "'"))?>">
-                        </div>
-
-
-                        <div>
-                            <div class="vst-text step-left input-label">
-                                <?php print __('Path');?>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="step-left">
-                                <input type="hidden" class="vst-input v-ftp-pre-path" name="v_ftp_pre_path" value="<?php print !empty($v_ftp_pre_path) ? htmlentities(trim($v_ftp_pre_path, "'")) : '/'; ?>">
-                                <input type="hidden"  class="vst-input v-ftp-path" name="v_ftp_user[<?php print $i ?>][v_ftp_path_prev]" value="<?php if (!empty($v_ftp_path)) echo ($v_ftp_path[0] != '/' ? '/' : '').htmlentities(trim($v_ftp_path, "'")) ?>">
-                                <input type="text"  class="vst-input v-ftp-path" name="v_ftp_user[<?php print $i ?>][v_ftp_path]" value="<?php if (!empty($v_ftp_path)) echo ($v_ftp_path[0] != '/' ? '/' : '').htmlentities(trim($v_ftp_path, "'")); ?>">
-                                <br /><span class="ftp-path-prefix"><?=htmlentities(trim($v_ftp_pre_path, "'"))?></span><span class="ftp-path-value v-ftp-path-hint"></span>
-                            </div>
-                        </div>
-                        <?php if ($ftp_user['is_new'] == 1): ?>
-                        <div>
-                            <div class="vst-text step-left input-label">
-                                <?php print __('Send FTP credentials to email');?>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="step-left">
-                                <input type="text"  class="vst-input vst-email-alert-on-psw" name="v_ftp_user[<?php print $i ?>][v_ftp_email]" value="<?=htmlentities(trim($v_ftp_email, "'"))?>">
-                            </div>
-                        </div>
-                        <?php endif; ?>
-
-                    </div>
-                    <?php endforeach; ?>
-
-                </div>
-
-
-                <div class="add-new-ftp-user-button" style="<?php print !empty($v_ftp_user) ? '' : 'display:none;' ?>">
-                    <div class="vst-text step-top v-add-new-user step-bottom">
-                        <a class="additional-control" onClick="App.Actions.WEB.add_ftp_user_form()"><?php print __('Add one more FTP Account');?></a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-12 row d-flex justify-content-end mb-5">
-
-                <div class="step-top col-sm-1 me-4" >
-                    <input type="submit" class="button" name="save" value="<?=__('Save')?>">
-                </div>
-                <div class="step-top col-sm-5">
-                    <input type="button" class="button cancel" value="<?=__('Back')?>" onclick="<?=$back?>">
-                </div>
-
-            </div>
-
-
-        </div>
-    </form>
-
-    <div id="templates" class="hidden">
-        <table class="ftptable ftptable-nrm" name="v_add_domain_ftp">
-            <tr>
-                <td class="vst-text input-label">
-                    <?php print __('FTP') ?> #<span class="ftp-user-number"></span> <a class="ftp-remove-user additional-control" onCLick="App.Actions.WEB.remove_ftp_user(this)">(<?=__('delete')?>)</a>
-                    <input type="hidden"  class="v-ftp-user-deleted" name="v_ftp_user[%INDEX%][delete]" value="0" />
-                    <input type="hidden" class="v-ftp-user-is-new" name="v_ftp_user[%INDEX%][is_new]" value="1" />
-                </td>
-            </tr>
-            <tr>
-                <td class="vst-text step-left input-label">
-                    <?php print __('Username');?><br>
-                    <span style="font-size: 10pt; color:#777;"><?php print __('Prefix will be automaticaly added to username',$user."_");?></span>
-                </td>
-            </tr>
-            <tr>
-                <td class="step-left">
-                    <input type="text" size="20" class="vst-input v-ftp-user" name="v_ftp_user[%INDEX%][v_ftp_user]" value="">
-                    <small class="hint"></small>
-                </td>
-            </tr>
-            <tr>
-                <td class="vst-text step-left  input-label">
-                    <?php print __('Password');?> / <a href="javascript:void(0);" onClick="FTPrandom(this)"; class="generate" ><?php print __('generate');?></a>
-                </td>
-            </tr>
-            <tr>
-                <td class="step-left">
-                    <input type="text" class="vst-input v-ftp-user-psw password" name="v_ftp_user[%INDEX%][v_ftp_password]" value="">
-                </td>
-            </tr>
-
-            <tr>
-                <td class="vst-text step-left input-label">
-                    <?php print __('Path');?>
-                </td>
-            </tr>
-            <tr>
-                <td class="step-left">
-                    <input type="hidden" class="vst-input v-ftp-pre-path" name="v_ftp_pre_path" value="">
-                    <input type="text"  class="vst-input v-ftp-path" name="v_ftp_user[%INDEX%][v_ftp_path]" value="">
-                    <br /><span class="ftp-path-prefix"><?=htmlentities(trim($v_ftp_pre_path_new_user, "'"))?></span><span class="ftp-path-value v-ftp-path-hint"></span>
-                </td>
-            </tr>
-            <tr>
-                <td class="vst-text step-left input-label">
-                    <?php print __('Send FTP credentials to email');?>
-                </td>
-            </tr>
-            <tr>
-                <td class="step-left">
-                    <input type="text" class="vst-input vst-email-alert-on-psw" name="v_ftp_user[%INDEX%][v_ftp_email]" value="">
-                </td>
-            </tr>
+                <tr>
+                    <td class="vst-text step-left input-label">
+                         <?php print __('Path');?>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="step-left">
+                        <input type="hidden" class="vst-input v-ftp-pre-path" name="v_ftp_pre_path" value="">
+                        <input type="text"  class="vst-input v-ftp-path" name="v_ftp_user[%INDEX%][v_ftp_path]" value="">
+                        <br /><span class="ftp-path-prefix"><?=htmlentities(trim($v_ftp_pre_path_new_user, "'"))?></span><span class="ftp-path-value v-ftp-path-hint"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vst-text step-left input-label">
+                         <?php print __('Send FTP credentials to email');?>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="step-left">
+                        <input type="text" class="vst-input vst-email-alert-on-psw" name="v_ftp_user[%INDEX%][v_ftp_email]" value="">
+                    </td>
+                </tr>
         </table>
+        </div>
     </div>
-</div>
-<script>
-    GLOBAL.FTP_USER_PREFIX = <?=json_encode($user.'_')?>;
-</script>
+    <script>
+      GLOBAL.FTP_USER_PREFIX = <?=json_encode($user.'_')?>;
+    </script>
