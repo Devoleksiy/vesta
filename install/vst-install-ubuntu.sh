@@ -810,9 +810,6 @@ cp -rf $vestacp/packages $VESTA/data/
 # Installing templates
 cp -rf $vestacp/templates $VESTA/data/
 
-# Installing templates for gitlab
-cp -rf $vestacp/templates/gitlab $VESTA/data/gitlab
-
 # Copying index.html to default documentroot
 cp $VESTA/data/templates/web/skel/public_html/index.html /var/www/
 sed -i 's/%domain%/It worked!/g' /var/www/index.html

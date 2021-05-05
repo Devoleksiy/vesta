@@ -679,15 +679,9 @@ check_result $? 'Not enable > dnf module enable php:remi-7.4 <'
 # install Git with the following command:
 dnf install git -y
 
-#git config --global user.name "devoleksiy"
-#git config --global user.email "devoleksiy@gmail.com"
+#git config --global user.name "youname"
+#git config --global user.email "youmail@gmail.com"
 
-#
-#
-#
-#
-#
-#
 #################################################
 
 #---------------- phpMyAdmin  ------------------------------
@@ -923,6 +917,9 @@ cp -rf "$vestacp"/packages $VESTA/data/
 
 # Installing templates
 cp -rf "$vestacp"/templates $VESTA/data/
+
+# Installing templates for gitlab
+cp -rf $vestacp/templates/gitlab $VESTA/data/templates/gitlab
 
 # Copying index.html to default documentroot
 cp $VESTA/data/templates/web/skel/public_html/index.html /var/www/html/
