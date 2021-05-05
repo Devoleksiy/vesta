@@ -67,10 +67,10 @@ if ! [ -d "$git_docroot"/.git/ ]; then
     # git remote add origin git@10.0.2.15:vpoltave/vpoltave.net.git
 
     git remote add origin "$remote_url_repository" > /dev/null 2>&1
-    git add public_html > /dev/null 2>&1
+    git add -A > /dev/null 2>&1
 
     git commit -m "Initial firs commit by $user user" > /dev/null 2>&1 || exit
-    git push -u origin master > /dev/null 2>&1 || echo "push -u origin master NOT WORKING"
+    git push -u origin master > /dev/null 2>&1 || exit
     git='on'
 fi
 

@@ -1,0 +1,74 @@
+#image: golang:latest
+
+## 3. cache, reused packages fetched from previous job
+#cache:
+#  paths:
+#    - vendor
+#    - docroot/core
+#    - docroot/modules/contrib
+#    - docroot/themes/contrib
+#    - docroot/profiles/contrib
+#    - docroot/libraries
+
+
+before_script:
+  - echo "This job tests something"
+  # Настраиваем SSH
+  #  - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+  #  - eval $(ssh-agent -s)
+  #  - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
+  #  - mkdir -p ~/.ssh
+  #  - chmod 700 ~/.ssh
+  #  - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+
+#  - mkdir -p /home/$USER_DEPLOY/web/$SITE_NAME/
+  # Клонируем в неё репозиторий
+  #  - git clone git@gitlab.com:$GROUP_NAME/$REPOSITORY_NAME.git /go/src/gitlab.com/$GROUP_NAME/$REPOSITORY_NAME
+#  - git clone git@gitlab.webstudion.dev:35353/vpoltave/mytest.vpoltave.net.git /home/$USER_DEPLOY/web/$SITE_NAME
+
+# Создаем папку под готовый билд
+#  - mkdir -p $CI_PROJECT_DIR/build/public_html
+# Копируем в папку с билдом все ассеты (картинки, HTML-файлы и.т.п) из репозитория.
+# У меня они лежат в папке src/public
+#  - cp -r $CI_PROJECT_DIR/src/public $CI_PROJECT_DIR/buildbbb
+
+stages:
+
+  - build_deploy
+
+#compile:
+#  stage: build
+#  script:
+#    # Переходим в папку с Go файлами
+#    #    - cd /home/$USER_DEPLOY/web/$REPOSITORY_NAME/public_htmlpublic_html
+#    #    - /home/admin/web/vpoltave.net/public_html
+#    - echo "compile worked"
+#    # Вызываем в ней сборку. Указываем, что готовый бинарник будет положен в папку build рядом с ассетами и будет называться main
+##    - go build -race -ldflags "-extldflags '-static'" -o $CI_PROJECT_DIR/build/main
+##    - composer update
+##  artifacts:
+##    paths:
+##      - $CI_PROJECT_DIR/build/main
+
+build_deploy:
+  stage: build_deploy
+  only:
+    - master
+  script:
+    - echo "RUN build_deploy script"
+    # Переходим в папку репозиторя на проде
+#    - cd /home/$USER_DEPLOY/web/$CI_PROJECT_NAME/public_html
+#    - git pull origin master
+#    - echo "Ok pull"
+    # Composer install And drush cr
+#    - composer install
+#    - drush cr
+#    # Используем утилиту sshpass для удаленного выполнения команд на VDS
+#    - sshpass -V
+#    - export SSHPASS=$USER_PASS
+#    # Останавливаем сервис
+#    - sshpass -e ssh -o stricthostkeychecking=no $USER@$HOST systemctl stop $SERVICE_NAME
+#    # Копируем новые файлы
+#    - sshpass -e scp -o stricthostkeychecking=no -r . $USER@$HOST:$TARGET_DIR_ON_HOST
+#    # Перезапускаем сервис
+#    - sshpass -e ssh -o stricthostkeychecking=no $USER@$HOST systemctl restart $SERVICE_NAME

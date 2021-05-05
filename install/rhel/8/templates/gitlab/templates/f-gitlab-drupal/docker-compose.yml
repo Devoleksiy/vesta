@@ -1,0 +1,52 @@
+#    image: devoleksiy/php-apache-dev-7.4-alpine:v1 # с webdevops/php-apache-dev:7.4-alpine
+version: '3'
+services:
+  apache-php:
+    image: webdevops/php-apache-dev:7.4-alpine
+    ports:
+      - 80:80
+      - 22:22
+    volumes:
+      - ./public_html/:/app
+      # - ./dev/etc/php/php.ini:/opt/docker/etc/php/php.ini
+      # - ./etc/apache2/sites-available:/etc/apache2/sites-available
+      # - ./etc/php:/opt/docker/etc/php/
+      # - ./dev/log/:/var/log
+    environment:
+      - WEB_DOCUMENT_ROOT=/app/web
+      - PHP_DEBUGGER=xdebug
+      - XDEBUG_REMOTE_HOST=host.docker.internal
+      - XDEBUG_REMOTE_PORT=9000
+      - XDEBUG_IDE_KEY=PHPSTORM
+      - XDEBUG_REMOTE_CONNECT_BACK=0
+      - XDEBUG_REMOTE_AUTOSTART=1
+    depends_on:
+      - memcached
+      - Mariadb
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    ports:
+      - 8000:80
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=Mariadb
+      - PMA_USER=root
+      - PMA_PASSWORD=example
+      - UPLOAD_LIMIT=200M
+    depends_on:
+      - Mariadb
+  Mariadb:
+    image: mariadb:10.4
+    hostname: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+    volumes:
+    - ./dev/data/mysql:/var/lib/mysql
+  memcached:
+    image: memcached:latest
+    hostname: memcached
+    ports:
+      - "11211:11211"
+#  redis:
+#    image: redis:alpine3.13
+#    hostname: redis
