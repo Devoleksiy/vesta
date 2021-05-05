@@ -14,7 +14,8 @@ user=$1
 domain=$2
 domain_idn=$2
 remote_url_repository=$3
-git=$4
+$v_template=$4
+git=$5
 type="GIT"
 #git_template=$3
 # default bare
@@ -52,17 +53,24 @@ get_domain_values 'web'
 # Adding statistic config
 prepare_web_domain_values
 
-git_docroot=$(echo "${sdocroot//\/public_html/}")
+# git_docroot=$(echo "${sdocroot//\/public_html/}")
 
 # GIT Template |> Default <|
 # Add git suporeted for web domain
 if [ $git_template = "default" ]; then
 
 
-if ! [ -d "$git_docroot"/.git/ ]; then
-    cd "$git_docroot" || exit
+if ! [ -d "$sdocroot"/.git/ ]; then
+    cd "$sdocroot" || exit
     git init || exit
-    chown -R "$user":"$user" "$git_docroot"/.git > /dev/null 2>&1
+
+    if [ $git_template = "drupal-project" ]; then
+        cp -n  /usr/local/vesta/data/templates/gitlab/templates/f-gitlab-drupal/.gitignore "$sdocroot"
+        cp -n  /usr/local/vesta/data/templates/gitlab/templates/f-gitlab-drupal/.gitlab-ci.yml "$sdocroot"
+        cp -n  /usr/local/vesta/data/templates/gitlab/templates/f-gitlab-drupal/docker-compose.yml "$sdocroot"
+    fi
+
+    chown -R "$user":"$user" "$sdocroot" > /dev/null 2>&1
 
     # git remote add origin git@10.0.2.15:vpoltave/vpoltave.net.git
 
@@ -78,9 +86,9 @@ fi
 
 # GIT Template |> Bare <|
 if [ $git_template = "bare" ]; then
-    git_repo="$git_docroot"/"$domain".git
+    git_repo="$sdocroot"/"$domain".git
     if ! [ -d "$git_repo" ]; then
-        cd "$git_docroot" || exit
+        cd "$sdocroot" || exit
         git init --bare "$domain".git #creates a bare repo named myweb.git
         cd "$domain".git || exit
         echo '#!/bin/sh' > hooks/post-receive

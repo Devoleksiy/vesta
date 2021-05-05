@@ -494,7 +494,7 @@ if (!empty($_POST['save'])) {
 
     if (($_POST['v_gitlab_set_url_repo']) != ""){
       $v_gitlab_set_url_repo = escapeshellarg($_POST['v_gitlab_set_url_repo']);
-      exec (VESTA_CMD."v-add-web-domain-git ".$v_username." ".$v_domain." ".$v_gitlab_set_url_repo." ".$v_git, $output, $return_var);
+      exec (VESTA_CMD."v-add-web-domain-git ".$v_username." ".$v_domain." ".$v_gitlab_set_url_repo." ".$v_template."  ".$v_git, $output, $return_var);
       check_return_code($return_var,$output);
       if($output == 0){
         $v_git = 'on';
