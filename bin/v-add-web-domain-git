@@ -14,7 +14,7 @@ user=$1
 domain=$2
 domain_idn=$2
 remote_url_repository=$3
-$v_template=$4
+v_template=$4
 git=$5
 type="GIT"
 #git_template=$3
@@ -29,8 +29,8 @@ source $VESTA/conf/vesta.conf
 format_domain
 format_domain_idn
 
-log_history "added web domain $user $domain $git"
 
+log_history "added web domain $v_template"
 #----------------------------------------------------------#
 #                    Verifications                         #
 #----------------------------------------------------------#
@@ -59,15 +59,20 @@ prepare_web_domain_values
 # Add git suporeted for web domain
 if [ $git_template = "default" ]; then
 
-
+ $v_template > /usr/local/vesta/data/users/history.log
+    log_history "$v_template vs drupal-project $sdocroot"
 if ! [ -d "$sdocroot"/.git/ ]; then
-    cd "$sdocroot" || exit
-    git init || exit
 
-    if [ $git_template = "drupal-project" ]; then
-        cp -n  /usr/local/vesta/data/templates/gitlab/templates/f-gitlab-drupal/.gitignore "$sdocroot"
-        cp -n  /usr/local/vesta/data/templates/gitlab/templates/f-gitlab-drupal/.gitlab-ci.yml "$sdocroot"
-        cp -n  /usr/local/vesta/data/templates/gitlab/templates/f-gitlab-drupal/docker-compose.yml "$sdocroot"
+    cd "$sdocroot" || exit
+
+    if ! [ -f "$sdocroot/web/sites/default/settings.php" ]; then
+     echo 'CMS Drupal not installed' && exit
+    fi
+
+    git init || exit
+#    git_template="drupal-project";
+    if [ "$v_template" = "drupal-project" ]; then
+        cp -n -R  /usr/local/vesta/data/templates/gitlab/templates/f-gitlab-drupal/. "$sdocroot"
     fi
 
     chown -R "$user":"$user" "$sdocroot" > /dev/null 2>&1
@@ -78,7 +83,7 @@ if ! [ -d "$sdocroot"/.git/ ]; then
     git add -A > /dev/null 2>&1
 
     git commit -m "Initial firs commit by $user user" > /dev/null 2>&1 || exit
-    git push -u origin master > /dev/null 2>&1 || exit
+    timeout 5s git push -u origin master > /dev/null 2>&1 || echo 'Error command git push -u origin master'
     git='on'
 fi
 

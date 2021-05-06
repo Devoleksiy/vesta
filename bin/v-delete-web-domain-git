@@ -51,23 +51,23 @@ get_domain_values 'web'
 # Adding statistic config
 prepare_web_domain_values
 
-git_docroot=$(echo "${sdocroot//\/public_html/}")
+#git_docroot=$(echo "${sdocroot//\/public_html/}")
 
 # GIT Template |> Default <|
 # Add git suporeted for web domain
 if [ $git_template = "default" ]; then
 
-  if [ -d "$git_docroot"/.git/ ]; then
+  if [ -d "$sdocroot"/.git/ ]; then
 
-    cd "$git_docroot" || exit
+    cd "$sdocroot" || exit
     yes | rm -R .git
 
     v_git_post='no'
   fi
 
-  if [ -d "$git_docroot"/.git/ ]; then
+  if [ -d "$sdocroot"/.git/ ]; then
 
-    cd "$git_docroot" || exit
+    cd "$sdocroot" || exit
     result=$(git remote -v)
     if [ "$result" ]; then
        echo "$result"
@@ -79,9 +79,9 @@ fi
 
 # GIT Template |> Bare <|
 if [ $git_template = "bare" ]; then
-  git_repo="$git_docroot"/"$domain".git
+  git_repo="$sdocroot"/"$domain".git
   if ! [ -d "$git_repo" ]; then
-    cd "$git_docroot" || exit
+    cd "$sdocroot" || exit
     git init --bare "$domain".git #creates a bare repo named myweb.git
     cd "$domain".git || exit
     echo '#!/bin/sh' >hooks/post-receive

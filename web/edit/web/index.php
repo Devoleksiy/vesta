@@ -51,14 +51,10 @@ if (!empty($v_git)) {
 
   }
 
-  // user@127.0.0.100:/home/admin/mywebsite.git
-  //    $web_ip = $data[$v_domain]['IP'];
-  //    $docroot = $data[$v_domain]['DOCUMENT_ROOT'];
-  //    $git_patch_repo = str_replace('public_html',$v_domain.'.git', $docroot);
-  //    $v_git_clone_url = $user.'@'.$web_ip.':'.$git_patch_repo;
-
-
-
+}
+else{
+    $v_git = 'no';
+    $v_git_clone_url=null;
 }
 
 
@@ -494,6 +490,7 @@ if (!empty($_POST['save'])) {
 
     if (($_POST['v_gitlab_set_url_repo']) != ""){
       $v_gitlab_set_url_repo = escapeshellarg($_POST['v_gitlab_set_url_repo']);
+      $v_template = escapeshellarg($v_template);
       exec (VESTA_CMD."v-add-web-domain-git ".$v_username." ".$v_domain." ".$v_gitlab_set_url_repo." ".$v_template."  ".$v_git, $output, $return_var);
       check_return_code($return_var,$output);
       if($output == 0){
