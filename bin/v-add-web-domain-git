@@ -69,14 +69,12 @@ if ! [ -d "$sdocroot"/.git/ ]; then
      echo 'CMS Drupal not installed' && exit
     fi
 
-    git init || exit
 #    git_template="drupal-project";
     if [ "$v_template" = "drupal-project" ]; then
         cp -n -R  /usr/local/vesta/data/templates/gitlab/templates/f-gitlab-drupal/. "$sdocroot"
     fi
 
-    chown -R "$user":"$user" "$sdocroot" > /dev/null 2>&1
-
+    git init || exit
     # git remote add origin git@10.0.2.15:vpoltave/vpoltave.net.git
 
     git remote add origin "$remote_url_repository" > /dev/null 2>&1
@@ -84,6 +82,7 @@ if ! [ -d "$sdocroot"/.git/ ]; then
 
     git commit -m "Initial firs commit by $user user" > /dev/null 2>&1 || exit
     timeout 5s git push -u origin master > /dev/null 2>&1 || echo 'Error command git push -u origin master'
+    chown -R "$user":"$user" "$sdocroot" > /dev/null 2>&1
     git='on'
 fi
 

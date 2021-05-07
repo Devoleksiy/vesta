@@ -44,8 +44,6 @@ if [ -n "$(command -v dnf)" ]; then
   rm -rf /root/master.zip
   rm -rf /root/vesta-master
 
-
-
     # Define yum cmd
     # yum="yum -q -y --noplugins --disablerepo=* --enablerepo=vesta"
 
