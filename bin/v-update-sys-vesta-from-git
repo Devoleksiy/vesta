@@ -51,21 +51,6 @@ if [ -n "$(command -v dnf)" ]; then
     # Update templates for RHEL 8
     cp -rf /usr/local/vesta/install/rhel/8/templates/gitlab /usr/local/vesta/data/templates/gitlab
 
-
-    # Define yum cmd
-    # yum="yum -q -y --noplugins --disablerepo=* --enablerepo=vesta"
-
-    # Update vesta package
-    # $yum update $package > /dev/null 2>&1
-    check_result $? "$package update failed" $E_UPDATE
-else
-    # Update repo
-    apt-get update -o Dir::Etc::sourcelist="sources.list.d/vesta.list" \
-        -o Dir::Etc::sourceparts="-" -o APT::Get::List-Cleanup="0" -qq
-
-    # Update vesta package
-    apt-get install $package -qq > /dev/null 2>&1
-    check_result $? "$package update failed" $E_UPDATE
 fi
 
 
