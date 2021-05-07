@@ -25,7 +25,6 @@
 /.env
 
 # Ignore downloaded Drupal project.
-composer.*
 /drush/
 /scripts/
 /web/profiles/

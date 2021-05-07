@@ -7,7 +7,7 @@ services:
       - 80:80
       - 22:22
     volumes:
-      - ./public_html/:/app
+      - ./:/app
       # - ./dev/etc/php/php.ini:/opt/docker/etc/php/php.ini
       # - ./etc/apache2/sites-available:/etc/apache2/sites-available
       # - ./etc/php:/opt/docker/etc/php/

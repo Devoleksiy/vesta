@@ -21,7 +21,7 @@ before_script:
   #  - chmod 700 ~/.ssh
   #  - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
 
-#  - mkdir -p /home/$USER_DEPLOY/web/$SITE_NAME/
+  #  - mkdir -p /home/$USER_DEPLOY/web/$SITE_NAME/
   # Клонируем в неё репозиторий
   #  - git clone git@gitlab.com:$GROUP_NAME/$REPOSITORY_NAME.git /go/src/gitlab.com/$GROUP_NAME/$REPOSITORY_NAME
 #  - git clone git@gitlab.webstudion.dev:35353/vpoltave/mytest.vpoltave.net.git /home/$USER_DEPLOY/web/$SITE_NAME
@@ -57,9 +57,9 @@ build_deploy:
   script:
     - echo "RUN build_deploy script"
     # Переходим в папку репозиторя на проде
-#    - cd /home/$USER_DEPLOY/web/$CI_PROJECT_NAME/public_html
-#    - git pull origin master
-#    - echo "Ok pull"
+    - cd /home/$USER_DEPLOY/web/$CI_PROJECT_NAME/public_html
+    - git pull origin master
+    - echo "Ok pull"
     # Composer install And drush cr
 #    - composer install
 #    - drush cr
