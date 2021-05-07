@@ -11,7 +11,7 @@
 #----------------------------------------------------------#
 
 # Argument definition
-package=$1
+all=$1
 
 # Importing system environment
 source /etc/profile
@@ -26,7 +26,9 @@ source $VESTA/conf/vesta.conf
 #----------------------------------------------------------#
 
 # Checking arg number
-check_args '1' "$#" 'PACKAGE'
+if ! [ "$all" = "all" ]; then
+    exit
+fi
 
 
 #----------------------------------------------------------#
@@ -37,12 +39,18 @@ if [ -n "$(command -v dnf)" ]; then
     # Clean yum chache
     dnf -q clean all
 
-  rm -rf /root/master.zip
-  wget --no-check-certificate https://github.com/Devoleksiy/vesta/archive/master.zip -P /root/
-  unzip /root/master.zip -d /root/ > /dev/null 2>&1
-  yes | cp -rf /root/vesta-master/* /usr/local/vesta
-  rm -rf /root/master.zip
-  rm -rf /root/vesta-master
+
+    # update code from git master
+    rm -rf /root/master.zip
+    wget --no-check-certificate https://github.com/Devoleksiy/vesta/archive/master.zip -P /root/
+    unzip /root/master.zip -d /root/ > /dev/null 2>&1
+    yes | cp -rf /root/vesta-master/* /usr/local/vesta
+    rm -rf /root/master.zip
+    rm -rf /root/vesta-master
+
+    # Update templates for RHEL 8
+    cp -rf /usr/local/vesta/install/rhel/8/templates/gitlab /usr/local/vesta/data/templates/gitlab
+
 
     # Define yum cmd
     # yum="yum -q -y --noplugins --disablerepo=* --enablerepo=vesta"
