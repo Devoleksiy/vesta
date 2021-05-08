@@ -12,7 +12,7 @@
 # Ignore sensitive information
 /web/sites/*/settings.php
 /web/sites/*/settings.local.php
-
+/web/sites/*/services*.yml
 # Ignore Drupal's file directory
 /web/sites/*/files
 /web/sites/*/private
@@ -29,7 +29,9 @@
 /scripts/
 /web/profiles/
 /web/sites/
+
 /web/*.*
+!/web/autoload.php
 .editorconfig
 .env.example
 .gitattributes

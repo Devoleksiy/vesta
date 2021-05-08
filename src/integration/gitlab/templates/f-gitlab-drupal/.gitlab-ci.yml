@@ -61,8 +61,8 @@ build_deploy:
     - git pull origin master
     - echo "Ok pull"
     # Composer install And drush cr
-#    - composer install
-#    - drush cr
+    - composer install
+    - drush cr
 #    # Используем утилиту sshpass для удаленного выполнения команд на VDS
 #    - sshpass -V
 #    - export SSHPASS=$USER_PASS
