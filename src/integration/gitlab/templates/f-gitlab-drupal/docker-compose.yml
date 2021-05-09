@@ -1,20 +1,16 @@
-#    image: devoleksiy/php-apache-dev-7.4-alpine:v1 # с webdevops/php-apache-dev:7.4-alpine
+# image:  webdevops/php-apache-dev:7.4-alpine
 version: '3'
 services:
   apache-php:
-    image: webdevops/php-apache-dev:8.0-alpine
+    #    build: ./dev/docker
+    image: webdevops/php-apache-dev:7.4-alpine
     ports:
       - 80:80
-      - 22:22
     volumes:
       - ./:/app
-      # - ./dev/etc/php/php.ini:/opt/docker/etc/php/php.ini
-      # - ./etc/apache2/sites-available:/etc/apache2/sites-available
-      # - ./etc/php:/opt/docker/etc/php/
       # - ./dev/log/:/var/log
     environment:
       - WEB_DOCUMENT_ROOT=/app/web
-      - PHP_DEBUGGER=xdebug
       #--------->  LIMIT  <-------------------------
       - PHP_MEMORY_LIMIT=3G
       #--------->  OPCACHE  <-------------------------
@@ -22,14 +18,12 @@ services:
       - PHP_OPCACHE_MAX_ACCELERATED_FILES=32531
       - PHP_OPCACHE_INTERNED_STRINGS_BUFFER=16
       #--------->  XDEBUG  <-------------------------
-      - XDEBUG_REMOTE_HOST=host.docker.internal
-      - XDEBUG_REMOTE_PORT=9000
+      - XDEBUG_MODE=debug
+      - XDEBUG_CLIENT_HOST=host.docker.internal
+      - XDEBUG_CLIENT_PORT=9003
       - XDEBUG_IDE_KEY=PHPSTORM
-      - XDEBUG_REMOTE_CONNECT_BACK=0
-      - XDEBUG_REMOTE_AUTOSTART=1
-  #    depends_on:
-  #      - memcached
-  #      - Mariadb
+    depends_on:
+      - Mariadb
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
     ports:
@@ -48,12 +42,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: example
     volumes:
-      - ./dev/lib/mysql:/var/lib/mysql
-#  memcached:
-#    image: memcached:latest
-#    hostname: memcached
-#    ports:
-#      - "11211:11211"
+      #      - ./dev/lib/mysql:/var/lib/mysql
+      - L:\data\service\mysql:/var/lib/mysql
 #  redis:
 #    image: redis:alpine3.13
 #    hostname: redis
