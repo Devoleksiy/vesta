@@ -71,7 +71,10 @@ if ! [ -d "$sdocroot"/.git/ ]; then
 
 #    git_template="drupal-project";
     if [ "$v_template" = "drupal-project" ]; then
-        cp -n -R  /usr/local/vesta/data/templates/gitlab/templates/f-gitlab-drupal/. "$sdocroot"
+        cp -n /usr/local/vesta/data/templates/gitlab/templates/f-gitlab-drupal/.gitignore "$sdocroot"
+        cp -n /usr/local/vesta/data/templates/gitlab/templates/f-gitlab-drupal/.gitlab-ci.yml "$sdocroot"
+        cp -n /usr/local/vesta/data/templates/gitlab/templates/f-gitlab-drupal/docker-compose.yml "$sdocroot"
+        cp -n /usr/local/vesta/data/templates/gitlab/templates/f-gitlab-drupal/switch-config.php "$sdocroot/web/sites/default"
     fi
 
     git init || exit
