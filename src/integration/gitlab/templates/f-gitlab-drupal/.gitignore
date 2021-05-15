@@ -27,6 +27,7 @@
 
 # Ignore all files and folder development
 /config/dev/*
+/config/env.prod
 
 # Ignore downloaded Drupal project.
 /drush/
