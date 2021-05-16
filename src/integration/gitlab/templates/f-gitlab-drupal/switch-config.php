@@ -23,16 +23,3 @@ else {
   }
 
 }
-
-// Create missing directories
-if (!mkdir("../config", 0700) && !is_dir("../config")) {
-  throw new \RuntimeException(sprintf('Directory "%s" was not created', "../config"));
-}
-
-if (!mkdir("../config/prod", 0700) && !is_dir("../config/prod")) {
-  throw new \RuntimeException(sprintf('Directory "%s" was not created', "../config"));
-}
-
-if (!mkdir("../config/dev", 0700) && !is_dir("../config/dev")) {
-  throw new \RuntimeException(sprintf('Directory "%s" was not created', "../config"));
-}
