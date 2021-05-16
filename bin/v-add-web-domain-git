@@ -82,12 +82,23 @@ if ! [ -d "$sdocroot"/.git/ ]; then
     # git remote add origin git@10.0.2.15:user/younamerepo.com.git
 
     git remote add origin "$remote_url_repository" > /dev/null 2>&1
-    git add -A > /dev/null 2>&1
 
+    git='on'
+
+    git add -A > /dev/null 2>&1
     git commit -m "Initial firs commit by $user user" > /dev/null 2>&1
-    timeout 5s git push -u origin master > /dev/null 2>&1 || echo 'Error command git push -u origin master'
+    timeout 5s git push -u origin master > /dev/null 2>&1 # || echo 'Error command git push -u origin master'
     chown -R "$user":"$user" "$sdocroot" > /dev/null 2>&1
     git='on'
+
+    if [ $? -ne 0 ]; then
+        echo "ERROR"
+        update_object_value 'web' 'DOMAIN' "$domain" '$GIT' "$git"
+    else
+        echo "OK"
+        update_object_value 'web' 'DOMAIN' "$domain" '$GIT' "$git"
+    fi
+
 fi
 
 fi
