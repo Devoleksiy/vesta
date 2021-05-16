@@ -75,10 +75,11 @@ if ! [ -d "$sdocroot"/.git/ ]; then
         cp -n /usr/local/vesta/data/templates/gitlab/templates/f-gitlab-drupal/.gitlab-ci.yml "$sdocroot"
         cp -n /usr/local/vesta/data/templates/gitlab/templates/f-gitlab-drupal/docker-compose.yml "$sdocroot"
         cp -n /usr/local/vesta/data/templates/gitlab/templates/f-gitlab-drupal/switch-config.php "$sdocroot/web/sites/default"
+        chmod 444 "$sdocroot/web/sites/default/switch-config.php"
     fi
 
     git init || exit
-    # git remote add origin git@10.0.2.15:vpoltave/vpoltave.net.git
+    # git remote add origin git@10.0.2.15:user/younamerepo.com.git
 
     git remote add origin "$remote_url_repository" > /dev/null 2>&1
     git add -A > /dev/null 2>&1
