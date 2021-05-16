@@ -83,8 +83,6 @@ if ! [ -d "$sdocroot"/.git/ ]; then
 
     git remote add origin "$remote_url_repository" > /dev/null 2>&1
 
-    git='on'
-
     git add -A > /dev/null 2>&1
     git commit -m "Initial firs commit by $user user" > /dev/null 2>&1
     timeout 5s git push -u origin master > /dev/null 2>&1 # || echo 'Error command git push -u origin master'
