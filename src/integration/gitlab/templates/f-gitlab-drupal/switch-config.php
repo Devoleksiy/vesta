@@ -2,7 +2,7 @@
 
 // set up a site host for production
 
-if (is_dir("../config/env.prod")) {
+if (file_exists("../config/env.prod")) {
   // config for production server
   $config['config_split.config_split.dev']['status'] = FALSE;
   $config['config_split.config_split.prod']['status'] = TRUE; // active
