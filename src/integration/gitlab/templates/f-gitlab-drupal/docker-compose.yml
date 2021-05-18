@@ -24,6 +24,14 @@ services:
       - XDEBUG_IDE_KEY=PHPSTORM
     depends_on:
       - Mariadb
+  Mariadb:
+    image: mariadb:10.3
+    hostname: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+    volumes:
+      #      - ./dev/lib/mysql:/var/lib/mysql
+      - L:\data\service\mysql:/var/lib/mysql
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
     ports:
@@ -36,14 +44,6 @@ services:
       - UPLOAD_LIMIT=200M
     depends_on:
       - Mariadb
-  Mariadb:
-    image: mariadb:10.3
-    hostname: mariadb
-    environment:
-      MYSQL_ROOT_PASSWORD: example
-    volumes:
-      #      - ./dev/lib/mysql:/var/lib/mysql
-      - L:\data\service\mysql:/var/lib/mysql
 #  redis:
 #    image: redis:alpine3.13
 #    hostname: redis
