@@ -1,4 +1,4 @@
-
+# v0.3
 before_script:
   - echo "This job tests something"
 
@@ -15,11 +15,12 @@ build_deploy:
     - cd /home/$USER_DEPLOY/web/$CI_PROJECT_NAME/public_html
     - git pull origin master
     - echo "Ok pull"
-    # Composer install And drush cr
+    # Composer install
     - composer install --no-dev
-    # echo "Composer install Success"
-    - drush updb
-    # echo "Database update Success"
+    # Config import
     - drush cim
-    # echo "Configurate import Success"
+    # Database update
+    - drush updb -y
+    # Cache rebuild
     - drush cr
+
