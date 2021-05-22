@@ -115,6 +115,14 @@
                             $proxy_ext_title = '';
                             $proxy_ext = str_replace(',', ', ', $data[$key]['PROXY_EXT']);
                         }
+
+                        $git='no';
+                        if ($data[$key]['GIT'] == 'on') {
+                        $git = 'yes';
+                        } else {
+                            $git = 'no';
+                        }
+
                     ?>
 
       <div class="l-unit <? if($data[$key]['SUSPENDED'] == 'yes') echo 'l-unit--suspended'; if($_SESSION['favourites']['WEB'][$key] == 1) echo ' l-unit--starred'; ?>" v_section="web" v_unit_id="<?=$key?>"
@@ -162,7 +170,7 @@ sort-name="<?=$key?>"  sort-bandwidth="<?=$data[$key]['U_BANDWIDTH']?>" sort-dis
         </div>
         <!-- /.l-unit-toolbar -->
 
-        <div class="l-unit__col l-unit__col--left clearfix">
+        <div class="d-none d-md-table-cell l-unit__col l-unit__col--left clearfix">
           <div class="l-unit__date">
             <?=translate_date($data[$key]['DATE'])?>
           </div>
@@ -172,7 +180,7 @@ sort-name="<?=$key?>"  sort-bandwidth="<?=$data[$key]['U_BANDWIDTH']?>" sort-dis
           </div>
         </div>
         <!-- /.l-unit__col -->
-        <div class="l-unit__col l-unit__col--right">
+        <div class="l-unit__col l-unit__col--right w-100">
           <div class="l-unit__name" u_name="<?=$key?>">
             <?=$key?> <span><?=str_replace(',', ', ', $data[$key]['ALIAS'])?></span>
           </div>
@@ -182,150 +190,190 @@ sort-name="<?=$key?>"  sort-bandwidth="<?=$data[$key]['U_BANDWIDTH']?>" sort-dis
           </div>
           <!-- /.l-unit__ip -->
           <div class="l-unit__stats">
-            <table>
-              <tr>
-                <td>
-                  <div class="l-unit__stat-cols clearfix graph">
-                    <div class="l-unit__stat-col l-unit__stat-col--left">
-                      <?=__('Bandwidth')?>
-                    </div>
-                    <div class="l-unit__stat-col l-unit__stat-col--right text-right volume">
-                      <b><?=humanize_usage_size($data[$key]['U_BANDWIDTH'])?></b> <?=humanize_usage_measure($data[$key]['U_BANDWIDTH'])?>
-                    </div>
-                  </div>
-                  <div class="l-percent">
-                    <div class="l-percent__fill" style="width: <?=get_percentage($data[$key]['U_BANDWIDTH'],$panel[$user]['BANDWIDTH'])?>%"></div>
-                  </div>
-                  <!-- /.percent -->
-                </td>
-                <td>
-                  <div class="l-unit__stat-cols clearfix">
-                    <div class="l-unit__stat-col l-unit__stat-col--left"><?=__('Web Template')?>:</div>
-                    <div class="l-unit__stat-col l-unit__stat-col--right">
-                      <b><?=$data[$key]['TPL']?></b>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <?php if (!empty($_SESSION['PROXY_SYSTEM'])) { echo ""; ?>
-                  <? if($proxy_support == 'no'){ ?>
-                    <div class="l-unit__stat-cols clearfix disabled last"><?=__('Proxy Support')?></div>
-                  <? } else {?>
-                    <div class="l-unit__stat-cols clearfix last">
-                      <div class="l-unit__stat-col l-unit__stat-col--left"><?=__('Proxy Support')?>:</div>
-                      <div class="l-unit__stat-col l-unit__stat-col--right">
-                        <b><?=__($proxy_support)?></b>
+
+              <!--  row #1-->
+              <div class="row">
+
+                  <div class="col-md-4 p-1">
+
+                      <div class="l-unit__stat-cols clearfix graph">
+                          <div class="l-unit__stat-col l-unit__stat-col--left">
+                              <?=__('Bandwidth')?>
+                          </div>
+                          <div class="l-unit__stat-col l-unit__stat-col--right text-right volume">
+                              <b><?=humanize_usage_size($data[$key]['U_BANDWIDTH'])?></b> <?=humanize_usage_measure($data[$key]['U_BANDWIDTH'])?>
+                          </div>
                       </div>
-                    </div>
-                  <? } ?>
-                  <? } ?>
-                  <?php if (!empty($_SESSION['WEB_BACKEND'])) { echo ""; ?>
-                  <? if($backend_support == 'no'){ ?>
-                    <div class="l-unit__stat-cols clearfix disabled last"><?=__('Backend Support')?></div>
-                  <? } else {?>
-                    <div class="l-unit__stat-cols clearfix last">
-                      <div class="l-unit__stat-col l-unit__stat-col--left"><?=__('Backend Support')?>:</div>
-                      <div class="l-unit__stat-col l-unit__stat-col--right">
-                        <b><?=__($backend_support)?></b>
+                      <div class="l-percent">
+                          <div class="l-percent__fill" style="width: <?=get_percentage($data[$key]['U_BANDWIDTH'],$panel[$user]['BANDWIDTH'])?>%"></div>
                       </div>
-                    </div>
-                  <? } ?>
-                  <? } ?>
-                </td>
-              </tr>
-              <tr>
-                <td></td>
-                <td>
-                  <? if($data[$key]['SSL'] == 'no'){ ?>
-                    <div class="l-unit__stat-cols clearfix disabled"><?=__('SSL Support')?></div>
-                  <? } else {?>
-                    <div class="l-unit__stat-cols clearfix">
-                      <div class="l-unit__stat-col l-unit__stat-col--left"><?=__('SSL Support')?>:</div>
-                      <div class="l-unit__stat-col l-unit__stat-col--right">
-                        <b>
-                            <? if($data[$key]['LETSENCRYPT'] == 'yes'){
+                      <!-- /.percent -->
+
+                  </div>
+                  <div class="col-md-4 p-1">
+
+                      <div class="row l-unit__stat-cols clearfix">
+                          <div class="col-4 col-md-6 l-unit__stat-col l-unit__stat-col--left"><?=__('Web Template')?>:</div>
+                          <div class="col-6 l-unit__stat-col l-unit__stat-col--right">
+                              <b><?=$data[$key]['TPL']?></b>
+                          </div>
+                      </div>
+
+                  </div>
+                  <div class="col-md-4 p-1">
+
+
+                          <?php if (!empty($_SESSION['PROXY_SYSTEM'])) { echo ""; ?>
+                          <? if($proxy_support == 'no'){ ?>
+                          <div class="row "><?=__('Proxy Support')?></div>
+                          <? } else {?>
+                          <div class="row ">
+                              <div class="col-4 col-md-6"><?=__('Proxy Support')?>:</div>
+                              <div class="col-6 ">
+                                  <b><?=__($proxy_support)?></b>
+                              </div>
+                          </div>
+                          <? } ?>
+                          <? } ?>
+                          <?php if (!empty($_SESSION['WEB_BACKEND'])) { echo ""; ?>
+                          <? if($backend_support == 'no'){ ?>
+                          <div class="l-unit__stat-cols clearfix disabled last"><?=__('Backend Support')?></div>
+                          <? } else {?>
+                          <div class="l-unit__stat-cols clearfix last">
+                              <div class="l-unit__stat-col l-unit__stat-col--left"><?=__('Backend Support')?>:</div>
+                              <div class="l-unit__stat-col l-unit__stat-col--right">
+                                  <b><?=__($backend_support)?></b>
+                              </div>
+                          </div>
+                          <? } ?>
+                          <? } ?>
+
+
+                  </div>
+
+              </div>
+
+              <!--  row #2-->
+              <div class="row">
+                  <div class="col-md-4 p-1">
+
+
+                  </div>
+                  <div class="col-md-4 p-1">
+
+                      <? if($data[$key]['SSL'] == 'no'){ ?>
+                      <div class="l-unit__stat-cols clearfix disabled"><?=__('SSL Support')?></div>
+                      <? } else {?>
+                      <div class="row l-unit__stat-cols clearfix">
+                          <div class="col-4 col-md-6 l-unit__stat-col l-unit__stat-col--left"><?=__('SSL Support')?>:</div>
+                          <div class="col-6 l-unit__stat-col l-unit__stat-col--right">
+                              <b>
+                                  <? if($data[$key]['LETSENCRYPT'] == 'yes'){
                                 echo __('Lets Encrypt');
                             } else {
                                 echo __($data[$key]['SSL']);
                             }?>
-                        </b>
+                              </b>
+                          </div>
                       </div>
-                    </div>
-                  <? } ?>
-                </td>
-                <td>
-                  <?php if (!empty($_SESSION['PROXY_SYSTEM'])) { echo ""; ?>
-                  <div class="l-unit__stat-cols clearfix last">
-                    <div class="l-unit__stat-col l-unit__stat-col--left"><?=__('Proxy Template')?>:</div>
-                    <div class="l-unit__stat-col l-unit__stat-col--right">
-                      <b><?=$data[$key]['PROXY']?></b>
-                    </div>
+                      <? } ?>
+
                   </div>
-                  <? } ?>
-                  <?php if (!empty($_SESSION['WEB_BACKEND'])) { echo ""; ?>
-                  <div class="l-unit__stat-cols clearfix last">
-                    <div class="l-unit__stat-col l-unit__stat-col--left"><?=__('Backend Template')?>:</div>
-                    <div class="l-unit__stat-col l-unit__stat-col--right">
-                      <b><?=$data[$key]['BACKEND']?></b>
-                    </div>
-                  </div>
-                  <? } ?>
-                </td>
-              </tr>
-                <!--tr>
-                    <td></td>
-                    <td>
-                        <? if(empty($data[$key]['LETSENCRYPT']) || $data[$key]['LETSENCRYPT'] == 'no') { ?>
-                        <div class="l-unit__stat-cols clearfix disabled"><?=__('Lets Encrypt Support')?></div>
-                        <? } else {?>
-                        <div class="l-unit__stat-cols clearfix">
-                            <div class="l-unit__stat-col l-unit__stat-col--left"><?=__('Lets Encrypt Support')?>:</div>
-                            <div class="l-unit__stat-col l-unit__stat-col--right">
-                                <b><?=__($data[$key]['LETSENCRYPT'])?></b>
-                            </div>
-                        </div>
-                        <? } ?>
-                    </td>
-                </tr-->
-              <tr>
-                <td>
-                  <div class="l-unit__stat-cols clearfix graph">
-                    <div class="l-unit__stat-col l-unit__stat-col--left"><?=__('Disk')?>:</div>
-                    <div class="l-unit__stat-col l-unit__stat-col--right text-right volume">
-                      <b><?=humanize_usage_size($data[$key]['U_DISK'])?></b> <?=humanize_usage_measure($data[$key]['U_DISK'])?>
-                    </div>
-                  </div>
-                  <div class="l-percent">
-                    <div class="l-percent__fill" style="width: <?=get_percentage($data[$key]['U_DISK'],$panel[$user]['DISK_QUOTA'])?>%"></div>
-                  </div>
-                  <!-- /.percent -->
-                </td>
-                <td>
-                  <? if($web_stats == 'no'){ ?>
-                    <div class="l-unit__stat-cols clearfix disabled"><?=__('Web Statistics')?></div>
-                  <? } else {?>
-                    <div class="l-unit__stat-cols clearfix">
-                      <div class="l-unit__stat-col l-unit__stat-col--left"><?=__('Web Statistics')?>:</div>
-                      <div class="l-unit__stat-col l-unit__stat-col--right">
-                        <b><?=__($web_stats)?></b>
+                  <div class="col-md-4 p-1">
+
+                      <?php if (!empty($_SESSION['PROXY_SYSTEM'])) { echo ""; ?>
+                      <div class="row l-unit__stat-cols clearfix last">
+                          <div class="col-4 col-md-6 l-unit__stat-col l-unit__stat-col--left"><?=__('Proxy Template')?>:</div>
+                          <div class="col-6 l-unit__stat-col l-unit__stat-col--right">
+                              <b><?=$data[$key]['PROXY']?></b>
+                          </div>
                       </div>
-                    </div>
-                  <? } ?>
-                </td>
-                <td>
-                  <? if($ftp_user == 'no'){ ?>
-                    <div class="l-unit__stat-cols clearfix last disabled"><?=__('Additional FTP Account')?></div>
-                  <? } else {?>
-                    <div class="l-unit__stat-cols clearfix last">
-                      <div class="l-unit__stat-col l-unit__stat-col--left"><?=__('Additional FTP Account')?>:</div>
-                      <div class="l-unit__stat-col l-unit__stat-col--right">
-                        <b><?=$ftp_user?></b>
+                      <? } ?>
+                      <?php if (!empty($_SESSION['WEB_BACKEND'])) { echo ""; ?>
+                      <div class="row l-unit__stat-cols clearfix last">
+                          <div class="col-6 l-unit__stat-col l-unit__stat-col--left"><?=__('Backend Template')?>:</div>
+                          <div class="col-6 l-unit__stat-col l-unit__stat-col--right">
+                              <b><?=$data[$key]['BACKEND']?></b>
+                          </div>
                       </div>
-                    </div>
-                  <? } ?>
-                </td>
-              </tr>
-            </table>
+                      <? } ?>
+
+                  </div>
+              </div>
+
+              <!--  row #3-->
+              <div class="row">
+                  <div class="col-md-4 p-1">
+
+                      <div class=" l-unit__stat-cols clearfix graph">
+                          <div class=" l-unit__stat-col l-unit__stat-col--left"><?=__('Disk')?>:</div>
+                          <div class="l-unit__stat-col l-unit__stat-col--right text-right volume">
+                              <b><?=humanize_usage_size($data[$key]['U_DISK'])?></b> <?=humanize_usage_measure($data[$key]['U_DISK'])?>
+                          </div>
+                      </div>
+                      <div class="l-percent">
+                          <div class="l-percent__fill" style="width: <?=get_percentage($data[$key]['U_DISK'],$panel[$user]['DISK_QUOTA'])?>%"></div>
+                      </div>
+                      <!-- /.percent -->
+
+                  </div>
+                  <div class="col-md-4 p-1">
+
+                      <? if($web_stats == 'no'){ ?>
+                      <div class="l-unit__stat-cols clearfix disabled"><?=__('Web Statistics')?></div>
+                      <? } else {?>
+                      <div class="row l-unit__stat-cols clearfix">
+                          <div class="col-4 col-md-6 l-unit__stat-col l-unit__stat-col--left"><?=__('Web Statistics')?>:</div>
+                          <div class="col-6 l-unit__stat-col l-unit__stat-col--right">
+                              <b><?=__($web_stats)?></b>
+                          </div>
+                      </div>
+                      <? } ?>
+
+                  </div>
+                  <div class="col-md-4 p-1">
+
+                      <? if($ftp_user == 'no'){ ?>
+                      <div class="l-unit__stat-cols clearfix last disabled"><?=__('Additional FTP Account')?></div>
+                      <? } else {?>
+                      <div class="row l-unit__stat-cols clearfix last">
+                          <div class="col-4 col-md-6 l-unit__stat-col l-unit__stat-col--left"><?=__('Additional FTP Account')?>:</div>
+                          <div class="col-6 l-unit__stat-col l-unit__stat-col--right">
+                              <b><?=$ftp_user?></b>
+                          </div>
+                      </div>
+                      <? } ?>
+
+                  </div>
+              </div>
+
+              <!--  row #4-->
+              <div class="row">
+
+                  <div class="col-md-4 p-1">
+
+                  </div>
+                  <div class="col-md-4 p-1">
+
+                      <? if($git == 'no'){ ?>
+                      <div class="l-unit__stat-cols clearfix last disabled"><?=__('Git supprot')?></div>
+                      <? } else {?>
+                      <div class="row l-unit__stat-cols clearfix last">
+                          <div class="col-4 col-md-6 l-unit__stat-col l-unit__stat-col--left"><?=__('Git supprot')?>:</div>
+                          <div class="col-6 l-unit__stat-col l-unit__stat-col--right">
+                              <b><?=$git?></b>
+                          </div>
+                      </div>
+                      <? } ?>
+
+                  </div>
+
+                  <div class="col-md-4 p-1">
+
+                  </div>
+
+              </div>
+
           </div>
           <!-- /.l-unit__stats -->
         </div>

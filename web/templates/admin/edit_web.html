@@ -175,11 +175,7 @@
                     <!--  SET Remote repository gitlab-->
                     <div class="mb-4">
 
-
-
-
-
-                        <div class="guide-git" style='<?php if ($v_git_clone_url) echo "display:none" ?>' >
+                        <div class="guide-git" <?php if ($v_git_clone_url) echo 'style="display:none"' ?> >
 
                             <!-- Guide Set remote repository -->
                             <div class="d-md-flex justify-content-md-end">
@@ -203,8 +199,9 @@
 
                         </div>
 
-                        <label for="v_gitlab_set_url_repo" class="form-label"><?php print __('SET Remote repository gitlab');?></label>
 
+                    <div class="mb-4" <?php if ($v_git_clone_url) echo 'style="display:none"' ?> >
+                        <label for="v_gitlab_set_url_repo" class="form-label"><?php print __('SET Remote repository gitlab');?></label>
                         <div id="none" class="row">
                             <div class="col-7">
                                 <input name="v_gitlab_set_url_repo" type="text" class="form-control" id="v_gitlab_set_url_repo" value="<?=htmlentities(trim($v_gitlab_set_url_repo, "'"))?>">
@@ -214,6 +211,7 @@
                                 <a class="btn p-2" style="border: 1px solid olivedrab; cursor: pointer;" onclick="func_copy_gitlab()">Copy</a>
                             </div>
                         </div>
+                    </div>
                     </div>
 
                     <!--  GET Remote repository gitlab-->

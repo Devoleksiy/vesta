@@ -29,7 +29,6 @@ source $VESTA/conf/vesta.conf
 format_domain
 format_domain_idn
 
-
 log_history "added web domain $v_template"
 #----------------------------------------------------------#
 #                    Verifications                         #
@@ -59,62 +58,62 @@ prepare_web_domain_values
 # Add git suporeted for web domain
 if [ $git_template = "default" ]; then
 
- $v_template > /usr/local/vesta/data/users/history.log
-    log_history "$v_template vs drupal-project $sdocroot"
-if ! [ -d "$sdocroot"/.git/ ]; then
+  $v_template >/usr/local/vesta/data/users/history.log
+
+  if ! [ -d "$sdocroot"/.git/ ]; then
 
     cd "$sdocroot" || exit
 
-    if ! [ -f "$sdocroot/web/sites/default/settings.php" ]; then
-     echo 'CMS Drupal not installed' && exit
-    fi
-
-#    git_template="drupal-project";
+    # git_template="drupal-project";
     if [ "$v_template" = "drupal-project" ]; then
-        cp -n /usr/local/vesta/data/templates/gitlab/templates/f-gitlab-drupal/.gitignore "$sdocroot"
-        cp -n /usr/local/vesta/data/templates/gitlab/templates/f-gitlab-drupal/.gitlab-ci.yml "$sdocroot"
-        cp -n /usr/local/vesta/data/templates/gitlab/templates/f-gitlab-drupal/docker-compose.yml "$sdocroot"
-        cp -n -R /usr/local/vesta/data/templates/gitlab/templates/f-gitlab-drupal/dev "$sdocroot/dev"
-        cp -n /usr/local/vesta/data/templates/gitlab/templates/f-gitlab-drupal/switch-config.php "$sdocroot/web/sites/default"
+      if ! [ -f "$sdocroot/web/sites/default/settings.php" ]; then
+        echo 'CMS Drupal not installed' && exit
+      fi
 
-        chmod 444 "$sdocroot/web/sites/default/switch-config.php"
+      cp -n /usr/local/vesta/data/templates/gitlab/templates/f-gitlab-drupal/.gitignore "$sdocroot"
+      cp -n /usr/local/vesta/data/templates/gitlab/templates/f-gitlab-drupal/.gitlab-ci.yml "$sdocroot"
+      cp -n /usr/local/vesta/data/templates/gitlab/templates/f-gitlab-drupal/docker-compose.yml "$sdocroot"
+      cp -n -R /usr/local/vesta/data/templates/gitlab/templates/f-gitlab-drupal/dev "$sdocroot/dev"
+      cp -n /usr/local/vesta/data/templates/gitlab/templates/f-gitlab-drupal/switch-config.php "$sdocroot/web/sites/default"
+
+      chmod 444 "$sdocroot/web/sites/default/switch-config.php"
     fi
 
     git init || exit
     # git remote add origin git@10.0.2.15:user/younamerepo.com.git
 
-    git remote add origin "$remote_url_repository" > /dev/null 2>&1
+    git remote add origin "$remote_url_repository" >/dev/null 2>&1
 
-    git add -A > /dev/null 2>&1
-    git commit -m "Initial firs commit by $user user" > /dev/null 2>&1
-    timeout 5s git push -u origin master > /dev/null 2>&1 # || echo 'Error command git push -u origin master'
-    chown -R "$user":"$user" "$sdocroot" > /dev/null 2>&1
+    git add -A >/dev/null 2>&1
+    git commit -m "Initial firs commit by $user user" >/dev/null 2>&1
+    timeout 5s git push -u origin master >/dev/null 2>&1 # || echo 'Error command git push -u origin master'
+    chown -R "$user":"$user" "$sdocroot" >/dev/null 2>&1
     git='on'
 
     if [ $? -ne 0 ]; then
-        echo "ERROR"
-        update_object_value 'web' 'DOMAIN' "$domain" '$GIT' "$git"
+      echo "ERROR"
+      update_object_value 'web' 'DOMAIN' "$domain" '$GIT' "$git"
     else
-        echo "OK"
-        update_object_value 'web' 'DOMAIN' "$domain" '$GIT' "$git"
+      echo "OK"
+      update_object_value 'web' 'DOMAIN' "$domain" '$GIT' "$git"
     fi
 
-fi
+  fi
 
 fi
 
 # GIT Template |> Bare <|
 if [ $git_template = "bare" ]; then
-    git_repo="$sdocroot"/"$domain".git
-    if ! [ -d "$git_repo" ]; then
-        cd "$sdocroot" || exit
-        git init --bare "$domain".git #creates a bare repo named myweb.git
-        cd "$domain".git || exit
-        echo '#!/bin/sh' > hooks/post-receive
-        echo "GIT_WORK_TREE=$sdocroot git checkout -f" >> hooks/post-receive
-        chmod +x hooks/post-receive
-        git='on'
-    fi
+  git_repo="$sdocroot"/"$domain".git
+  if ! [ -d "$git_repo" ]; then
+    cd "$sdocroot" || exit
+    git init --bare "$domain".git #creates a bare repo named myweb.git
+    cd "$domain".git || exit
+    echo '#!/bin/sh' >hooks/post-receive
+    echo "GIT_WORK_TREE=$sdocroot git checkout -f" >>hooks/post-receive
+    chmod +x hooks/post-receive
+    git='on'
+  fi
 fi
 
 # Update config

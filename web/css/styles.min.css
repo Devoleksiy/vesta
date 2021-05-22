@@ -1464,6 +1464,9 @@ div.l-content > div.l-separator:nth-of-type(4) {
   letter-spacing: 1px;
   margin-top: 10px;
   padding-bottom: 30px;
+  white-space: nowrap;
+  padding-right: 20px;
+  padding-left: 10px;
 }
 
 .l-unit__suspended {
@@ -1560,14 +1563,18 @@ div.l-content > div.l-separator:nth-of-type(4) {
   width: 100%;
   table-layout: fixed;
 }
-.l-unit__stats td {
-  height: 22px;
+.l-unit__stats .row {
+  /*padding-right: 100px;*/
+}
+.l-unit__stats .row {
   padding-bottom: 3px;
   vertical-align: top;
 }
 .l-unit__stat-col--left {
   float: left;
-  width: 124px;
+  /*width: 124px;*/
+
+  white-space: nowrap;
 }
 .l-unit__stat-col--left.compact {
   width: 70px;
@@ -1603,8 +1610,11 @@ div.l-content > div.l-separator:nth-of-type(4) {
 
 
 .l-unit__stat-col--right {
-  float: left;
-  max-width: 152px;
+  min-width: 70px;
+  padding-left: 9em;
+}
+.body-web .l-unit__stat-col--right{
+  padding-left: unset;
 }
 
 .l-unit-toolbar__col--left {

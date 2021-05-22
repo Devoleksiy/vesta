@@ -43,7 +43,7 @@ get_domain_values 'web'
 # Adding statistic config
 prepare_web_domain_values
 
-git_docroot=$(echo "${sdocroot//\/public_html/}")
+git_docroot=$sdocroot
 
 # List git remote -v
   declare -a arr_git_url
