@@ -47,4 +47,8 @@ services:
 #  redis:
 #    image: redis:alpine3.13
 #    hostname: redis
-
+#  memcached:
+#    image: memcached:latest
+#    hostname: memcached
+#    ports:
+#      - "11211:11211"
