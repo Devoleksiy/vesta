@@ -980,6 +980,12 @@ if [ "$nginx" = 'yes' ]; then
         echo "#Vesta: workraround for networkmanager" >> /etc/rc.local
         echo "sleep 3 && systemctl restart nginx" >> /etc/rc.local
     fi
+
+    # Fix services are not started after restart
+    if [ "$release" -ge '7' ]; then
+        echo "#Vesta: Fix services are not started after restart" >> /etc/rc.local
+        echo "sleep 3 && systemctl restart nginx  && systemctl restart httpd" >> /etc/rc.local
+    fi
 fi
 
 
