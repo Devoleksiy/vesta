@@ -1,12 +1,35 @@
 # v0.3
 before_script:
-  - echo "This job tests something"
+  - echo "echo before run script"
 
 stages:
-  - build_deploy
+  - deploy_webtest
+  - deploy_prod
 
-build_deploy:
-  stage: build_deploy
+deploy_webtest:
+  stage: deploy_webtest
+  only:
+    - webtest
+  script:
+    - echo "RUN build_deploy script"
+    # Переходим в папку репозиторя на проде
+    - cd /home/$USER_DEPLOY/web/dev-$CI_PROJECT_NAME/public_html
+    # First  run
+    #  - git init . && git remote add origin $CI_REPOSITORY_URL && git pull origin webtest
+    # Always run
+    - git pull origin webtest
+    - echo "Ok pull"
+    # Composer  install
+    - composer install
+    # Config import
+    - drush cim
+    # Cache rebuild
+    - drush cr
+    # Database update
+    - drush updb -y
+
+deploy_prod:
+  stage: deploy_prod
   only:
     - master
   script:
@@ -17,10 +40,10 @@ build_deploy:
     - echo "Ok pull"
     # Composer install
     - composer install --no-dev
-    # Config import
-    - drush cim
     # Database update
     - drush updb -y
+    # Config import
+    - drush cim
     # Cache rebuild
     - drush cr
 

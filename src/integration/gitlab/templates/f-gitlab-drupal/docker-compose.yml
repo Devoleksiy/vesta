@@ -1,9 +1,9 @@
-# image:  webdevops/php-apache-dev:7.4-alpine
+# image:  webdevops/php-apache-dev:7.4-alpine v 1.0
 version: '3'
 services:
   apache-php:
     build: ./dev/docker
-#    image: webdevops/php-apache-dev:7.4-alpine
+    #    image: webdevops/php-apache-dev:7.4-alpine
     ports:
       - 80:80
     volumes:
@@ -23,8 +23,8 @@ services:
       - XDEBUG_CLIENT_PORT=9003
       - XDEBUG_IDE_KEY=PHPSTORM
     depends_on:
-      - Mariadb
-  Mariadb:
+      - mariadb
+  mariadb:
     image: mariadb:10.3
     hostname: mariadb
     environment:
@@ -32,23 +32,18 @@ services:
     volumes:
       #      - ./dev/lib/mysql:/var/lib/mysql
       - L:\data\service\mysql:/var/lib/mysql
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin:latest
-    ports:
-      - 8000:80
-    environment:
-      - PMA_ARBITRARY=1
-      - PMA_HOST=Mariadb
-      - PMA_USER=root
-      - PMA_PASSWORD=example
-      - UPLOAD_LIMIT=200M
-    depends_on:
-      - Mariadb
-#  redis:
-#    image: redis:alpine3.13
-#    hostname: redis
-#  memcached:
-#    image: memcached:latest
-#    hostname: memcached
-#    ports:
-#      - "11211:11211"
+  redis:
+    image: redis:alpine3.13
+    hostname: redis
+  #  phpmyadmin:
+  #    image: phpmyadmin/phpmyadmin:latest
+  #    ports:
+  #      - 8000:80
+  #    environment:
+  #      - PMA_ARBITRARY=1
+  #      - PMA_HOST=Mariadb
+  #      - PMA_USER=root
+  #      - PMA_PASSWORD=example
+  #      - UPLOAD_LIMIT=200M
+  #    depends_on:
+  #      - mariadb
