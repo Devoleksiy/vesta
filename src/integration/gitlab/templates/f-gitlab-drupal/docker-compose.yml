@@ -1,4 +1,5 @@
-# image:  webdevops/php-apache-dev:7.4-alpine v 1.0
+# v 0.3.0
+# image:  webdevops/php-apache-dev:7.4-alpine
 version: '3'
 services:
   apache-php:
@@ -30,20 +31,20 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: example
     volumes:
-      #      - ./dev/lib/mysql:/var/lib/mysql
+      #      - ./dev/other/lib/mysql:/var/lib/mysql
       - L:\data\service\mysql:/var/lib/mysql
   redis:
     image: redis:alpine3.13
     hostname: redis
-  #  phpmyadmin:
-  #    image: phpmyadmin/phpmyadmin:latest
-  #    ports:
-  #      - 8000:80
-  #    environment:
-  #      - PMA_ARBITRARY=1
-  #      - PMA_HOST=Mariadb
-  #      - PMA_USER=root
-  #      - PMA_PASSWORD=example
-  #      - UPLOAD_LIMIT=200M
-  #    depends_on:
-  #      - mariadb
+#  phpmyadmin:
+#    image: phpmyadmin/phpmyadmin:latest
+#    ports:
+#      - 8000:80
+#    environment:
+#      - PMA_ARBITRARY=1
+#      - PMA_HOST=mariadb
+#      - PMA_USER=backup
+#      - PMA_PASSWORD=SKCthRPrCKujpM4Z
+#      - UPLOAD_LIMIT=200M
+#    depends_on:
+#      - mariadb
